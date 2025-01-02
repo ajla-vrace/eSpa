@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace eSpa.Model.Requests
+{
+    public class KorisnikUpdateRequest
+    {
+        [Required(AllowEmptyStrings = false)]
+        public string Ime { get; set; } = null!;
+        [Required(AllowEmptyStrings = false)]
+        public string Prezime { get; set; } = null!;
+        [Required(AllowEmptyStrings = false)]
+        public string? Email { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        public string? Telefon { get; set; }
+
+        public bool? Status { get; set; }
+    }
+}
