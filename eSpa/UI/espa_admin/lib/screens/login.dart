@@ -1,4 +1,5 @@
 //import 'package:espa_admin/screens/home.dart';
+import 'package:espa_admin/screens/home.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -51,9 +52,13 @@ class LoginPage extends StatelessWidget {
                       var password = _passwordController.text;
                       _passwordController.text = username;
 
-                      print("login proceed $username $password");
+                      print("login proceed na login stranici $username $password");
 
-                       
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
                     },
                     child: Text("Login"))
               ]),

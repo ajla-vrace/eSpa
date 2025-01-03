@@ -1,8 +1,16 @@
+import 'package:espa_admin/providers/usluga_provider.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+/*void main() {
   runApp(const MyApp());
+}*/
+void main(){
+runApp(MultiProvider(providers: [
+ChangeNotifierProvider(create: (_) => UslugaProvider())],
+child:const MyApp(),)
+);
 }
 
 class MyApp extends StatelessWidget {
