@@ -1,4 +1,4 @@
-import 'package:espa_admin/screens/home.dart';
+//import 'package:espa_admin/screens/home.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -53,11 +53,7 @@ class LoginPage extends StatelessWidget {
 
                       print("login proceed $username $password");
 
-                       Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        );
+                       
                     },
                     child: Text("Login"))
               ]),
