@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:espa_admin/utils/util.dart';
 import 'package:flutter/material.dart'; 
 import 'package:http/http.dart' as http;
 
@@ -24,8 +25,9 @@ return data;
 }
 
 Map<String, String> createHeaders() {
-String username = "neko";
-String password = "neko";
+String username = Authorization.username?? "";
+String password = Authorization.password?? "";
+print("username i password: $username $password");
 String basicAuth = "Basic ${base64Encode(utf8.encode('$username:$password'))}";
 print("Authorization: $basicAuth");
 
