@@ -1,3 +1,4 @@
+import 'package:espa_admin/providers/komentar_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ import 'package:provider/provider.dart';
 }*/
 void main(){
 runApp(MultiProvider(providers: [
-ChangeNotifierProvider(create: (_) => UslugaProvider())],
+ChangeNotifierProvider(create: (_) => UslugaProvider()),
+ChangeNotifierProvider(create: (_) => KomentarProvider())],
 child:const MyApp(),)
 );
 }

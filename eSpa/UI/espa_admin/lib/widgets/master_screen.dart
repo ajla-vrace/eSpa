@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 //import 'package:espa_admin/main.dart';
+import 'package:espa_admin/screens/home.dart';
+import 'package:espa_admin/screens/komentari.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/foundation/key.dart';
@@ -40,11 +42,21 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Nesto'),
+              title: Text('Komentar'),
               onTap: () {
                 Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>  LoginPage(),
+                          builder: (context) =>  KomentarPage(),
+                        ),
+                      );
+              },
+            ),
+            ListTile(
+              title: Text('HomePage'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  HomePage(),
                         ),
                       );
               },
