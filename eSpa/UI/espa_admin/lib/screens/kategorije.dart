@@ -90,25 +90,58 @@ class _KategorijaPageState extends State<KategorijaPage> {
                   },
                 ),
                 columns: const [
-                  DataColumn(
+                 /* DataColumn(
                     label: Text(
                       "ID",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
+                  ),*/
                   DataColumn(
                     label: Text(
                       "Naziv",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
+                  DataColumn(
+                    label: Text(
+                      "",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  /*DataColumn(
+                    label: Text(
+                      "",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),*/
                 ],
                 rows: _kategorije.map((kategorija) {
                   return DataRow(
                     cells: [
-                      DataCell(Text(kategorija.id?.toString() ?? "N/A")),
+                      //DataCell(Text(kategorija.id?.toString() ?? "N/A")),
                       DataCell(Text(kategorija.naziv ?? "N/A")),
-                    ],
+                       DataCell(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end, // Poravnavanje ikonica desno
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              // Akcija za update
+                              print('Update clicked for: ${kategorija.naziv}');
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              // Akcija za delete
+                              print('Delete clicked for: ${kategorija.naziv}');
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   );
                 }).toList(),
               ),
@@ -130,11 +163,11 @@ class _KategorijaPageState extends State<KategorijaPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                const Text(
+                /*const Text(
                   "Tabela Kategorije",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                const SizedBox(height: 20), //const SizedBox(height: 20),
+                ),*/
+                //const SizedBox(height: 20), //const SizedBox(height: 20),
                 // Novi red za input i dugme
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -163,6 +196,15 @@ class _KategorijaPageState extends State<KategorijaPage> {
                       child: const Text("Pretraži"),
                     ),*/
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 16.0), // Isti padding za oba dugmeta
+                            minimumSize: const Size(
+                                120, 50), // Ista minimalna širina i visina
+                            textStyle: const TextStyle(fontSize: 16),
+                          ), // Ista veličina fonta
+
                           onPressed: () async {
                             try {
                               var data = await _kategorijaProvider
@@ -181,7 +223,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           },
                           child: const Text("Pretraži"),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 30),
                         /*ElevatedButton(
                           onPressed: () async {
                             
@@ -191,12 +233,21 @@ class _KategorijaPageState extends State<KategorijaPage> {
                         ),*/
 
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 16.0), // Isti padding za oba dugmeta
+                            minimumSize: const Size(
+                                120, 50), // Ista minimalna širina i visina
+                            textStyle: const TextStyle(
+                                fontSize: 16), // Ista veličina fonta
+                          ),
                           onPressed: () async {
                             // Dodaj funkcionalnost za dugme
                           },
                           child: Row(
-                            mainAxisSize: MainAxisSize
-                                .min, // Osigurava da Row zauzima minimalnu širinu potrebnu za ikonu i tekst
+                            /*mainAxisSize: MainAxisSize
+                                .min, // Osigurava da Row zauzima minimalnu širinu potrebnu za ikonu i tekst*/
                             children: const [
                               Icon(Icons.add), // Ikonica plusa
                               SizedBox(
