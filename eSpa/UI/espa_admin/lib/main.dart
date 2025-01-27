@@ -1,4 +1,7 @@
+import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/providers/komentar_provider.dart';
+import 'package:espa_admin/providers/novost_provider.dart';
+import 'package:espa_admin/providers/termin_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +13,9 @@ import 'package:provider/provider.dart';
 void main(){
 runApp(MultiProvider(providers: [
 ChangeNotifierProvider(create: (_) => UslugaProvider()),
+ChangeNotifierProvider(create: (_) => KategorijaProvider()),
+ChangeNotifierProvider(create: (_) => NovostProvider()),
+ChangeNotifierProvider(create: (_) => TerminProvider()),
 ChangeNotifierProvider(create: (_) => KomentarProvider())],
 child:const MyApp(),)
 );
@@ -24,8 +30,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 7, 79, 34)),
+        useMaterial3: false,
       ),
       home:  LoginPage(),
     );

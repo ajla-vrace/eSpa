@@ -5,13 +5,13 @@ namespace eSpa.Models
 {
     public partial class Korisnik
     {
-        /*public Korisnik()
+        public Korisnik()
         {
             Komentars = new HashSet<Komentar>();
             KorisnikUlogas = new HashSet<KorisnikUloga>();
             Ocjenas = new HashSet<Ocjena>();
             Rezervacijas = new HashSet<Rezervacija>();
-        }*/
+        }
 
         public int Id { get; set; }
         public string Ime { get; set; } = null!;

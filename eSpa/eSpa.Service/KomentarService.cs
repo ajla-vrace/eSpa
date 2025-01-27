@@ -2,12 +2,13 @@
 using eSpa.Model.Requests;
 using eSpa.Model.SearchObject;
 using eSpa.Service.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using eSpa.Model;
 namespace eSpa.Service
 {
     public class KomentarService:BaseCRUDService<Model.Komentar,Database.Komentar,KomentarSearchObject,KomentarInsertRequest,KomentarUpdateRequest>, IKomentarService
@@ -20,10 +21,15 @@ namespace eSpa.Service
         {
             var filteredQuery = base.AddFilter(query, search);
 
+           
             if (!string.IsNullOrWhiteSpace(search?.FTS))
             {
-                filteredQuery = filteredQuery.Where(x => x.Tekst.Contains(search.FTS));
+                //filteredQuery = filteredQuery.Where(x => x.Tekst.Contains(search.FTS));
+                //filteredQuery = filteredQuery.Where(x => x.Tekst.ToLower().Contains(search.FTS.ToLower()));
+                filteredQuery = filteredQuery.Where(x => EF.Functions.Like(x.Tekst, $"%{search.FTS}%"));
+
             }
+
 
 
 

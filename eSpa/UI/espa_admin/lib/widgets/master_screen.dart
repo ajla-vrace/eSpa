@@ -2,8 +2,11 @@
 
 //import 'package:espa_admin/main.dart';
 import 'package:espa_admin/screens/home.dart';
+import 'package:espa_admin/screens/kategorije.dart';
 import 'package:espa_admin/screens/komentari.dart';
 import 'package:espa_admin/screens/login.dart';
+import 'package:espa_admin/screens/novosti.dart';
+import 'package:espa_admin/screens/termini.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/foundation/key.dart';
 //import 'package:flutter/src/widgets/framework.dart';
@@ -47,6 +50,36 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) =>  KomentarPage(),
+                        ),
+                      );
+              },
+            ),
+             ListTile(
+              title: Text('Kategorije'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  KategorijaPage(),
+                        ),
+                      );
+              },
+            ),
+            ListTile(
+              title: Text('Termini'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  TerminPage(),
+                        ),
+                      );
+              },
+            ),
+            ListTile(
+              title: Text('Novosti'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  NovostPage(),
                         ),
                       );
               },
