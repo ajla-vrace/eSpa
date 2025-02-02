@@ -1,27 +1,30 @@
 //import 'package:espa_admin/models/kategorija.dart';
-import 'package:espa_admin/models/novost.dart';
+//import 'package:espa_admin/models/novost.dart';
 import 'package:espa_admin/models/search_result.dart';
+import 'package:espa_admin/models/usluga.dart';
 //import 'package:espa_admin/providers/kategorija_provider.dart';
-import 'package:espa_admin/providers/novost_provider.dart';
-import 'package:espa_admin/screens/novost_detalji.dart';
+//import 'package:espa_admin/providers/novost_provider.dart';
+import 'package:espa_admin/providers/usluga_provider.dart';
+//import 'package:espa_admin/screens/novost_detalji.dart';
+import 'package:espa_admin/screens/usluga_detalji.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class NovostPage extends StatefulWidget {
-  const NovostPage({super.key});
+class UslugaPage extends StatefulWidget {
+  const UslugaPage({super.key});
 
   @override
-  _NovostiPageState createState() => _NovostiPageState();
+  _UslugePageState createState() => _UslugePageState();
 }
 
-class _NovostiPageState extends State<NovostPage> {
-  List<Novost> _novosti = [];
-  bool _isNovostLoading = true;
-  SearchResult<Novost>? result;
+class _UslugePageState extends State<UslugaPage> {
+  List<Usluga> _usluge = [];
+  bool _isUslugaLoading = true;
+  SearchResult<Usluga>? result;
   TextEditingController _ftsController = TextEditingController();
-  late NovostProvider _novostProvider;
+  late UslugaProvider _uslugaProvider;
 
   String _shortenText(String text, int maxLength) {
     if (text.length > maxLength) {
@@ -34,36 +37,36 @@ class _NovostiPageState extends State<NovostPage> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    _novostProvider = context.read<NovostProvider>();
+    _uslugaProvider = context.read<UslugaProvider>();
   }
 
   @override
   void initState() {
     super.initState();
-    _loadNovosti();
+    _loadUsluge();
   }
 
-  Future<void> _loadNovosti() async {
+  Future<void> _loadUsluge() async {
     try {
-      final novosti =
-          await Provider.of<NovostProvider>(context, listen: false).get();
+      final usluge =
+          await Provider.of<UslugaProvider>(context, listen: false).get();
       setState(() {
-        _novosti = novosti.result;
-        _isNovostLoading = false;
+        _usluge = usluge.result;
+        _isUslugaLoading = false;
       });
     } catch (e) {
       setState(() {
-        _isNovostLoading = false;
+        _isUslugaLoading = false;
       });
     }
   }
 
-  Widget _buildNovostTable() {
-    if (_isNovostLoading) {
+  Widget _buildUslugaTable() {
+    if (_isUslugaLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (_novosti.isEmpty) {
+    if (_usluge.isEmpty) {
       return const Center(child: Text("Nema podataka"));
     }
 
@@ -81,8 +84,8 @@ class _NovostiPageState extends State<NovostPage> {
             child: SizedBox(
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
-                columnSpacing:
-                    constraints.maxWidth * 0.2, // Prostor između kolona
+                columnSpacing:20,
+                  //OVDJE JE  // constraints.maxWidth * 0.2, // Prostor između kolona
                 /*headingRowColor: MaterialStateProperty.all(
                     Colors.lightBlue.shade100), // Boja zaglavlja
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -110,19 +113,25 @@ class _NovostiPageState extends State<NovostPage> {
                   ),*/
                   DataColumn(
                     label: Text(
-                      "Naslov",
+                      "Naziv",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   DataColumn(
                     label: Text(
-                      "Sadrzaj",
+                      "Opis",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   DataColumn(
                     label: Text(
-                      "Datum",
+                      "Cijena",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Trajanje",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -133,18 +142,21 @@ class _NovostiPageState extends State<NovostPage> {
                     ),
                   ),
                 ],
-                rows: _novosti.map((novost) {
+                rows: _usluge.map((usluga) {
                   return DataRow(
                     cells: [
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
-                      DataCell(Text(novost.naslov ?? "N/A")),
+                      DataCell(Text(usluga.naziv ?? "N/A")),
                       //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
                       DataCell(
                         Text(_shortenText(
-                            novost.sadrzaj ?? '', 30)), // Skraćeni sadržaj
+                            usluga.opis ?? '', 30)), // Skraćeni sadržaj
                       ),
-                      DataCell(Text(DateFormat('dd.MM.yyyy.')
-                          .format(novost.datum ?? DateTime.now()))),
+                      //DataCell(Text(usluga.cijena?.toStringAsFixed(2) ?? "N/A")),
+                      DataCell(Text('${usluga.cijena?.toStringAsFixed(2) ?? "N/A"} KM')),
+                       //DataCell(Text(usluga.trajanje ?? "N/A")),
+                       DataCell(Text('${usluga.trajanje ?? "N/A"} min')),
+
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
@@ -157,7 +169,7 @@ class _NovostiPageState extends State<NovostPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        NovostDetaljiPage(novost: novost),
+                                        UslugaDetaljiPage(usluga: usluga),
                                   ),
                                 );
                                 /* bool? isUpdated = await Navigator.push(
@@ -174,7 +186,7 @@ class _NovostiPageState extends State<NovostPage> {
                                   setState(() {});
                                 }*/
                                 // Akcija za update
-                                print('Update clicked for: ${novost.naslov}');
+                                print('Update clicked for: ${usluga.naziv}');
                               },
                             ),
                             /* IconButton(
@@ -194,7 +206,7 @@ class _NovostiPageState extends State<NovostPage> {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovu novost?"),
+                                          "Da li ste sigurni da želite obrisati ovu uslugu?"),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),
@@ -217,15 +229,15 @@ class _NovostiPageState extends State<NovostPage> {
 
                                 if (confirm == true) {
                                   try {
-                                    await _novostProvider.delete(novost.id!);
+                                    await _uslugaProvider.delete(usluga.id!);
                                     setState(() {
-                                      _novosti.remove(
-                                          novost); // Uklonite obrisanu novost iz liste
+                                      _usluge.remove(
+                                          usluga); // Uklonite obrisanu uslugu iz liste
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content:
-                                              Text("Novost uspešno obrisana.")),
+                                              Text("Usluga uspješno obrisana.")),
                                     );
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -254,7 +266,7 @@ class _NovostiPageState extends State<NovostPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: ("Novosti"),
+      title: ("Usluge"),
       child: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -279,7 +291,7 @@ class _NovostiPageState extends State<NovostPage> {
                           child: TextField(
                             controller: _ftsController,
                             decoration: const InputDecoration(
-                              labelText: "Pretraži novosti",
+                              labelText: "Pretraži usluge",
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.search),
                             ),
@@ -306,16 +318,16 @@ class _NovostiPageState extends State<NovostPage> {
 
                           onPressed: () async {
                             try {
-                              var data = await _novostProvider
+                              var data = await _uslugaProvider
                                   .get(filter: {'fts': _ftsController.text});
                               setState(() {
-                                _novosti =
+                                _usluge =
                                     data.result; // Ažurirajte listu komentara
                               });
                             } catch (e) {
                               print("Došlo je do greške prilikom pretrage: $e");
                               setState(() {
-                                _novosti =
+                                _usluge =
                                     []; // Prazna lista ako nema rezultata ili dođe do greške
                               });
                             }
@@ -344,7 +356,7 @@ class _NovostiPageState extends State<NovostPage> {
                           onPressed: () async {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => NovostDetaljiPage(),
+                                builder: (context) => UslugaDetaljiPage(),
                               ),
                             );
 
@@ -357,7 +369,7 @@ class _NovostiPageState extends State<NovostPage> {
                               Icon(Icons.add), // Ikonica plusa
                               SizedBox(
                                   width: 8), // Razmak između ikone i teksta
-                              Text("Dodaj novu novost"), // Tekst dugmeta
+                              Text("Dodaj novu uslugu"), // Tekst dugmeta
                             ],
                           ),
                         ),
@@ -366,7 +378,7 @@ class _NovostiPageState extends State<NovostPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                _buildNovostTable(),
+                _buildUslugaTable(),
                 const SizedBox(height: 20),
               ],
             ),

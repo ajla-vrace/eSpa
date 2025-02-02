@@ -61,5 +61,18 @@ namespace eSpa.Service
 
             return _mapper.Map<Model.Novost>(entity);
         }
+
+        public override async Task<Model.Novost> Delete(int id)
+        {
+            var entity = _context.Novosts.Find(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Novost nije pronađena.");
+            }
+
+            _context.Novosts.Remove(entity);
+           await  _context.SaveChangesAsync();
+            return _mapper.Map<Model.Novost>(entity);
+        }
     }
 }

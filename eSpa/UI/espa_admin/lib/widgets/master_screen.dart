@@ -7,6 +7,7 @@ import 'package:espa_admin/screens/komentari.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:espa_admin/screens/novosti.dart';
 import 'package:espa_admin/screens/termini.dart';
+import 'package:espa_admin/screens/usluge.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/foundation/key.dart';
 //import 'package:flutter/src/widgets/framework.dart';
@@ -80,6 +81,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) =>  NovostPage(),
+                        ),
+                      );
+              },
+            ),
+            ListTile(
+              title: Text('Usluge'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  UslugaPage(),
                         ),
                       );
               },

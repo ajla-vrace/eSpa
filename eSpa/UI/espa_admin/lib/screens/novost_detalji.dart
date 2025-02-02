@@ -1,16 +1,12 @@
-// ignore_for_file: prefer_const_constructors
-
+import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/novost.dart';
+import 'package:espa_admin/models/search_result.dart';
+//import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
-import 'package:espa_admin/screens/novosti.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
-
 
 // ignore: must_be_immutable
 class NovostDetaljiPage extends StatefulWidget {
@@ -24,162 +20,164 @@ class NovostDetaljiPage extends StatefulWidget {
 class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
-
+  //late KategorijaProvider _kategorijaProvider;
   late NovostProvider _novostProvider;
 
+  SearchResult<Novost>? novostResult;
   bool isLoading = true;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initialValue = {
       'naslov': widget.novost?.naslov,
-      'sadrzaj': widget.novost?.sadrzaj?.toString(),
+      'sadrzaj': widget.novost?.sadrzaj,
+      'datum': widget.novost?.datum,
     };
 
+    //_kategorijaProvider = context.read<KategorijaProvider>();
     _novostProvider = context.read<NovostProvider>();
 
     initForm();
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-
-    // if (widget.product != null) {
-    //   setState(() {
-    //     _formKey.currentState?.patchValue({'sifra': widget.product?.sifra});
-    //   });
-    // }
-  }
-
   Future initForm() async {
+    novostResult = await _novostProvider.get();
     setState(() {
       isLoading = false;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      // ignore: sort_child_properties_last
-      child: Column(
-        children: [
-          isLoading ? Container() : _buildForm(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: ElevatedButton(
-                    onPressed: () async {
-                      _formKey.currentState?.saveAndValidate();
 
-                      var currentValues =
-                          Map.from(_formKey.currentState!.value);
 
-                      // Provera da li su vrednosti promenjene
-                      bool isChanged = false;
-                      _initialValue.forEach((key, value) {
-                        if (currentValues[key] != value) {
-                          isChanged = true;
-                        }
-                      });
-
-                      if (!isChanged) {
-                        // Ako nema promena, vrati se na prethodnu stranicu bez ažuriranja
-                        Navigator.pop(context, false);
-                        return;
-                      }
-
-                      var request = new Map.from(_formKey.currentState!.value);
-
-                      try {
-                        if (widget.novost == null) {
-                          await _novostProvider.insert(request);
-                        } else {
-                          await _novostProvider.update(
-                              widget.novost!.id!, request);
-                        }
-                        //Navigator.pop(context);
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NovostPage(),
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title: Text("Error"),
-                                  content: Text(e.toString()),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text("OK"))
-                                  ],
-                                ));
-                      }
-                    },
-                    child: Text("Sačuvaj")),
-              )
+@override
+Widget build(BuildContext context) {
+  return MasterScreenWidget(
+    // ignore: sort_child_properties_last
+    child: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(100.0), // Odmicanje od ivica ekrana
+        child: Container(
+          width: 500,
+          padding: EdgeInsets.all(30),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 5),
+              ),
             ],
-          )
-        ],
+          ),
+          child: Column(
+            children: [
+              isLoading ? CircularProgressIndicator() : _buildForm(),
+              SizedBox(height: 20),  // Dodavanje prostora između forme i dugmeta
+              Center(  // Koristimo Center za centriranje dugmeta
+                child: ElevatedButton(
+                  onPressed: () async {
+                    _formKey.currentState?.saveAndValidate();
+                    var request = new Map.from(_formKey.currentState!.value);
+
+                    try {
+                      if (widget.novost == null) {
+                        await _novostProvider.insert(request);
+                      } else {
+                        await _novostProvider.update(widget.novost!.id!, request);
+                      }
+                    } on Exception catch (e) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text("Error"),
+                          content: Text(e.toString()),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  child: Text("Sačuvaj"),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      title: this.widget.novost?.naslov ?? "Novost details",
-    );
-  }
+    ),
+    title: this.widget.novost?.naslov ?? "Novost details",
+  );
+}
+
+
 
   FormBuilder _buildForm() {
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
-      child: Column(children: [
-        Row(
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: "Naslov"),
-                name: "naslov",
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: "Sadrzaj"),
-                name: "sadrzaj",
-              ),
-            ),
-          ],
-        ),
-      ]),
+      child: Column(
+        children: [
+          // Polja sa ikonama
+          _buildInputField("Naslov", Icons.title, "naslov"),
+          SizedBox(height: 10),
+          _buildInputField("Sadrzaj", Icons.description, "sadrzaj"),
+         
+           SizedBox(height: 10),
+          //_buildInputField("Datum", Icons.attach_money, "datum"),
+          //SizedBox(height: 10),
+          //_buildInputField("Trajanje (min)", Icons.access_time, "trajanje"), // Dodano trajanje
+          // SizedBox(height: 10),
+          /*_buildDropdownField(
+            "Kategorija",
+            Icons.list,
+            "kategorijaId",
+            kategorijaResult?.result ?? [],
+          ),
+         */
+        ],
+      ),
     );
   }
 
-  //File? _image;
-  //String? _base64Image;
+  // Funkcija za kreiranje input polja sa ikonom
+  Widget _buildInputField(String label, IconData icon, String name) {
+    return FormBuilderTextField(
+      name: name,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
 
-  /*Future getImage()  async {
-    var result = await FilePicker.platform.pickFiles(type: FileType.image);
-
-    if(result != null && result.files.single.path != null) {
-      _image = File(result.files.single.path!);
-      _base64Image = base64Encode(_image!.readAsBytesSync());
-    }
-
-  }*/
+  // Funkcija za dropdown meni sa kategorijama
+  Widget _buildDropdownField(
+    String label,
+    IconData icon,
+    String name,
+    List<Kategorija> items,
+  ) {
+    return FormBuilderDropdown<String>(
+      name: name,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(),
+      ),
+      items: items
+          .map((item) => DropdownMenuItem<String>(
+                value: item.id.toString(),
+                child: Text(item.naziv ?? ""),
+              ))
+          .toList(),
+    );
+  }
 }
+
