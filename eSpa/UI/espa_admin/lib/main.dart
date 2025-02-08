@@ -1,8 +1,10 @@
 import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/providers/komentar_provider.dart';
+import 'package:espa_admin/providers/korisnik_provider.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
 import 'package:espa_admin/providers/termin_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
+import 'package:espa_admin/providers/zaposlenik_provider.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +17,10 @@ runApp(MultiProvider(providers: [
 ChangeNotifierProvider(create: (_) => UslugaProvider()),
 ChangeNotifierProvider(create: (_) => KategorijaProvider()),
 ChangeNotifierProvider(create: (_) => NovostProvider()),
+ChangeNotifierProvider(create: (_) => ZaposlenikProvider()),
 ChangeNotifierProvider(create: (_) => TerminProvider()),
-ChangeNotifierProvider(create: (_) => KomentarProvider())],
+ChangeNotifierProvider(create: (_) => KomentarProvider()),
+ChangeNotifierProvider(create: (_) => KorisnikProvider())],
 child:const MyApp(),)
 );
 }

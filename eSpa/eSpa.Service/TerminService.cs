@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class TerminService:BaseCRUDService<Model.Termin,Database.Termin,TerminSearchObject,TerminInsertRequest,TerminUpdateRequest>,ITerminService
     {
-        public TerminService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public TerminService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -44,6 +44,9 @@ namespace eSpa.Service
 
             return filteredQuery;
         }*/     //prikazivalo error
+
+
+
         public override IQueryable<Database.Termin> AddFilter(IQueryable<Database.Termin> query, TerminSearchObject? search = null)
         {
             var filteredQuery = base.AddFilter(query, search);
@@ -63,6 +66,10 @@ namespace eSpa.Service
 
             return filteredQuery;
         }
+        
+
+
+
 
         /* public override Task<Model.Termin> Insert(TerminInsertRequest insert)
          {
@@ -91,7 +98,7 @@ namespace eSpa.Service
             {
                 throw new ArgumentException("Pogrešan format za Kraj. Koristi format HH:mm (npr. 09:30).");
             }
-
+           
             return base.Insert(insert);
         }
 

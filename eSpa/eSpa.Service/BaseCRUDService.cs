@@ -14,7 +14,7 @@ namespace eSpa.Service
         : BaseService<T, TDb, TSearch>, ICRUDService<T, TSearch, TInsert, TUpdate>
             where T : class where TDb : class where TSearch : BaseSearchObject where TInsert : class where TUpdate : class
     {
-        public BaseCRUDService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public BaseCRUDService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
         }
 

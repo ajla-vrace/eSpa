@@ -8,7 +8,7 @@ namespace eSpa.Model.SearchObject
 {
     public class TerminSearchObject:BaseSearchObject
     {
-        public string? Pocetak { get; set; }
+         public string? Pocetak { get; set; }
         //public string? Kraj { get; set; }
 
     }

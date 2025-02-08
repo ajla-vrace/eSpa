@@ -1,4 +1,4 @@
-import 'package:espa_admin/models/kategorija.dart';
+
 import 'package:espa_admin/models/novost.dart';
 import 'package:espa_admin/models/search_result.dart';
 //import 'package:espa_admin/providers/kategorija_provider.dart';
@@ -158,7 +158,7 @@ Widget build(BuildContext context) {
   }
 
   // Funkcija za dropdown meni sa kategorijama
-  Widget _buildDropdownField(
+  /*Widget _buildDropdownField(
     String label,
     IconData icon,
     String name,
@@ -178,6 +178,6 @@ Widget build(BuildContext context) {
               ))
           .toList(),
     );
-  }
+  }*/
 }
 

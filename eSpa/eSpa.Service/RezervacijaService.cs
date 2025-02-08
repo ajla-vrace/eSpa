@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class RezervacijaService:BaseCRUDService<Model.Rezervacija,Database.Rezervacija,RezervacijaSearchObject,RezervacijaInsertRequest,RezervacijaUpdateRequest>,IRezervacijaService
     {
-        public RezervacijaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public RezervacijaService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }

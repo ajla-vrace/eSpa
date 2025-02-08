@@ -25,4 +25,8 @@
     <ProjectReference Include="..\eSpa.Model\eSpa.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/kategorija_provider.dart';
+import 'package:espa_admin/screens/kategorija_detalji.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -127,13 +128,68 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           IconButton(
                             icon: const Icon(Icons.edit),
                             onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        KategorijaDetaljiPage(kategorija: kategorija),
+                                  ),
+                                );
                               // Akcija za update
                               print('Update clicked for: ${kategorija.naziv}');
                             },
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
-                            onPressed: () {
+                            onPressed: () async{
+                              final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Potvrda brisanja"),
+                                      content: const Text(
+                                          "Da li ste sigurni da želite obrisati ovu kategoriju?"),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text("Odustani"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop(
+                                                false); // Korisnik je odustao
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text("Obriši"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop(
+                                                true); // Korisnik je potvrdio
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+
+                                if (confirm == true) {
+                                  try {
+                                    await _kategorijaProvider.delete(kategorija.id!);
+                                    setState(() {
+                                      _kategorije.remove(
+                                          kategorija); // Uklonite obrisanu novost iz liste
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content:
+                                              Text("Kategorija uspešno obrisana.")),
+                                    );
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Došlo je do greške prilikom brisanja.")),
+                                    );
+                                  }
+                                }
+                            
                               // Akcija za delete
                               print('Delete clicked for: ${kategorija.naziv}');
                             },
@@ -244,6 +300,11 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           ),
                           onPressed: () async {
                             // Dodaj funkcionalnost za dugme
+                             Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => KategorijaDetaljiPage(),
+                              ),
+                            );
                           },
                           child: Row(
                             /*mainAxisSize: MainAxisSize

@@ -5,7 +5,11 @@ namespace eSpa.Service.Database
 {
     public partial class Uloga
     {
-       
+        public Uloga()
+        {
+            KorisnikUlogas = new HashSet<KorisnikUloga>();
+        }
+
         public int Id { get; set; }
         public string Naziv { get; set; } = null!;
 

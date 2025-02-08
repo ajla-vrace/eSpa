@@ -6,10 +6,12 @@ namespace eSpa.Models
     public partial class Zaposlenik
     {
         public int Id { get; set; }
-        public string Ime { get; set; } = null!;
-        public string Prezime { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string? Telefon { get; set; }
+        public int KorisnikId { get; set; }
         public DateTime DatumZaposlenja { get; set; }
+        public string Struka { get; set; } = null!;
+        public string? Status { get; set; }
+        public string? Napomena { get; set; }
+
+        public virtual Korisnik Korisnik { get; set; } = null!;
     }
 }

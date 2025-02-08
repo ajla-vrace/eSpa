@@ -5,7 +5,12 @@ namespace eSpa.Service.Database
 {
     public partial class Usluga
     {
-       
+        public Usluga()
+        {
+            Komentars = new HashSet<Komentar>();
+            Ocjenas = new HashSet<Ocjena>();
+            Rezervacijas = new HashSet<Rezervacija>();
+        }
 
         public int Id { get; set; }
         public string Naziv { get; set; } = null!;

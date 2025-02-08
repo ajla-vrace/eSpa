@@ -12,7 +12,7 @@ namespace eSpa.Service
 {
     public class UslugaService : BaseCRUDService<Model.Usluga, Database.Usluga, Model.SearchObject.UslugaSearchObject, Model.Requests.UslugaInsertRequest, Model.Requests.UslugaUpdateRequest>, IUslugaService
     {
-        public UslugaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public UslugaService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }

@@ -3,11 +3,13 @@
 //import 'package:espa_admin/main.dart';
 import 'package:espa_admin/screens/home.dart';
 import 'package:espa_admin/screens/kategorije.dart';
-import 'package:espa_admin/screens/komentari.dart';
+import 'package:espa_admin/screens/korisnici.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:espa_admin/screens/novosti.dart';
+import 'package:espa_admin/screens/recenzije.dart';
 import 'package:espa_admin/screens/termini.dart';
 import 'package:espa_admin/screens/usluge.dart';
+import 'package:espa_admin/screens/zaposlenici.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/foundation/key.dart';
 //import 'package:flutter/src/widgets/framework.dart';
@@ -46,16 +48,45 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
-              title: Text('Komentar'),
+              title: Text('HomePage'),
               onTap: () {
                 Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>  KomentarPage(),
+                          builder: (context) =>  HomePage(),
                         ),
                       );
               },
             ),
-             ListTile(
+            ListTile(
+              title: Text('Korisnici'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  KorisnikPage(),
+                        ),
+                      );
+              },
+            ),ListTile(
+              title: Text('Zaposlenici'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  ZaposlenikPage(),
+                        ),
+                      );
+              },
+            ),
+            ListTile(
+              title: Text('Usluge'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  UslugaPage(),
+                        ),
+                      );
+              },
+            ),
+            ListTile(
               title: Text('Kategorije'),
               onTap: () {
                 Navigator.of(context).push(
@@ -76,6 +107,19 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               },
             ),
             ListTile(
+              title: Text('Recenzije'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  RecenzijaPage(),
+                        ),
+                      );
+              },
+            ),
+            
+             
+            
+            ListTile(
               title: Text('Novosti'),
               onTap: () {
                 Navigator.of(context).push(
@@ -85,26 +129,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       );
               },
             ),
-            ListTile(
-              title: Text('Usluge'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  UslugaPage(),
-                        ),
-                      );
-              },
-            ),
-            ListTile(
-              title: Text('HomePage'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  HomePage(),
-                        ),
-                      );
-              },
-            ),
+            
+            
            
           ],
         ),

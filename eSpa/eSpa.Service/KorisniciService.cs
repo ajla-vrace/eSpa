@@ -15,7 +15,7 @@ namespace eSpa.Service
     public class KorisniciService : BaseCRUDService<Model.Korisnik, Database.Korisnik, Model.SearchObject.KorisnikSearchObject, Model.Requests.KorisnikInsertRequest, Model.Requests.KorisnikUpdateRequest>, IKorisniciService
     {
         //eSpaContext _context;
-        public KorisniciService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public KorisniciService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
             // _context = context;
         }

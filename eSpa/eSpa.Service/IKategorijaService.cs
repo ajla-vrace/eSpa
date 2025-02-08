@@ -1,4 +1,5 @@
 ﻿using eSpa.Model;
+using eSpa.Model.Requests;
 using eSpa.Model.SearchObject;
 using eSpa.Service.Database;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eSpa.Service
 {
-        public interface IKategorijaService: IService<Model.Kategorija,KategorijaSearchObject>
+        public interface IKategorijaService: ICRUDService<Model.Kategorija,KategorijaSearchObject, KategorijaInsertRequest,KategorijaUpdateRequest>
         {
         //jer sad nasljedjuje iservice interfejs
         //Task<List<Model.Kategorija>> Get();

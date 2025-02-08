@@ -13,6 +13,8 @@ namespace eSpa.Model
         public int UslugaId { get; set; }
         public string Tekst { get; set; } = null!;
         public DateTime Datum { get; set; }
+        public Korisnik Korisnik { get; set; }
+        public Usluga Usluga { get; set; }
 
     }
 

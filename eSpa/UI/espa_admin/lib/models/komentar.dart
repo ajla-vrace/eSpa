@@ -1,3 +1,5 @@
+import 'package:espa_admin/models/korisnik.dart';
+import 'package:espa_admin/models/usluga.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
@@ -12,7 +14,9 @@ class Komentar {
   int? uslugaId;
   String? tekst;
   DateTime? datum;
-  Komentar(this.id, this.korisnikId, this.uslugaId, this.tekst, this.datum);
+  Korisnik? korisnik;
+  Usluga? usluga;
+  Komentar(this.id, this.korisnikId, this.uslugaId, this.tekst, this.datum, this.korisnik,this.usluga);
 
     /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

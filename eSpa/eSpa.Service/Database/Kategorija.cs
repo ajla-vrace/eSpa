@@ -5,7 +5,11 @@ namespace eSpa.Service.Database
 {
     public partial class Kategorija
     {
-       
+        public Kategorija()
+        {
+            Uslugas = new HashSet<Usluga>();
+        }
+
         public int Id { get; set; }
         public string Naziv { get; set; } = null!;
 

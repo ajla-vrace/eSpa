@@ -12,7 +12,7 @@ namespace eSpa.Service
 {
     public class OcjenaService:BaseCRUDService<Model.Ocjena,Database.Ocjena,OcjenaSearchObject,OcjenaInsertRequest,OcjenaUpdateRequest>,IOcjenaService
     {
-        public OcjenaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public OcjenaService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }

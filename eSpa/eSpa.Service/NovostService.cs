@@ -12,7 +12,7 @@ namespace eSpa.Service
 {
     public class NovostService:BaseCRUDService<Model.Novost,Database.Novost,NovostSearchObject,NovostInsertRequest,NovostUpdateRequest>,INovostService
     {
-        public NovostService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public NovostService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -36,7 +36,7 @@ namespace eSpa.Service
 
             var entity = _mapper.Map<Database.Novost>(insert);
 
-            entity.Datum = DateTime.Now;
+            entity.DatumKreiranja = DateTime.Now;
 
             _context.Novosts.Add(entity);
             await _context.SaveChangesAsync();
@@ -54,7 +54,7 @@ namespace eSpa.Service
             }
 
             _mapper.Map(update, entity);
-            entity.Datum = DateTime.Now;
+            entity.DatumKreiranja = DateTime.Now;
 
             _context.Novosts.Update(entity);
             await _context.SaveChangesAsync();

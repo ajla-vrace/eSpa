@@ -8,7 +8,7 @@ namespace eSpa.Model.SearchObject
 {
     public class KategorijaSearchObject:BaseSearchObject
     {
-        public string? Naziv { get; set; }
+        //public string? Naziv { get; set; }
         public string? FTS { get; set; }
     }
 }

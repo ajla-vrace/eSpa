@@ -312,6 +312,7 @@ class _NovostiPageState extends State<NovostPage> {
                                 _novosti =
                                     data.result; // Ažurirajte listu komentara
                               });
+                              print(data.result);
                             } catch (e) {
                               print("Došlo je do greške prilikom pretrage: $e");
                               setState(() {

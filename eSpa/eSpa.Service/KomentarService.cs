@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class KomentarService:BaseCRUDService<Model.Komentar,Database.Komentar,KomentarSearchObject,KomentarInsertRequest,KomentarUpdateRequest>, IKomentarService
     {
-        public KomentarService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public KomentarService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -30,7 +30,8 @@ namespace eSpa.Service
 
             }
 
-
+            filteredQuery = filteredQuery.Include(x => x.Korisnik)
+                                .Include(x => x.Usluga);
 
 
             return filteredQuery;

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace eSpa.Service.Database
 {
-    public partial class eSpaContext : DbContext
+    public partial class eSpaContext1 : DbContext
     {
-        public eSpaContext()
+        public eSpaContext1()
         {
         }
 
-        public eSpaContext(DbContextOptions<eSpaContext> options)
+        public eSpaContext1(DbContextOptions<eSpaContext1> options)
             : base(options)
         {
         }
@@ -33,7 +33,7 @@ namespace eSpa.Service.Database
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data source=localhost;Initial Catalog=eSpa;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=eSpa;Integrated Security=True;");
             }
         }
 
@@ -63,9 +63,9 @@ namespace eSpa.Service.Database
 
                 entity.Property(e => e.KorisnikId).HasColumnName("korisnik_id");
 
-                entity.Property(e => e.Tekst)
-                    .HasColumnType("text")
-                    .HasColumnName("tekst");
+                entity.Property(e => e.Preporuka).HasColumnName("preporuka");
+
+                entity.Property(e => e.Tekst).HasColumnName("tekst");
 
                 entity.Property(e => e.UslugaId).HasColumnName("usluga_id");
 
@@ -104,6 +104,10 @@ namespace eSpa.Service.Database
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ime");
+
+                entity.Property(e => e.IsAdmin).HasColumnName("isAdmin");
+
+                entity.Property(e => e.IsBlokiran).HasColumnName("isBlokiran");
 
                 entity.Property(e => e.KorisnickoIme)
                     .HasMaxLength(10)
@@ -160,20 +164,18 @@ namespace eSpa.Service.Database
             {
                 entity.ToTable("Novost");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.DatumKreiranja).HasColumnType("datetime");
 
-                entity.Property(e => e.Datum)
-                    .HasColumnType("date")
-                    .HasColumnName("datum");
+                entity.Property(e => e.Naslov).HasMaxLength(255);
 
-                entity.Property(e => e.Naslov)
-                    .HasMaxLength(200)
-                    .IsUnicode(false)
-                    .HasColumnName("naslov");
+                entity.Property(e => e.Sadrzaj).HasColumnType("text");
 
-                entity.Property(e => e.Sadrzaj)
-                    .HasColumnType("text")
-                    .HasColumnName("sadrzaj");
+                entity.Property(e => e.Status).HasMaxLength(255);
+
+                entity.HasOne(d => d.Autor)
+                    .WithMany(p => p.Novosts)
+                    .HasForeignKey(d => d.AutorId)
+                    .HasConstraintName("FK__Novost__AutorID__72C60C4A");
             });
 
             modelBuilder.Entity<Ocjena>(entity =>
@@ -304,34 +306,20 @@ namespace eSpa.Service.Database
             {
                 entity.ToTable("Zaposlenik");
 
-                entity.HasIndex(e => e.Email, "UQ__Zaposlen__AB6E616402DE6F37")
-                    .IsUnique();
+                entity.Property(e => e.DatumZaposlenja).HasColumnType("datetime");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Napomena).HasColumnType("text");
 
-                entity.Property(e => e.DatumZaposlenja)
-                    .HasColumnType("date")
-                    .HasColumnName("datum_zaposlenja");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Ime)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ime");
-
-                entity.Property(e => e.Prezime)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("prezime");
-
-                entity.Property(e => e.Telefon)
+                entity.Property(e => e.Status)
                     .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("telefon");
+                    .HasDefaultValueSql("('Aktivan')");
+
+                entity.Property(e => e.Struka).HasMaxLength(100);
+
+                entity.HasOne(d => d.Korisnik)
+                    .WithMany(p => p.Zaposleniks)
+                    .HasForeignKey(d => d.KorisnikId)
+                    .HasConstraintName("FK__Zaposleni__Koris__6FE99F9F");
             });
 
             OnModelCreatingPartial(modelBuilder);

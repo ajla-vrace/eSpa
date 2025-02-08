@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eSpa.Model;
+using eSpa.Model.Requests;
 using eSpa.Model.SearchObject;
 using eSpa.Service.Database;
 using Microsoft.EntityFrameworkCore;
@@ -8,114 +9,72 @@ using System.Threading.Tasks;
 
 namespace eSpa.Service
 {
-    public class KategorijaService : BaseService<Model.Kategorija, Database.Kategorija, KategorijaSearchObject>, IKategorijaService
+    public class KategorijaService : BaseCRUDService<Model.Kategorija, Database.Kategorija, KategorijaSearchObject,KategorijaInsertRequest,KategorijaUpdateRequest>, IKategorijaService
     {
         /* private readonly eSpaContext _context;
          public IMapper _mapper { get;set; }*/
 
-        public KategorijaService(eSpaContext context, IMapper mapper)
-           : base(context, mapper)
+        public KategorijaService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
         {
 
         }
-        /*public KategorijaService(eSpaContext context, IMapper mapper):base(context,mapper)
-        {
-        }
-        public override async Task<PagedResult<Model.Kategorija>> Get(KategorijaSearchObject? search)
-        {
-           
-            var query = _context.Set<Database.Kategorija>().AsQueryable();
-            if (!string.IsNullOrWhiteSpace(search?.Naziv))
-            {
-                query = query.Where(x => x.Naziv.StartsWith(search.Naziv));
-            }
-            if (!string.IsNullOrWhiteSpace(search?.FTS))
-            {
-                query = query.Where(x => x.Naziv.Contains(search.FTS));
-            }
-            var list=await query.ToListAsync();
-           
-            return _mapper.Map<PagedResult<Model.Kategorija>>(list);
-        }*/
 
         public override IQueryable<Database.Kategorija> AddFilter(IQueryable<Database.Kategorija> query, KategorijaSearchObject? search = null)
         {
-            if (!string.IsNullOrWhiteSpace(search?.Naziv))
-            {
-                query = query.Where(x => x.Naziv.StartsWith(search.Naziv));
-            }
+            var filteredQuery = base.AddFilter(query, search);
 
             if (!string.IsNullOrWhiteSpace(search?.FTS))
             {
-                query = query.Where(x => x.Naziv.Contains(search.FTS));
+                filteredQuery = filteredQuery.Where(x => x.Naziv.Contains(search.FTS));
             }
 
-            return base.AddFilter(query, search);
+
+
+            return filteredQuery;
         }
 
-        /* public List<Model.Kategorija> GetAllKategorija()
-         {
-             var entityList = _context.Kategorijas.ToList();
-             var list=new List<Model.Kategorija>();
-             foreach(var item in entityList)
-             {
-                 list.Add(new Model.Kategorija()
-                 {
-                     Naziv = item.Naziv,
-                 });
-             }
-             return list;
-         }*/
-        /*public List<Model.Kategorija> Get()
+        public async override Task<Model.Kategorija> Insert(KategorijaInsertRequest insert)
         {
-            var entityList= _context.Kategorijas.ToList();
-            return _mapper.Map<List<Model.Kategorija>>(entityList);
 
-        }*/ //bez async i await
-            //ovo se brise jer se sada nasljedjuje baseservice
-        /*public async Task<List<Model.Kategorija>> Get()
-        {
-            var entityList = await _context.Kategorijas.ToListAsync();
-            return _mapper.Map<List<Model.Kategorija>>(entityList);
+            var entity = _mapper.Map<Database.Kategorija>(insert);
 
-        }*/
-        /*
-        public async Task<IEnumerable<Database.Kategorija>> GetAll()
-        {
-            return await _context.Kategorijas.ToListAsync();  // Koristi DbSet Kategorijas
-        }
+            //entity.Datum = DateTime.Now;
 
-        public async Task<Database.Kategorija> GetById(int id)
-        {
-            return await _context.Kategorijas.FindAsync(id);  // Koristi DbSet Kategorijas
-        }
-
-        public async Task<Database.Kategorija> AddKategorija(Database.Kategorija novaKategorija)
-        {
-            _context.Kategorijas.Add(novaKategorija);  // Dodavanje u DbSet Kategorijas
+            _context.Kategorijas.Add(entity);
             await _context.SaveChangesAsync();
-            return novaKategorija;
+
+            return _mapper.Map<Model.Kategorija>(entity);
+
         }
 
-        public async Task<Database.Kategorija> UpdateKategorija(int id, Database.Kategorija kategorija)
+        public override async Task<Model.Kategorija> Update(int id, KategorijaUpdateRequest update)
         {
-            var existingKategorija = await _context.Kategorijas.FindAsync(id);  // Pronađi u Kategorijas
-            if (existingKategorija == null) return null;
+            var entity = await _context.Kategorijas.FindAsync(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Kategorija nije pronađena.");
+            }
 
-            existingKategorija.Naziv = kategorija.Naziv;
+            _mapper.Map(update, entity);
+            //entity.Datum = DateTime.Now;
 
+            _context.Kategorijas.Update(entity);
             await _context.SaveChangesAsync();
-            return existingKategorija;
+
+            return _mapper.Map<Model.Kategorija>(entity);
         }
 
-        public async Task<bool> DeleteKategorija(int id)
+        public override async Task<Model.Kategorija> Delete(int id)
         {
-            var kategorija = await _context.Kategorijas.FindAsync(id);  // Pronađi u Kategorijas
-            if (kategorija == null) return false;
+            var entity = _context.Kategorijas.Find(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Kategorija nije pronađena.");
+            }
 
-            _context.Kategorijas.Remove(kategorija);  // Briši iz Kategorijas
+            _context.Kategorijas.Remove(entity);
             await _context.SaveChangesAsync();
-            return true;
-        }*/
+            return _mapper.Map<Model.Kategorija>(entity);
+        }
     }
 }

@@ -194,39 +194,40 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
 
 */
 
+  @override
+  Widget build(BuildContext context) {
+    return MasterScreenWidget(
+      // ignore: sort_child_properties_last
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(100.0), // Odmicanje od ivica ekrana
+          child: Container(
+            width: 500,
+            padding: EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                isLoading ? CircularProgressIndicator() : _buildForm(),
+                SizedBox(
+                    height: 20), // Dodavanje prostora između forme i dugmeta
+                Center(
+                  // Koristimo Center za centriranje dugmeta
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      _formKey.currentState?.saveAndValidate();
+                      var request = new Map.from(_formKey.currentState!.value);
 
-@override
-Widget build(BuildContext context) {
-  return MasterScreenWidget(
-    // ignore: sort_child_properties_last
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(100.0), // Odmicanje od ivica ekrana
-        child: Container(
-          width: 500,
-          padding: EdgeInsets.all(30),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              isLoading ? CircularProgressIndicator() : _buildForm(),
-              SizedBox(height: 20),  // Dodavanje prostora između forme i dugmeta
-              Center(  // Koristimo Center za centriranje dugmeta
-                child: ElevatedButton(
-                  onPressed: () async {
-                    _formKey.currentState?.saveAndValidate();
-                    var request = new Map.from(_formKey.currentState!.value);
-
-var currentValues =
+                      var currentValues =
                           Map.from(_formKey.currentState!.value);
 
                       // Provera da li su vrednosti promenjene
@@ -243,49 +244,46 @@ var currentValues =
                         return;
                       }
 
-
-
-                    try {
-                      if (widget.usluga == null) {
-                        await _uslugaProvider.insert(request);
-                      } else {
-                        await _uslugaProvider.update(widget.usluga!.id!, request);
-                      }
-                      Navigator.push(
+                      try {
+                        if (widget.usluga == null) {
+                          await _uslugaProvider.insert(request);
+                        } else {
+                          await _uslugaProvider.update(
+                              widget.usluga!.id!, request);
+                        }
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => UslugaPage(),
                           ),
                         );
-                    } on Exception catch (e) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: Text("Error"),
-                          content: Text(e.toString()),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text("OK"),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  child: Text("Sačuvaj"),
+                      } on Exception catch (e) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Text("Error"),
+                            content: Text(e.toString()),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    child: Text("Sačuvaj"),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
-    title: this.widget.usluga?.naziv ?? "Usluga details",
-  );
-}
-
-
+      title: this.widget.usluga?.naziv ?? "Usluga details",
+    );
+  }
 
   FormBuilder _buildForm() {
     return FormBuilder(
@@ -297,19 +295,19 @@ var currentValues =
           _buildInputField("Naziv", Icons.title, "naziv"),
           SizedBox(height: 10),
           _buildInputField("Opis", Icons.description, "opis"),
-         
-           SizedBox(height: 10),
+
+          SizedBox(height: 10),
           _buildInputField("Cijena", Icons.attach_money, "cijena"),
           SizedBox(height: 10),
-          _buildInputField("Trajanje (min)", Icons.access_time, "trajanje"), // Dodano trajanje
-           SizedBox(height: 10),
+          _buildInputField("Trajanje (min)", Icons.access_time,
+              "trajanje"), // Dodano trajanje
+          SizedBox(height: 10),
           _buildDropdownField(
             "Kategorija",
             Icons.list,
             "kategorijaId",
             kategorijaResult?.result ?? [],
           ),
-         
         ],
       ),
     );

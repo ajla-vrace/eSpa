@@ -44,30 +44,34 @@ namespace eSpa.Service
 
             CreateMap<Database.Uloga, Model.Uloga>();
 
-           // CreateMap<Database.Usluga, Model.Usluga>();
+            // CreateMap<Database.Usluga, Model.Usluga>();
 
             // Kategorija
             CreateMap<Database.Kategorija, Model.Kategorija>();
+            CreateMap<Model.Requests.KategorijaInsertRequest, Database.Kategorija>();
+            CreateMap<Model.Requests.KategorijaUpdateRequest, Database.Kategorija>();
 
-            
+
             // Zaposlenik
             CreateMap<Database.Zaposlenik, Model.Zaposlenik>();
+            CreateMap<Model.Requests.ZaposlenikInsertRequest, Database.Zaposlenik>();
+            CreateMap<Model.Requests.ZaposlenikUpdateRequest, Database.Zaposlenik>();
 
             // Novost
             //CreateMap<Database.Novost, Model.Novost>();
 
             // Komentar
-           // CreateMap<Database.Komentar, Model.Komentar>();
+            // CreateMap<Database.Komentar, Model.Komentar>();
 
             // Ocjena
-           // CreateMap<Database.Ocjena, Model.Ocjena>();
+            // CreateMap<Database.Ocjena, Model.Ocjena>();
 
             // Rezervacija
             //CreateMap<Database.Rezervacija, Model.Rezervacija>();
 
             // Termin
-           // CreateMap<Database.Termin, Model.Termin>();
-            
+            // CreateMap<Database.Termin, Model.Termin>();
+
         }
     }
 

@@ -9,14 +9,15 @@ namespace eSpa.Model.Requests
 {
     public class TerminInsertRequest
     {
-        [Required]
-        [RegularExpression(@"^([01]\d|2[0-3]):[0-5]\d$", ErrorMessage = "Vrijeme mora biti u formatu 09:00.")]
+         [Required]
+         [RegularExpression(@"^([01]\d|2[0-3]):[0-5]\d$", ErrorMessage = "Vrijeme mora biti u formatu 09:00.")]
 
-        public string Pocetak { get; set; }
+         public string Pocetak { get; set; }
 
-        [Required]
-        [RegularExpression(@"^([01]\d|2[0-3]):[0-5]\d$", ErrorMessage = "Vrijeme mora biti u formatu 09:00.")]
+         [Required]
+         [RegularExpression(@"^([01]\d|2[0-3]):[0-5]\d$", ErrorMessage = "Vrijeme mora biti u formatu 09:00.")]
 
-        public string Kraj { get; set; }
+         public string Kraj { get; set; }
+
     }
 }

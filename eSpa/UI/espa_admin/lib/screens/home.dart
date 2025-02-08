@@ -1,4 +1,4 @@
-import 'package:espa_admin/screens/komentari.dart';
+import 'package:espa_admin/screens/recenzije.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -183,7 +183,7 @@ Widget build(BuildContext context) {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => KomentarPage(),
+                      builder: (context) => RecenzijaPage(),
                     ),
                   );
                 },

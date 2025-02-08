@@ -1,7 +1,10 @@
+import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/termin.dart';
 import 'package:espa_admin/providers/termin_provider.dart';
+import 'package:espa_admin/screens/termin_detalji.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TerminPage extends StatefulWidget {
@@ -14,6 +17,25 @@ class TerminPage extends StatefulWidget {
 class _TerminPageState extends State<TerminPage> {
   List<Termin> _termini = [];
   bool _isTerminLoading = true;
+  SearchResult<Termin>? result;
+  TextEditingController _ftsController = TextEditingController();
+  late TerminProvider _terminProvider;
+
+  String formatTime(String timeString) {
+    try {
+      DateTime dateTime = DateFormat('HH:mm:ss').parse(timeString);
+      return DateFormat('HH:mm').format(dateTime);
+    } catch (e) {
+      return timeString; // Ako dođe do greške u parsiranju, vratite originalni string
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _terminProvider = context.read<TerminProvider>();
+  }
 
   @override
   void initState() {
@@ -59,8 +81,9 @@ class _TerminPageState extends State<TerminPage> {
             child: SizedBox(
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
-                columnSpacing: constraints.maxWidth * 0.2, // Prostor između kolona
-                headingRowColor: MaterialStateProperty.all(
+                columnSpacing:
+                    constraints.maxWidth * 0.2, // Prostor između kolona
+                /*headingRowColor: MaterialStateProperty.all(
                     Colors.lightBlue.shade100), // Boja zaglavlja
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
@@ -69,33 +92,132 @@ class _TerminPageState extends State<TerminPage> {
                     }
                     return Colors.white; // Podrazumevana boja reda
                   },
+                ),*/
+                headingRowColor: MaterialStateProperty.all(
+                    Colors.green.shade800), // Tamnozelena boja za zaglavlje
+                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    return const Color.fromARGB(
+                        255, 181, 226, 182); // Svetlozelena boja za redove
+                  },
                 ),
                 columns: const [
-                  DataColumn(
+                  /* DataColumn(
                     label: Text(
                       "ID",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
+                  ),*/
                   DataColumn(
                     label: Text(
-                      "Pocetak",
+                      "Početak termina",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   DataColumn(
                     label: Text(
-                      "Kraj",
+                      "Kraj termina",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
+                  DataColumn(
+                    label: Text(
+                      "",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  /*DataColumn(
+                    label: Text(
+                      "",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),*/
                 ],
                 rows: _termini.map((termin) {
                   return DataRow(
                     cells: [
-                      DataCell(Text(termin.id?.toString() ?? "N/A")),
-                      DataCell(Text(termin.pocetak ?? "N/A")),
-                       DataCell(Text(termin.kraj ?? "N/A")),
+                      //DataCell(Text(kategorija.id?.toString() ?? "N/A")),
+                      //DataCell(Text(termin.pocetak ?? "N/A")),
+                      //DataCell(Text(termin.kraj ?? "N/A")),
+                      DataCell(Text(formatTime(termin.pocetak ?? "00:00:00"))),
+                      DataCell(Text(formatTime(termin.kraj ?? "00:00:00"))),
+                      DataCell(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .end, // Poravnavanje ikonica desno
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TerminDetaljiPage(termin: termin),
+                                  ),
+                                );
+                                // Akcija za update
+                                print('Update clicked for: ${termin.pocetak}');
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Potvrda brisanja"),
+                                      content: const Text(
+                                          "Da li ste sigurni da želite obrisati ovaj termin?"),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text("Odustani"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop(
+                                                false); // Korisnik je odustao
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text("Obriši"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop(
+                                                true); // Korisnik je potvrdio
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+
+                                if (confirm == true) {
+                                  try {
+                                    await _terminProvider.delete(termin.id!);
+                                    setState(() {
+                                      _termini.remove(
+                                          termin); // Uklonite obrisanu novost iz liste
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content:
+                                              Text("Termin uspješno obrisan.")),
+                                    );
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Došlo je do greške prilikom brisanja.")),
+                                    );
+                                  }
+                                }
+
+                                // Akcija za delete
+                                print('Delete clicked for: ${termin.pocetak}');
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   );
                 }).toList(),
@@ -118,9 +240,195 @@ class _TerminPageState extends State<TerminPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                const Text(
-                  "Tabela Termini",
+                /*const Text(
+                  "Tabela Kategorije",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),*/
+                //const SizedBox(height: 20), //const SizedBox(height: 20),
+                // Novi red za input i dugme
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.8, // Ograničavanje širine
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _ftsController,
+                            decoration: const InputDecoration(
+                              labelText: "Pretraži termine",
+                              hintText: "Format HH:mm (npr. 09:00)",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        /*ElevatedButton(
+                      onPressed: () {
+                        final searchTerm = _ftsController.text;
+                        print("Pretraženi termin: $searchTerm");
+                        // Možete pozvati funkciju za pretragu ovde
+                      },
+                      child: const Text("Pretraži"),
+                    ),*/
+                        /*   ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 16.0), // Isti padding za oba dugmeta
+                            minimumSize: const Size(
+                                120, 50), // Ista minimalna širina i visina
+                            textStyle: const TextStyle(fontSize: 16),
+                          ), // Ista veličina fonta
+
+                          onPressed: () async {
+                            final searchTerm = _ftsController.text;
+                            RegExp regex = RegExp(r'^[0-9]{2}:[0-9]{2}$');
+                            if (!regex.hasMatch(searchTerm)) {
+                              // Ako nije u ispravnom formatu, prikažite poruku o grešci
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Format mora biti HH:mm (npr. 09:00)."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return; // Ne pokrećite pretragu dok unos nije ispravan
+                            }
+                            try {
+                              var data = await _terminProvider.get(
+                                  filter: {'pocetak': _ftsController.text});
+                              //print("oov je pretraga za :"_ftsController.text);
+                              print(
+                                  "Ovo je pretraga za: ${_ftsController.text}");
+
+                              setState(() {
+                                _termini =
+                                    data.result; // Ažurirajte listu komentara
+                              });
+                              print(data
+                                  .result); // Proveri šta tačno vraća server
+                            } catch (e) {
+                              print("Došlo je do greške prilikom pretrage: $e");
+                              setState(() {
+                                _termini =
+                                    []; // Prazna lista ako nema rezultata ili dođe do greške
+                              });
+                            }
+                          },
+                          child: const Text("Pretraži"),
+                        ),
+                        const SizedBox(width: 30),
+                        /*ElevatedButton(
+                          onPressed: () async {
+                            
+                            
+                          },
+                          child: const Text("Dodaj novu kategoriju"),
+                        ),*/
+*/
+                        
+                       
+                      
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 16.0), // Isti padding za oba dugmeta
+                            minimumSize: const Size(
+                                120, 50), // Ista minimalna širina i visina
+                            textStyle: const TextStyle(fontSize: 16),
+                          ), // Ista veličina fonta
+
+                          onPressed: () async {
+                            final searchTerm = _ftsController.text;
+
+                            if (searchTerm.isEmpty) {
+                              // Ako je input polje prazno, prikaži sve termine
+                              try {
+                                var data =
+                                    await _terminProvider.get(); // Bez filtera
+                                setState(() {
+                                  _termini =
+                                      data.result; // Ažuriraj listu termina
+                                });
+                              } catch (e) {
+                                print(
+                                    "Došlo je do greške prilikom učitavanja svih termina: $e");
+                                setState(() {
+                                  _termini =
+                                      []; // Prazna lista u slučaju greške
+                                });
+                              }
+                            } else {
+                              // Ako nije prazno, proveri format i uradi pretragu
+                              RegExp regex = RegExp(r'^[0-9]{2}:[0-9]{2}$');
+                              if (!regex.hasMatch(searchTerm)) {
+                                // Ako nije u ispravnom formatu, prikaži poruku o grešci
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        "Format mora biti HH:mm (npr. 09:00)."),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return; // Ne pokrećite pretragu dok unos nije ispravan
+                              }
+                              try {
+                                var data = await _terminProvider.get(filter: {
+                                  'pocetak': searchTerm
+                                }); // Pretraga sa filterom
+                                setState(() {
+                                  _termini =
+                                      data.result; // Ažuriraj listu termina
+                                });
+                              } catch (e) {
+                                print(
+                                    "Došlo je do greške prilikom pretrage: $e");
+                                setState(() {
+                                  _termini =
+                                      []; // Prazna lista ako nema rezultata ili greške
+                                });
+                              }
+                            }
+                          },
+                          child: const Text("Pretraži"),
+                        ),
+                          const SizedBox(width: 30),
+                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 16.0), // Isti padding za oba dugmeta
+                            minimumSize: const Size(
+                                120, 50), // Ista minimalna širina i visina
+                            textStyle: const TextStyle(
+                                fontSize: 16), // Ista veličina fonta
+                          ),
+                          onPressed: () async {
+                            // Dodaj funkcionalnost za dugme
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => TerminDetaljiPage(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            /*mainAxisSize: MainAxisSize
+                                .min, // Osigurava da Row zauzima minimalnu širinu potrebnu za ikonu i tekst*/
+                            children: const [
+                              Icon(Icons.add), // Ikonica plusa
+                              SizedBox(
+                                  width: 8), // Razmak između ikone i teksta
+                              Text("Dodaj novi termin"), // Tekst dugmeta
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 _buildTerminiTable(),

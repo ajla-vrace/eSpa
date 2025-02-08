@@ -9,5 +9,9 @@ namespace eSpa.Model.SearchObject
     public class KorisnikSearchObject : BaseSearchObject
     {
         public bool? IsUlogeIncluded { get; set; }
+        public string? Ime { get; set; }
+        public string? Prezime { get; set; }
+        public string? KorisnickoIme { get; set; }
+        public string? Status { get; set; }
     }
 }
