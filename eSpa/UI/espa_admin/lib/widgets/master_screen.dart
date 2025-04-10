@@ -7,6 +7,7 @@ import 'package:espa_admin/screens/korisnici.dart';
 import 'package:espa_admin/screens/login.dart';
 import 'package:espa_admin/screens/novosti.dart';
 import 'package:espa_admin/screens/recenzije.dart';
+import 'package:espa_admin/screens/rezervacije.dart';
 import 'package:espa_admin/screens/termini.dart';
 import 'package:espa_admin/screens/usluge.dart';
 import 'package:espa_admin/screens/zaposlenici.dart';
@@ -129,7 +130,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                       );
               },
             ),
-            
+             ListTile(
+              title: Text('Rezervacije'),
+              onTap: () {
+                Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>  RezervacijePage(),
+                        ),
+                      );
+              },
+            ),
             
            
           ],

@@ -27,6 +27,7 @@ namespace eSpa.Service.Database
         public string Status { get; set; } = null!;
         public bool? IsAdmin { get; set; }
         public bool? IsBlokiran { get; set; }
+        public bool? IsZaposlenik { get; set; }
 
         public virtual ICollection<Komentar> Komentars { get; set; }
         public virtual ICollection<KorisnikUloga> KorisnikUlogas { get; set; }

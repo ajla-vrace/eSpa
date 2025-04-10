@@ -11,7 +11,9 @@ namespace eSpa.Model
         public int Id { get; set; }
         public string Naslov { get; set; } = null!;
         public string Sadrzaj { get; set; } = null!;
-        public DateTime Datum { get; set; }
+        public DateTime DatumKreiranja { get; set; }
         public int? AutorId { get; set; }
+        public string? Status { get; set; }
+        public Korisnik Autor { get; set; }
     }
 }

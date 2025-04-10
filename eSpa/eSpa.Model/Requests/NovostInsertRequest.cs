@@ -16,9 +16,9 @@ namespace eSpa.Model.Requests
         [MinLength(10, ErrorMessage = "Sadržaj mora imati minimalno 10 znakova.")]
 
         public string Sadrzaj { get; set; } = null!;
-        public string? Status { get; set; }
+        //public string? Status { get; set; }
 
-        public int? AutorID { get; set; }
+        //public int? AutorID { get; set; }
         // public DateTime Datum { get; set; }
     }
 }

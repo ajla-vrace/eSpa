@@ -20,5 +20,7 @@ namespace eSpa.Model.Requests
         public string Struka { get; set; } = null!;
         public string? Status { get; set; } = "Aktivan";
         public string? Napomena { get; set; }
+        public string? Biografija { get; set; }
+        public int? SlikaId { get; set; }
     }
 }

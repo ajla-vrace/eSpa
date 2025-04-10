@@ -1,7 +1,5 @@
-//import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/novost.dart';
 import 'package:espa_admin/models/search_result.dart';
-//import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
 import 'package:espa_admin/screens/novost_detalji.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
@@ -20,7 +18,10 @@ class _NovostiPageState extends State<NovostPage> {
   List<Novost> _novosti = [];
   bool _isNovostLoading = true;
   SearchResult<Novost>? result;
-  TextEditingController _ftsController = TextEditingController();
+  TextEditingController _naslovController = TextEditingController();
+  TextEditingController _autorController = TextEditingController();
+  String? _selectedStatus = "Sve";
+
   late NovostProvider _novostProvider;
 
   String _shortenText(String text, int maxLength) {
@@ -82,17 +83,7 @@ class _NovostiPageState extends State<NovostPage> {
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
                 columnSpacing:
-                    constraints.maxWidth * 0.2, // Prostor između kolona
-                /*headingRowColor: MaterialStateProperty.all(
-                    Colors.lightBlue.shade100), // Boja zaglavlja
-                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Colors.lightBlue.shade200; // Selektovani red
-                    }
-                    return Colors.white; // Podrazumevana boja reda
-                  },
-                ),*/
+                    constraints.maxWidth * 0.1, // Prostor između kolona
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -102,12 +93,6 @@ class _NovostiPageState extends State<NovostPage> {
                   },
                 ),
                 columns: const [
-                  /*DataColumn(
-                    label: Text(
-                      "ID",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                   DataColumn(
                     label: Text(
                       "Naslov",
@@ -128,6 +113,18 @@ class _NovostiPageState extends State<NovostPage> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Autor",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Status",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -136,15 +133,15 @@ class _NovostiPageState extends State<NovostPage> {
                 rows: _novosti.map((novost) {
                   return DataRow(
                     cells: [
-                      // DataCell(Text(novost.id?.toString() ?? "N/A")),
                       DataCell(Text(novost.naslov ?? "N/A")),
-                      //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
                       DataCell(
                         Text(_shortenText(
                             novost.sadrzaj ?? '', 30)), // Skraćeni sadržaj
                       ),
                       DataCell(Text(DateFormat('dd.MM.yyyy.')
-                          .format(novost.datum ?? DateTime.now()))),
+                          .format(novost.datumKreiranja ?? DateTime.now()))),
+                      DataCell(Text(novost.autor?.korisnickoIme ?? "N/A")),
+                      DataCell(Text(novost.status ?? "N/A")),
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
@@ -160,31 +157,11 @@ class _NovostiPageState extends State<NovostPage> {
                                         NovostDetaljiPage(novost: novost),
                                   ),
                                 );
-                                /* bool? isUpdated = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NovostDetaljiPage(novost: novost),
-                                  ),
-                                );
 
-                                // Provjera da li treba osvježiti podatke
-                                if (isUpdated == true) {
-                                  await _loadNovosti(); // Poziv metode za ponovno učitavanje podataka
-                                  setState(() {});
-                                }*/
                                 // Akcija za update
-                                print('Update clicked for: ${novost.naslov}');
+                                print('Detalji clicked for: ${novost.naslov}');
                               },
                             ),
-                            /* IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                // Akcija za delete
-                                print('Delete clicked for: ${novost.naslov}');
-                              },
-                            ),*/
-
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
@@ -202,6 +179,10 @@ class _NovostiPageState extends State<NovostPage> {
                                             Navigator.of(context).pop(
                                                 false); // Korisnik je odustao
                                           },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .grey, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                         TextButton(
                                           child: const Text("Obriši"),
@@ -209,6 +190,10 @@ class _NovostiPageState extends State<NovostPage> {
                                             Navigator.of(context).pop(
                                                 true); // Korisnik je potvrdio
                                           },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .red, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                       ],
                                     );
@@ -224,8 +209,21 @@ class _NovostiPageState extends State<NovostPage> {
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                          content:
-                                              Text("Novost uspešno obrisana.")),
+                                        content: Text(
+                                          "Novost uspješno obrisana.",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: Colors
+                                            .green, // Dodaj zelenu pozadinu
+                                        behavior: SnackBarBehavior
+                                            .floating, // Opcionalno za lepši prikaz
+                                        duration: Duration(seconds: 3),
+                                        /*margin: EdgeInsets.symmetric(
+                                            horizontal: 100.0, vertical: 20.0),
+                                        padding: EdgeInsets.all(8.0),*/
+                                      ),
                                     );
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -262,11 +260,6 @@ class _NovostiPageState extends State<NovostPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                /*const Text(
-                  "Tabela Kategorije",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),*/
-                //const SizedBox(height: 20), //const SizedBox(height: 20),
                 // Novi red za input i dugme
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -277,23 +270,61 @@ class _NovostiPageState extends State<NovostPage> {
                       children: [
                         Expanded(
                           child: TextField(
-                            controller: _ftsController,
+                            controller: _naslovController,
                             decoration: const InputDecoration(
-                              labelText: "Pretraži novosti",
+                              labelText: "Pretraži po naslovu",
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
                         ),
                         const SizedBox(width: 10),
-                        /*ElevatedButton(
-                      onPressed: () {
-                        final searchTerm = _ftsController.text;
-                        print("Pretraženi termin: $searchTerm");
-                        // Možete pozvati funkciju za pretragu ovde
-                      },
-                      child: const Text("Pretraži"),
-                    ),*/
+                        Expanded(
+                          child: TextField(
+                            controller: _autorController,
+                            decoration: const InputDecoration(
+                              labelText: "Pretraži po autoru",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            value: _selectedStatus,
+                            decoration: const InputDecoration(
+                              labelText: "Pretraži po statusu",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                            items: <String>["Sve", "Aktivna", "Neaktivna"]
+                                .map((status) => DropdownMenuItem<String>(
+                                      value: status,
+                                      child: Text(status),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedStatus = value;
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                       /* IconButton(
+                          icon: Icon(Icons.backspace, color: Colors.red),
+                          onPressed: () {
+                            _naslovController.clear();
+                            _autorController.clear();
+                            
+                            setState(() {
+                              _selectedStatus= "Sve"; 
+                            });// Briše unos iz polja
+                          },
+                          tooltip: 'Obriši unos',
+                        ),*/
+                         const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -306,11 +337,21 @@ class _NovostiPageState extends State<NovostPage> {
 
                           onPressed: () async {
                             try {
-                              var data = await _novostProvider
-                                  .get(filter: {'fts': _ftsController.text});
+                              var filter = {
+                                'Naslov': _naslovController.text,
+                                'Autor': _autorController.text,
+                              };
+
+                              // Ako je izabrana vrednost različita od "Sve", dodaj filter za status
+                              if (_selectedStatus != null &&
+                                  _selectedStatus != "Sve") {
+                                filter['Status'] = _selectedStatus!;
+                              }
+
+                              var data =
+                                  await _novostProvider.get(filter: filter);
                               setState(() {
-                                _novosti =
-                                    data.result; // Ažurirajte listu komentara
+                                _novosti = data.result;
                               });
                               print(data.result);
                             } catch (e) {
@@ -324,14 +365,6 @@ class _NovostiPageState extends State<NovostPage> {
                           child: const Text("Pretraži"),
                         ),
                         const SizedBox(width: 30),
-                        /*ElevatedButton(
-                          onPressed: () async {
-                            
-                            
-                          },
-                          child: const Text("Dodaj novu kategoriju"),
-                        ),*/
-
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(

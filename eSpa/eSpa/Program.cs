@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<eSpaContext1>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<eSpaContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(IKategorijaService));  //prije bilo startup
 
 //builder.Services.AddAuthentication("BasicAuthentication")
@@ -52,6 +52,7 @@ builder.Services.AddAutoMapper(typeof(IKategorijaService));  //prije bilo startu
 builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
+builder.Services.AddHttpContextAccessor(); //dodano novo
 
 builder.Services.AddTransient<IKorisniciService, KorisniciService>(); //plus dodat sve ostalo
 //builder.Services.AddScoped<IUslugaService, UslugaService>();
@@ -64,6 +65,9 @@ builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IOcjenaService, OcjenaService>();
 builder.Services.AddTransient<ITerminService, TerminService>();
 builder.Services.AddTransient<IRezervacijaService,RezervacijaService>();
+builder.Services.AddTransient<IZaposlenikSlikeService, ZaposlenikSlikeService>();
+builder.Services.AddTransient<IUlogaService, UlogaService>();
+builder.Services.AddTransient<IKorisnikUlogaService, KorisnikUlogaService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

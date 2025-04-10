@@ -9,9 +9,13 @@ namespace eSpa.Model.Requests
 {
     public class ZaposlenikUpdateRequest
     {
+        public string? Ime { get; set; }
+        public string? Prezime { get; set; }
         public DateTime DatumZaposlenja { get; set; }
         public string Struka { get; set; } = null!;
-        public string? Status { get; set; } = "Aktivan";
+        public string? Status { get; set; }
         public string? Napomena { get; set; }
+        public string? Biografija { get; set; }
+        public int? SlikaId { get; set; }
     }
 }

@@ -285,3 +285,6 @@ C:\Users\User\Documents\eSpa\eSpa\eSpa\obj\Debug\net6.0\refint\eSpa.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\obj\Debug\net6.0\eSpa.pdb
 C:\Users\User\Documents\eSpa\eSpa\eSpa\obj\Debug\net6.0\eSpa.genruntimeconfig.cache
 C:\Users\User\Documents\eSpa\eSpa\eSpa\obj\Debug\net6.0\ref\eSpa.dll
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Text.Encodings.Web.dll
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll

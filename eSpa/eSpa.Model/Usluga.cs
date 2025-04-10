@@ -14,5 +14,6 @@ namespace eSpa.Model
         public decimal Cijena { get; set; }
         public string Trajanje { get; set; } = null!;
         public int KategorijaId { get; set; }
+        public Kategorija Kategorija { get; set; }
     }
 }

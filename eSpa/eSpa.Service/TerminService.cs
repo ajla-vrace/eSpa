@@ -8,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace eSpa.Service
 {
     public class TerminService:BaseCRUDService<Model.Termin,Database.Termin,TerminSearchObject,TerminInsertRequest,TerminUpdateRequest>,ITerminService
     {
-        public TerminService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
+        public TerminService(eSpaContext context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -98,7 +99,14 @@ namespace eSpa.Service
             {
                 throw new ArgumentException("Pogrešan format za Kraj. Koristi format HH:mm (npr. 09:30).");
             }
-           
+            var exists = _context.Termins
+         .Any(x => x.Pocetak == pocetak && x.Kraj == kraj);
+
+            if (exists)
+            {
+                throw new ArgumentException("Termin sa istim vremenskim intervalom već postoji.");
+            }
+
             return base.Insert(insert);
         }
 

@@ -8,10 +8,12 @@ namespace eSpa.Model
 {
     public partial class Uloga
     {
-        public int UlogaId { get; set; }
+        public int Id { get; set; }
 
         public string Naziv { get; set; } = null!;
+        //public virtual ICollection<KorisnikUloga> KorisnikUloges { get; set; } = new List<KorisnikUloga>();
 
-        public string? Opis { get; set; }
+
+        //public string? Opis { get; set; }
     }
 }

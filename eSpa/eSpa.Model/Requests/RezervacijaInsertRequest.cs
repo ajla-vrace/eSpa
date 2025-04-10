@@ -30,7 +30,7 @@ namespace eSpa.Model.Requests
 
         [Required(ErrorMessage = "Datum je obavezan.")]
         [DataType(DataType.Date, ErrorMessage = "Datum mora biti validan datum.")]
-        [FutureDate(ErrorMessage = "Datum rezervacije ne može biti u prošlosti.")]
+        //[FutureDate(ErrorMessage = "Datum rezervacije ne može biti u prošlosti.")]
         public DateTime Datum { get; set; }
 
         [Required(ErrorMessage = "Termin ID je obavezan.")]

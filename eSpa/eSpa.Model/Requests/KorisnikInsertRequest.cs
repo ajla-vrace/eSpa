@@ -21,7 +21,7 @@ namespace eSpa.Model.Requests
         [Required(AllowEmptyStrings = false)]
         public string KorisnickoIme { get; set; } = null!;
 
-        public bool? Status { get; set; }
+        //public bool? Status { get; set; }
 
         [Compare("PasswordPotvrda", ErrorMessage = "Passwords do not match.")]
         public string Password { get; set; }

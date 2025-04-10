@@ -11,10 +11,19 @@ namespace eSpa.Service
     {
         public MappingProfile()
         {
+
             CreateMap<Database.Korisnik, Model.Korisnik>();
             CreateMap<Model.Requests.KorisnikInsertRequest, Database.Korisnik>();
             CreateMap<Model.Requests.KorisnikUpdateRequest, Database.Korisnik>();
-           
+
+            CreateMap<Database.Uloga, Model.Uloga>();
+            CreateMap<Model.Requests.UlogaInsertRequest, Database.Uloga>();
+            CreateMap<Model.Requests.UlogaUpdateRequest, Database.Uloga>();
+
+            CreateMap<Database.KorisnikUloga, Model.KorisnikUloga>();
+            CreateMap<Model.Requests.KorisnikUlogaInsertRequest, Database.KorisnikUloga>();
+            CreateMap<Model.Requests.KorisnikUlogaUpdateRequest, Database.KorisnikUloga>();
+
             CreateMap<Database.Usluga, Model.Usluga>();
             CreateMap<Model.Requests.UslugaInsertRequest, Database.Usluga>();
             CreateMap<Model.Requests.UslugaUpdateRequest, Database.Usluga>();
@@ -40,9 +49,9 @@ namespace eSpa.Service
             CreateMap<Model.Requests.RezervacijaUpdateRequest, Database.Rezervacija>();
 
 
-            CreateMap<Database.KorisnikUloga, Model.KorisnikUloga>();
+           // CreateMap<Database.KorisnikUloga, Model.KorisnikUloga>();
 
-            CreateMap<Database.Uloga, Model.Uloga>();
+           // CreateMap<Database.Uloga, Model.Uloga>();
 
             // CreateMap<Database.Usluga, Model.Usluga>();
 
@@ -57,6 +66,12 @@ namespace eSpa.Service
             CreateMap<Model.Requests.ZaposlenikInsertRequest, Database.Zaposlenik>();
             CreateMap<Model.Requests.ZaposlenikUpdateRequest, Database.Zaposlenik>();
 
+            CreateMap<Database.ZaposlenikSlike, Model.ZaposlenikSlike>();
+            CreateMap<Model.Requests.ZaposlenikSlikeInsertRequest, Database.ZaposlenikSlike>();
+            CreateMap<Model.Requests.ZaposlenikSlikeUpdateRequest, Database.ZaposlenikSlike>();
+
+
+           
             // Novost
             //CreateMap<Database.Novost, Model.Novost>();
 

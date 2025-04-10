@@ -27,7 +27,6 @@ namespace eSpa.Models
         public string LozinkaHash { get; set; } = null!;
         public string LozinkaSalt { get; set; } = null!;
         public string Status { get; set; } = null!;
-       
 
         public virtual ICollection<Komentar> Komentars { get; set; }
         public virtual ICollection<KorisnikUloga> KorisnikUlogas { get; set; }

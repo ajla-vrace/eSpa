@@ -177,6 +177,10 @@ class _TerminPageState extends State<TerminPage> {
                                             Navigator.of(context).pop(
                                                 false); // Korisnik je odustao
                                           },
+                                           style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .grey, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                         TextButton(
                                           child: const Text("Obriši"),
@@ -184,6 +188,10 @@ class _TerminPageState extends State<TerminPage> {
                                             Navigator.of(context).pop(
                                                 true); // Korisnik je potvrdio
                                           },
+                                           style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .red, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                       ],
                                     );
@@ -199,8 +207,21 @@ class _TerminPageState extends State<TerminPage> {
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                          content:
-                                              Text("Termin uspješno obrisan.")),
+                                        content: Text(
+                                          "Termin uspješno obrisan.",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: Colors
+                                            .green, // Dodaj zelenu pozadinu
+                                        behavior: SnackBarBehavior
+                                            .floating, // Opcionalno za lepši prikaz
+                                        duration: Duration(seconds: 3),
+                                        /*margin: EdgeInsets.symmetric(
+                                            horizontal: 100.0, vertical: 20.0),
+                                        padding: EdgeInsets.all(8.0),*/
+                                      ),
                                     );
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -257,7 +278,7 @@ class _TerminPageState extends State<TerminPage> {
                           child: TextField(
                             controller: _ftsController,
                             decoration: const InputDecoration(
-                              labelText: "Pretraži termine",
+                              labelText: "Pretraži termine po početnom vremenu",
                               hintText: "Format HH:mm (npr. 09:00)",
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.search),
@@ -265,6 +286,14 @@ class _TerminPageState extends State<TerminPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
+                        IconButton(
+                          icon: Icon(Icons.backspace, color: Colors.red),
+                          onPressed: () {
+                            _ftsController.clear();
+                          },
+                          tooltip: 'Obriši unos',
+                        ),
+                         const SizedBox(width: 10),
                         /*ElevatedButton(
                       onPressed: () {
                         final searchTerm = _ftsController.text;
@@ -329,9 +358,7 @@ class _TerminPageState extends State<TerminPage> {
                           child: const Text("Dodaj novu kategoriju"),
                         ),*/
 */
-                        
-                       
-                      
+
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -343,61 +370,74 @@ class _TerminPageState extends State<TerminPage> {
                           ), // Ista veličina fonta
 
                           onPressed: () async {
-                            final searchTerm = _ftsController.text;
+                            //final searchTerm = _ftsController.text;
+                            final searchTerm = _ftsController.text.trim();
+
+                            // Regularni izraz za tačan format HH:mm (bez sekundi ili dodatnih karaktera)
+                            RegExp validFormat = RegExp(r'^\d{2}:\d{2}$');
+                            RegExp invalidFormat = RegExp(
+                                r'^\d{2}:\d{2}:'); // Hvata 09:00: ili 09:00:00
 
                             if (searchTerm.isEmpty) {
-                              // Ako je input polje prazno, prikaži sve termine
                               try {
-                                var data =
-                                    await _terminProvider.get(); // Bez filtera
+                                var data = await _terminProvider
+                                    .get(); // Dohvati sve termine ako je input prazan
                                 setState(() {
-                                  _termini =
-                                      data.result; // Ažuriraj listu termina
+                                  _termini = data.result;
                                 });
                               } catch (e) {
                                 print(
                                     "Došlo je do greške prilikom učitavanja svih termina: $e");
                                 setState(() {
-                                  _termini =
-                                      []; // Prazna lista u slučaju greške
+                                  _termini = [];
                                 });
                               }
+                            } else if (invalidFormat.hasMatch(searchTerm) ||
+                                !validFormat.hasMatch(searchTerm)) {
+                              // Ako format nije validan, jednostavno obriši tabelu
+                              setState(() {
+                                _termini = [];
+                              });
+                            } else if (!validFormat.hasMatch(searchTerm)) {
+                              // Ako format nije ispravan (npr. tekstualni unos), takođe prikaži poruku
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "Format mora biti HH:mm (npr. 09:00)."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
                             } else {
-                              // Ako nije prazno, proveri format i uradi pretragu
-                              RegExp regex = RegExp(r'^[0-9]{2}:[0-9]{2}$');
-                              if (!regex.hasMatch(searchTerm)) {
-                                // Ako nije u ispravnom formatu, prikaži poruku o grešci
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        "Format mora biti HH:mm (npr. 09:00)."),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                                return; // Ne pokrećite pretragu dok unos nije ispravan
-                              }
+                              // Ako je format tačan (HH:mm), izvrši pretragu
                               try {
-                                var data = await _terminProvider.get(filter: {
-                                  'pocetak': searchTerm
-                                }); // Pretraga sa filterom
+                                var data = await _terminProvider
+                                    .get(filter: {'pocetak': searchTerm});
                                 setState(() {
-                                  _termini =
-                                      data.result; // Ažuriraj listu termina
+                                  _termini = data.result;
                                 });
+
+                                if (_termini.isEmpty) {
+                                  // Ako nema rezultata, prikaži "Nema podataka"
+                                 /* ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Nema podataka"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );*/
+                                }
                               } catch (e) {
                                 print(
                                     "Došlo je do greške prilikom pretrage: $e");
                                 setState(() {
-                                  _termini =
-                                      []; // Prazna lista ako nema rezultata ili greške
+                                  _termini = [];
                                 });
                               }
                             }
                           },
                           child: const Text("Pretraži"),
                         ),
-                          const SizedBox(width: 30),
-                         ElevatedButton(
+                        const SizedBox(width: 30),
+                        ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0,

@@ -17,7 +17,8 @@ namespace eSpa.Model.Requests
         public string? Email { get; set; }
         [Required(AllowEmptyStrings = false)]
         public string? Telefon { get; set; }
-
-        public bool? Status { get; set; }
+        public bool? IsAdmin { get; set; }
+        public string? Status { get; set; }
+        public bool? IsBlokiran { get; set; }
     }
 }

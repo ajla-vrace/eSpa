@@ -17,10 +17,10 @@ namespace eSpa.Model.Requests
 
         public string Sadrzaj { get; set; } = null!;
 
-        public bool Status { get; set; } = true;
-
+        public string? Status { get; set; }
+        public bool? IsAdmin { get; set; }
         // Opcionalno, ako želiš da se može menjati autor
-        public int? AutorID { get; set; }
+        // public int? AutorID { get; set; }
         //public DateTime Datum { get; set; }
     }
 }

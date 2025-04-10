@@ -1,7 +1,9 @@
 //import 'package:espa_admin/models/kategorija.dart';
 //import 'package:espa_admin/models/novost.dart';
+import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/usluga.dart';
+import 'package:espa_admin/providers/kategorija_provider.dart';
 //import 'package:espa_admin/providers/kategorija_provider.dart';
 //import 'package:espa_admin/providers/novost_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
@@ -23,8 +25,23 @@ class _UslugePageState extends State<UslugaPage> {
   List<Usluga> _usluge = [];
   bool _isUslugaLoading = true;
   SearchResult<Usluga>? result;
-  TextEditingController _ftsController = TextEditingController();
+  //TextEditingController _ftsController = TextEditingController();
+  TextEditingController _nazivController = TextEditingController();
+  TextEditingController _cijenaController = TextEditingController();
+  TextEditingController _trajanjeController = TextEditingController();
   late UslugaProvider _uslugaProvider;
+  //late KategorijaProvider _kategorijaProvider;
+
+  String? selectedKategorija="Sve";
+  
+  List<Kategorija>? kategorije;
+  
+  List<String?>? _kategorije; // Varijabla za pohranu odabrane kategorije
+  //List<String> kategorije = [];
+
+  //List<Kategorija>? _kategorije;
+  
+  //var kategorije;
 
   String _shortenText(String text, int maxLength) {
     if (text.length > maxLength) {
@@ -38,12 +55,14 @@ class _UslugePageState extends State<UslugaPage> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _uslugaProvider = context.read<UslugaProvider>();
+   // _kategorijaProvider = context.read<KategorijaProvider>();
   }
 
   @override
   void initState() {
     super.initState();
     _loadUsluge();
+    _loadKategorije();
   }
 
   Future<void> _loadUsluge() async {
@@ -84,8 +103,8 @@ class _UslugePageState extends State<UslugaPage> {
             child: SizedBox(
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
-                columnSpacing:20,
-                  //OVDJE JE  // constraints.maxWidth * 0.2, // Prostor između kolona
+                columnSpacing: 20,
+                //OVDJE JE  // constraints.maxWidth * 0.2, // Prostor između kolona
                 /*headingRowColor: MaterialStateProperty.all(
                     Colors.lightBlue.shade100), // Boja zaglavlja
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -137,6 +156,12 @@ class _UslugePageState extends State<UslugaPage> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Kategorija",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -146,16 +171,22 @@ class _UslugePageState extends State<UslugaPage> {
                   return DataRow(
                     cells: [
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
-                      DataCell(Text(usluga.naziv ?? "N/A")),
+                      // DataCell(Text(usluga.naziv ?? "N/A")),
+                      DataCell(
+                        Text(_shortenText(
+                            usluga.naziv ?? '', 30)), // Skraćeni sadržaj
+                      ),
                       //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
                       DataCell(
                         Text(_shortenText(
                             usluga.opis ?? '', 30)), // Skraćeni sadržaj
                       ),
                       //DataCell(Text(usluga.cijena?.toStringAsFixed(2) ?? "N/A")),
-                      DataCell(Text('${usluga.cijena?.toStringAsFixed(2) ?? "N/A"} KM')),
-                       //DataCell(Text(usluga.trajanje ?? "N/A")),
-                       DataCell(Text('${usluga.trajanje ?? "N/A"} min')),
+                      DataCell(Text(
+                          '${usluga.cijena?.toStringAsFixed(0) ?? "N/A"} KM')),
+                      //DataCell(Text(usluga.trajanje ?? "N/A")),
+                      DataCell(Text('${usluga.trajanje ?? "N/A"} min')),
+                      DataCell(Text(usluga.kategorija.naziv ?? "N/A")),
 
                       DataCell(
                         Row(
@@ -214,6 +245,10 @@ class _UslugePageState extends State<UslugaPage> {
                                             Navigator.of(context).pop(
                                                 false); // Korisnik je odustao
                                           },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .grey, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                         TextButton(
                                           child: const Text("Obriši"),
@@ -221,6 +256,10 @@ class _UslugePageState extends State<UslugaPage> {
                                             Navigator.of(context).pop(
                                                 true); // Korisnik je potvrdio
                                           },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .red, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                       ],
                                     );
@@ -236,8 +275,21 @@ class _UslugePageState extends State<UslugaPage> {
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                          content:
-                                              Text("Usluga uspješno obrisana.")),
+                                        content: Text(
+                                          "Usluga uspješno obrisana.",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: Colors
+                                            .green, // Dodaj zelenu pozadinu
+                                        behavior: SnackBarBehavior
+                                            .floating, // Opcionalno za lepši prikaz
+                                        duration: Duration(seconds: 3),
+                                        /*margin: EdgeInsets.symmetric(
+                                            horizontal: 100.0, vertical: 20.0),
+                                        padding: EdgeInsets.all(8.0),*/
+                                      ),
                                     );
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -262,6 +314,58 @@ class _UslugePageState extends State<UslugaPage> {
       ),
     );
   }
+
+ /* Future<void> _loadKategorije1() async {
+    final kategorijeSve =
+        await Provider.of<KategorijaProvider>(context, listen: false).get();
+    setState(() {
+      _kategorije = kategorijeSve.result;
+      selectedKategorija = _kategorije!.isNotEmpty
+          ? _kategorije![0].naziv
+          : null; // Postavi početni odabir
+
+      //_isUslugaLoading = false;
+    });
+  }*/
+
+  Future<void> _loadKategorije() async {
+  final kategorijeSve = await Provider.of<KategorijaProvider>(context, listen: false).get();
+   kategorije = kategorijeSve.result;
+print("kategorije: $kategorije");
+ /* setState(() {
+    // Mapiraj kategorije i uzmi samo nazive
+    _kategorije = kategorije
+        ?.map((kategorija) => kategorija.naziv) // Uzimamo samo naziv
+        .toList(); // Ovo vraća listu samo sa nazivima kategorija
+        print("_kategorije je sada $_kategorije");
+  });*/
+  setState(() {
+      // Mapiraj kategorije i uzmi samo nazive
+      _kategorije = ["Sve", ...kategorije?.map((kategorija) => kategorija.naziv).toList() ?? []]; 
+    });
+}
+
+/*
+  DropdownButton<String?> buildKategorijaDropdown() {
+    return DropdownButton<String?>(
+      value: selectedKategorija, // Trenutno odabrana kategorija
+      onChanged: (String? newValue) {
+        setState(() {
+          selectedKategorija = newValue;
+          // Ako trebaš filtrirati usluge po kategoriji, ovde možeš pozvati funkciju za filtriranje
+          //_loadUsluge();  // Ovde možeš dodati funkciju koja filtrira usluge po kategoriji
+        });
+      },
+      items: ["Sve", ..._kategorije!.map((kategorija) => kategorija.naziv)]
+          .map<DropdownMenuItem<String?>>((String? value) {
+        return DropdownMenuItem<String?>(
+          value: value,
+          child: Text(value ??
+              "Nema kategorije"), // Ako je value null, prikaži tekst "Nema kategorije"
+        );
+      }).toList(),
+    );
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -289,13 +393,73 @@ class _UslugePageState extends State<UslugaPage> {
                       children: [
                         Expanded(
                           child: TextField(
-                            controller: _ftsController,
+                            controller: _nazivController,
                             decoration: const InputDecoration(
-                              labelText: "Pretraži usluge",
+                              labelText: "Pretraži po nazivu",
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: _cijenaController,
+                            decoration: const InputDecoration(
+                              labelText: "Pretraži po cijeni",
+                              hintText: "Format: 100 (bez valute)",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: _trajanjeController,
+                            decoration: const InputDecoration(
+                              labelText: "Pretraži po trajanju",
+                              hintText: "Format: 100 (bez min)",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: DropdownButtonFormField<String?>(
+                            value: selectedKategorija,
+                            decoration: const InputDecoration(
+                              labelText: "Pretrazi po kategoriji",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.filter_list),
+                            ),
+                            items: _kategorije?.map((naziv) {
+                              return DropdownMenuItem<String>(
+                                value: naziv, // Koristi samo naziv kategorije
+                                child:
+                                    Text(naziv!), // Prikazuje naziv kategorije
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedKategorija = value!;
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: Icon(Icons.backspace, color: Colors.red),
+                          onPressed: () {
+                            _nazivController.clear();
+                            _cijenaController.clear();
+                            _trajanjeController.clear();
+                             setState(() {
+                              selectedKategorija= "Sve"; 
+                            });// Briše unos iz polja
+                          },
+                          tooltip: 'Obriši unos',
                         ),
                         const SizedBox(width: 10),
                         /*ElevatedButton(
@@ -318,8 +482,19 @@ class _UslugePageState extends State<UslugaPage> {
 
                           onPressed: () async {
                             try {
-                              var data = await _uslugaProvider
-                                  .get(filter: {'fts': _ftsController.text});
+                              var filter = {
+                                'Naziv': _nazivController.text,
+                                'Cijena': _cijenaController.text,
+                                'Trajanje': _trajanjeController.text,
+                                //'Uloga': selectedUloga == "Sve" ? null : selectedUloga,
+                                /*'Status':
+                                    _selectedStatus, */ // Dodajemo status u filter
+                              };
+                              if (selectedKategorija != "Sve") {
+                                filter['Kategorija'] = selectedKategorija!;
+                              }
+                              var data =
+                                  await _uslugaProvider.get(filter: filter);
                               setState(() {
                                 _usluge =
                                     data.result; // Ažurirajte listu komentara

@@ -47,7 +47,7 @@ namespace eSpa
                     new Claim(ClaimTypes.NameIdentifier, user.KorisnickoIme)
                 };
 
-                foreach (var role in user.KorisnikUloges)
+                foreach (var role in user.KorisnikUlogas)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role.Uloga.Naziv));
                 }

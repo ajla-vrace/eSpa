@@ -19,6 +19,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
   SearchResult<Kategorija>? result;
   TextEditingController _ftsController = TextEditingController();
   late KategorijaProvider _kategorijaProvider;
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -47,7 +48,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
     }
   }
 
-  Widget _buildKategorijeTable() {
+  Widget _buildKategorijaTable() {
     if (_isKategorijaLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -58,7 +59,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.8, // 80% širine ekrana
-      //height: MediaQuery.of(context).size.height * 0.5, // 50% visine ekrana
+      //height: MediaQuery.of(context).size.height * 0.65, // 50% visine ekrana
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey), // Okvir oko tabele
         //borderRadius: BorderRadius.circular(8),
@@ -71,7 +72,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
                 columnSpacing:
-                    constraints.maxWidth * 0.2, // Prostor između kolona
+                    constraints.maxWidth * 0.1, // Prostor između kolona
                 /*headingRowColor: MaterialStateProperty.all(
                     Colors.lightBlue.shade100), // Boja zaglavlja
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -91,7 +92,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                   },
                 ),
                 columns: const [
-                 /* DataColumn(
+                  /*DataColumn(
                     label: Text(
                       "ID",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -99,56 +100,76 @@ class _KategorijaPageState extends State<KategorijaPage> {
                   ),*/
                   DataColumn(
                     label: Text(
-                      "Naziv",
+                      "Naslov",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
+                 
+                 
                   DataColumn(
                     label: Text(
                       "",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  /*DataColumn(
-                    label: Text(
-                      "",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                 ],
                 rows: _kategorije.map((kategorija) {
                   return DataRow(
                     cells: [
-                      //DataCell(Text(kategorija.id?.toString() ?? "N/A")),
+                      // DataCell(Text(novost.id?.toString() ?? "N/A")),
                       DataCell(Text(kategorija.naziv ?? "N/A")),
-                       DataCell(
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end, // Poravnavanje ikonica desno
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () {
-                              Navigator.push(
+                      //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
+                      
+                      DataCell(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .end, // Poravnavanje ikonica desno
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         KategorijaDetaljiPage(kategorija: kategorija),
                                   ),
                                 );
-                              // Akcija za update
-                              print('Update clicked for: ${kategorija.naziv}');
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () async{
-                              final confirm = await showDialog<bool>(
+                                /* bool? isUpdated = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        NovostDetaljiPage(novost: novost),
+                                  ),
+                                );
+
+                                // Provjera da li treba osvježiti podatke
+                                if (isUpdated == true) {
+                                  await _loadNovosti(); // Poziv metode za ponovno učitavanje podataka
+                                  setState(() {});
+                                }*/
+                                // Akcija za update
+                                print('Detalji clicked for: ${kategorija.naziv}');
+                              },
+                            ),
+                            /* IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                // Akcija za delete
+                                print('Delete clicked for: ${novost.naslov}');
+                              },
+                            ),*/
+
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () async {
+                                final confirm = await showDialog<bool>(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovu kategoriju?"),
+                                          "Da li ste sigurni da želite obrisati ovu novost?"),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),
@@ -156,6 +177,10 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                             Navigator.of(context).pop(
                                                 false); // Korisnik je odustao
                                           },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .grey, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                         TextButton(
                                           child: const Text("Obriši"),
@@ -163,6 +188,10 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                             Navigator.of(context).pop(
                                                 true); // Korisnik je potvrdio
                                           },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors
+                                                .red, // Boja teksta na dugmetu (siva)
+                                          ),
                                         ),
                                       ],
                                     );
@@ -176,10 +205,25 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                       _kategorije.remove(
                                           kategorija); // Uklonite obrisanu novost iz liste
                                     });
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    /*ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content:
-                                              Text("Kategorija uspešno obrisana.")),
+                                              Text("Novost uspešno obrisana.")),
+                                    );*/
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Kategorija uspješno obrisana.",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: Colors
+                                            .green, // Dodaj zelenu pozadinu
+                                        behavior: SnackBarBehavior
+                                            .floating, // Opcionalno za lepši prikaz
+                                        duration: Duration(seconds: 3),
+                                      ),
                                     );
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -189,15 +233,12 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                     );
                                   }
                                 }
-                            
-                              // Akcija za delete
-                              print('Delete clicked for: ${kategorija.naziv}');
-                            },
-                          ),
-                        ],
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
                   );
                 }).toList(),
               ),
@@ -236,13 +277,24 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           child: TextField(
                             controller: _ftsController,
                             decoration: const InputDecoration(
-                              labelText: "Pretraži kategorije",
+                              labelText: "Pretraži po nazivu",
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                       const SizedBox(width: 10),
+                        IconButton(
+                          icon: Icon(Icons.backspace, color: Colors.red),
+                          onPressed: () {
+                            _ftsController.clear();
+                          },
+                          tooltip: 'Obriši unos',
+                        ),
+                         const SizedBox(width: 10),
+                  
+
+                       
                         /*ElevatedButton(
                       onPressed: () {
                         final searchTerm = _ftsController.text;
@@ -263,12 +315,18 @@ class _KategorijaPageState extends State<KategorijaPage> {
 
                           onPressed: () async {
                             try {
-                              var data = await _kategorijaProvider
-                                  .get(filter: {'fts': _ftsController.text});
+                              var data = await _kategorijaProvider.get(filter: {
+                                'fts': _ftsController.text,
+                                //'Autor': _autorController.text,
+                                //'Status': _statusController.text
+                                //'Status': _selectedStatus ?? ""
+                              });
                               setState(() {
                                 _kategorije =
                                     data.result; // Ažurirajte listu komentara
                               });
+                              print(data.result);
+                             
                             } catch (e) {
                               print("Došlo je do greške prilikom pretrage: $e");
                               setState(() {
@@ -299,12 +357,13 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                 fontSize: 16), // Ista veličina fonta
                           ),
                           onPressed: () async {
-                            // Dodaj funkcionalnost za dugme
-                             Navigator.of(context).push(
+                            Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => KategorijaDetaljiPage(),
                               ),
                             );
+
+                            // Dodaj funkcionalnost za dugme
                           },
                           child: Row(
                             /*mainAxisSize: MainAxisSize
@@ -322,7 +381,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                _buildKategorijeTable(),
+                _buildKategorijaTable(),
                 const SizedBox(height: 20),
               ],
             ),

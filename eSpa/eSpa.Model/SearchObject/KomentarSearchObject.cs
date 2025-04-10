@@ -8,6 +8,7 @@ namespace eSpa.Model.SearchObject
 {
     public class KomentarSearchObject:BaseSearchObject
     {
-        public string? FTS { get; set; }
+        public string? Korisnik { get; set; }
+        public string? Usluga { get; set; }
     }
 }

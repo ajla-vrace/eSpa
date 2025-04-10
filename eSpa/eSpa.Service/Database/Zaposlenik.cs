@@ -11,7 +11,10 @@ namespace eSpa.Service.Database
         public string Struka { get; set; } = null!;
         public string? Status { get; set; }
         public string? Napomena { get; set; }
+        public string? Biografija { get; set; }
+        public int? SlikaId { get; set; }
 
         public virtual Korisnik Korisnik { get; set; } = null!;
+        public virtual ZaposlenikSlike? Slika { get; set; }
     }
 }

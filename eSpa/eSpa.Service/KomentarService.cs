@@ -13,26 +13,87 @@ namespace eSpa.Service
 {
     public class KomentarService:BaseCRUDService<Model.Komentar,Database.Komentar,KomentarSearchObject,KomentarInsertRequest,KomentarUpdateRequest>, IKomentarService
     {
-        public KomentarService(eSpaContext1 context, IMapper mapper) : base(context, mapper)
+        public KomentarService(eSpaContext context, IMapper mapper) : base(context, mapper)
         {
 
         }
-        public override IQueryable<Database.Komentar> AddFilter(IQueryable<Database.Komentar> query, KomentarSearchObject? search = null)
+        /* public override IQueryable<Database.Komentar> AddFilter(IQueryable<Database.Komentar> query, KomentarSearchObject? search = null)
+         {
+             var filteredQuery = base.AddFilter(query, search);
+
+
+             if (!string.IsNullOrWhiteSpace(search?.FTS))
+             {
+                 //filteredQuery = filteredQuery.Where(x => x.Tekst.Contains(search.FTS));
+                 //filteredQuery = filteredQuery.Where(x => x.Tekst.ToLower().Contains(search.FTS.ToLower()));
+                 filteredQuery = filteredQuery.Where(x => EF.Functions.Like(x.Tekst, $"%{search.FTS}%"));
+
+             }
+
+             filteredQuery = filteredQuery.Include(x => x.Korisnik)
+                                 .Include(x => x.Usluga);
+
+
+             return filteredQuery;
+         }*/
+        /*public override IQueryable<Database.Komentar> AddFilter(IQueryable<Database.Komentar> query, KomentarSearchObject? search = null)
         {
             var filteredQuery = base.AddFilter(query, search);
 
-           
-            if (!string.IsNullOrWhiteSpace(search?.FTS))
-            {
-                //filteredQuery = filteredQuery.Where(x => x.Tekst.Contains(search.FTS));
-                //filteredQuery = filteredQuery.Where(x => x.Tekst.ToLower().Contains(search.FTS.ToLower()));
-                filteredQuery = filteredQuery.Where(x => EF.Functions.Like(x.Tekst, $"%{search.FTS}%"));
 
+            if (!string.IsNullOrWhiteSpace(search?.Korisnik) ||
+                     !string.IsNullOrWhiteSpace(search?.Usluga))
+            {
+                // Pretvori pretrage u lowercase za neosjetljivost na velika/mala slova
+                string korisnikSearch = search?.Korisnik?.ToLower() ?? "";
+                string uslugaSearch = search?.Usluga?.ToLower() ?? "";
+
+                filteredQuery = filteredQuery.Where(x => x.Korisnik.KorisnickoIme.Contains(search.Korisnik) ||
+                 x.Usluga.Naziv.Contains(search.Usluga)
+                );
             }
 
             filteredQuery = filteredQuery.Include(x => x.Korisnik)
                                 .Include(x => x.Usluga);
 
+
+            return filteredQuery;
+        }
+        */
+        public override IQueryable<Database.Komentar> AddFilter(IQueryable<Database.Komentar> query, KomentarSearchObject? search = null)
+        {
+            var filteredQuery = base.AddFilter(query, search);
+
+            // Ako je korisničko ime i naziv usluge uneseno
+            if (!string.IsNullOrWhiteSpace(search?.Korisnik) && !string.IsNullOrWhiteSpace(search?.Usluga))
+            {
+                string korisnikSearch = search.Korisnik.ToLower();
+                string uslugaSearch = search.Usluga.ToLower();
+                filteredQuery = filteredQuery.Where(x =>
+                    x.Korisnik.KorisnickoIme.ToLower().Contains(korisnikSearch) &&
+                    x.Usluga.Naziv.ToLower().Contains(uslugaSearch)
+                );
+            }
+            // Ako je unesen samo username
+            else if (!string.IsNullOrWhiteSpace(search?.Korisnik))
+            {
+                string korisnikSearch = search.Korisnik.ToLower();
+                filteredQuery = filteredQuery.Where(x =>
+                    x.Korisnik.KorisnickoIme.ToLower().Contains(korisnikSearch)
+                );
+            }
+            // Ako je unesen samo naziv usluge
+            else if (!string.IsNullOrWhiteSpace(search?.Usluga))
+            {
+                string uslugaSearch = search.Usluga.ToLower();
+                filteredQuery = filteredQuery.Where(x =>
+                    x.Usluga.Naziv.ToLower().Contains(uslugaSearch)
+                );
+            }
+
+            // Uključi povezane entitete
+            filteredQuery = filteredQuery.Include(x => x.Korisnik)
+                                         .Include(x => x.Usluga).ThenInclude(x=>x.Kategorija);
 
             return filteredQuery;
         }

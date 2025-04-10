@@ -28,7 +28,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var response = await http.get(uri, headers: headers);
-
+   // print("response body je ${response.body}");
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 
@@ -37,6 +37,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       result.count = data['count'];
 
       for (var item in data['result']) {
+        // print("Item koji se parsira: $item");
         result.result.add(fromJson(item));
       }
 
@@ -44,9 +45,24 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else {
       throw new Exception("Unknown error");
     }
-     //print("response: ${response.request} ${response.statusCode}, ${response.body}");
+    //print("response: ${response.request} ${response.statusCode}, ${response.body}");
   }
 
+  Future getById(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    Response response = await http.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+/*
   Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
@@ -60,6 +76,34 @@ abstract class BaseProvider<T> with ChangeNotifier {
       return fromJson(data);
     } else {
       throw new Exception("Unknown error");
+    }
+  }
+*/
+
+  Future<T> insert(dynamic request) async {
+    var url = "$_baseUrl$_endpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var jsonRequest = jsonEncode(request);
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    } else {
+      var errorMessage = await _handleErrorResponse(response);
+      throw Exception(errorMessage);
+    }
+  }
+
+  Future<String> _handleErrorResponse(Response response) async {
+    var data = jsonDecode(response.body);
+    if (response.statusCode == 400 &&
+        data['message'] == "Korisničko ime već postoji.") {
+      return "Korisničko ime već postoji.";
+    } else {
+      return "Unknown error: ${data['message']}";
     }
   }
 
@@ -79,7 +123,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-Future<T> delete(int id) async {
+  Future<T> delete(int id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
@@ -94,7 +138,6 @@ Future<T> delete(int id) async {
       throw Exception("Unknown error");
     }
   }
-
 
   T fromJson(data) {
     throw Exception("Method not implemented");

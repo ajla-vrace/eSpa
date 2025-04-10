@@ -2,7 +2,6 @@ import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/screens/kategorije.dart';
-//import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -31,7 +30,7 @@ class _KategorijaDetaljiPageState extends State<KategorijaDetaljiPage> {
     super.initState();
     _initialValue = {
       'naziv': widget.kategorija?.naziv,
-     /* 'sadrzaj': widget.novost?.sadrzaj,
+      /* 'sadrzaj': widget.novost?.sadrzaj,
       'datum': widget.novost?.datum,*/
     };
 
@@ -47,39 +46,45 @@ class _KategorijaDetaljiPageState extends State<KategorijaDetaljiPage> {
       isLoading = false;
     });
   }
-
-
-
-@override
-Widget build(BuildContext context) {
-  return MasterScreenWidget(
-    // ignore: sort_child_properties_last
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(100.0), // Odmicanje od ivica ekrana
-        child: Container(
-          width: 500,
-          padding: EdgeInsets.all(30),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              isLoading ? CircularProgressIndicator() : _buildForm(),
-              SizedBox(height: 20),  // Dodavanje prostora između forme i dugmeta
-              Center(  // Koristimo Center za centriranje dugmeta
-                child: ElevatedButton(
-                  onPressed: () async {
-                    _formKey.currentState?.saveAndValidate();
-                    var request = new Map.from(_formKey.currentState!.value);
+/*
+  @override
+  Widget build(BuildContext context) {
+    return MasterScreenWidget(
+      // ignore: sort_child_properties_last
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(210.0), // Odmicanje od ivica ekrana
+          child: Container(
+            width: 500,
+            padding: EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                isLoading ? CircularProgressIndicator() : _buildForm(),
+                SizedBox(
+                    height: 20), // Dodavanje prostora između forme i dugmeta
+                Center(
+                  // Koristimo Center za centriranje dugmeta
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      _formKey.currentState?.saveAndValidate();
+                      if (!(_formKey.currentState?.saveAndValidate() ??
+                          false)) {
+                        // Možeš prikazati poruku korisniku ako je potrebno
+                        print("Validacija nije prošla!");
+                        return;
+                      }
+                      var request = new Map.from(_formKey.currentState!.value);
 
                       var currentValues =
                           Map.from(_formKey.currentState!.value);
@@ -98,59 +103,217 @@ Widget build(BuildContext context) {
                         return;
                       }
 
-                    try {
-                      if (widget.kategorija == null) {
-                        await _kategorijaProvider.insert(request);
-                      } else {
-                        await _kategorijaProvider.update(widget.kategorija!.id!, request);
-                      }
-                      Navigator.push(
+                      try {
+                        if (widget.kategorija == null) {
+                          await _kategorijaProvider.insert(request);
+                        } else {
+                          await _kategorijaProvider.update(
+                              widget.kategorija!.id!, request);
+                        }
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => KategorijaPage(),
                           ),
                         );
-                    } on Exception catch (e) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: Text("Error"),
-                          content: Text(e.toString()),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text("OK"),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  child: Text("Sačuvaj"),
+                      } on Exception catch (e) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Text("Error"),
+                            content: Text(e.toString()),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    child: Text("Sačuvaj"),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
-    title: this.widget.kategorija?.naziv ?? "Kategorija details",
-  );
-}
+      
 
 
+
+      
+      title: this.widget.kategorija?.naziv ?? "Kategorija detalji",
+    );
+  }
+*/
+
+  @override
+  Widget build(BuildContext context) {
+    return MasterScreenWidget(
+      // ignore: sort_child_properties_last
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(210.0), // Odmicanje od ivica ekrana
+          child: Container(
+            width: 500,
+            padding: EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // X dugme u gornjem desnom uglu
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close, color: Colors.black54),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                isLoading ? CircularProgressIndicator() : _buildForm(),
+                SizedBox(height: 20), // Prostor između forme i dugmadi
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey),
+                      child: Text("Nazad"),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        _formKey.currentState?.saveAndValidate();
+                        if (!(_formKey.currentState?.saveAndValidate() ??
+                            false)) {
+                          print("Validacija nije prošla!");
+                          return;
+                        }
+
+                        var request = Map.from(_formKey.currentState!.value);
+                        var currentValues =
+                            Map.from(_formKey.currentState!.value);
+
+                        // Provera da li su vrednosti promenjene
+                        bool isChanged = false;
+                        _initialValue.forEach((key, value) {
+                          if (currentValues[key] != value) {
+                            isChanged = true;
+                          }
+                        });
+
+                        if (!isChanged) {
+                          Navigator.pop(context, false);
+                          return;
+                        }
+
+                        try {
+                          if (widget.kategorija == null) {
+                            await _kategorijaProvider.insert(request);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Kategorija uspješno dodana.",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                backgroundColor:
+                                    Colors.green, // Dodaj zelenu pozadinu
+                                behavior: SnackBarBehavior
+                                    .floating, // Opcionalno za lepši prikaz
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          } else {
+                            await _kategorijaProvider.update(
+                                widget.kategorija!.id!, request);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Kategorija uspješno modifikovana.",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                backgroundColor:
+                                    Colors.green, // Dodaj zelenu pozadinu
+                                behavior: SnackBarBehavior
+                                    .floating, // Opcionalno za lepši prikaz
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => KategorijaPage(),
+                            ),
+                          );
+                        } on Exception catch (e) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text("Error"),
+                              content: Text(e.toString()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: Text("Sačuvaj"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      title: widget.kategorija?.naziv ?? "Kategorija detalji",
+    );
+  }
 
   FormBuilder _buildForm() {
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           // Polja sa ikonama
           _buildInputField("Naziv", Icons.title, "naziv"),
           SizedBox(height: 10),
           //_buildInputField("Sadrzaj", Icons.description, "sadrzaj"),
-         
+
           // SizedBox(height: 10),
           //_buildInputField("Datum", Icons.attach_money, "datum"),
           //SizedBox(height: 10),
@@ -169,7 +332,7 @@ Widget build(BuildContext context) {
   }
 
   // Funkcija za kreiranje input polja sa ikonom
-  Widget _buildInputField(String label, IconData icon, String name) {
+  /*Widget _buildInputField(String label, IconData icon, String name) {
     return FormBuilderTextField(
       name: name,
       decoration: InputDecoration(
@@ -178,10 +341,64 @@ Widget build(BuildContext context) {
         border: OutlineInputBorder(),
       ),
     );
+  }*/
+  /*Widget _buildInputField(String label, IconData icon, String name) {
+    return FormBuilderTextField(
+      name: name,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+       if (value == null || value.isEmpty) {
+        return 'Polje je obavezno';
+      }
+      // Proveri da li sadrži samo slova i razmake
+      final regexOnlyLetters = RegExp(r'^[a-zA-Z\s]+$');
+      if (!regexOnlyLetters.hasMatch(value)) {
+        return 'Dozvoljena su samo slova';
+      }
+      // Proveri da li je prvo slovo veliko
+      if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+        return 'Prvo slovo mora biti veliko';
+      }
+      return null;
+    },
+    );
+  }*/
+  Widget _buildInputField(String label, IconData icon, String name) {
+    return FormBuilderTextField(
+      name: name,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Polje je obavezno';
+        }
+        // Proveri da li sadrži samo slova i razmake
+        final regexOnlyLetters = RegExp(r'^[a-zA-Z\s]+$');
+        if (!regexOnlyLetters.hasMatch(value)) {
+          return 'Dozvoljena su samo slova';
+        }
+        // Proveri da li je minimum 3 karaktera
+        if (value.trim().length < 3) {
+          return 'Naziv mora imati minimum 3 slova';
+        }
+        // Proveri da li je prvo slovo veliko
+        if (!RegExp(r'^[A-Z]').hasMatch(value.trim())) {
+          return 'Prvo slovo mora biti veliko';
+        }
+        return null;
+      },
+    );
   }
 
   // Funkcija za dropdown meni sa kategorijama
- /* Widget _buildDropdownField(
+  /* Widget _buildDropdownField(
     String label,
     IconData icon,
     String name,
@@ -203,4 +420,3 @@ Widget build(BuildContext context) {
     );
   }*/
 }
-

@@ -8,6 +8,10 @@ namespace eSpa.Model.SearchObject
 {
     public class RezervacijaSearchObject:BaseSearchObject
     {
-        public string? FTS { get; set; }
+        public string? Korisnik { get; set; }
+
+        public string? Usluga { get; set; }
+
+        public string? Status { get; set; }
     }
 }

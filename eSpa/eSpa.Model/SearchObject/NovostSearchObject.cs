@@ -8,6 +8,8 @@ namespace eSpa.Model.SearchObject
 {
     public class NovostSearchObject:BaseSearchObject
     {
-        public string? FTS { get; set; }
+        public string? Naslov { get; set; }
+        public string? Autor { get; set; }
+        public string? Status { get; set; }
     }
 }

@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace eSpa.Service.Database
 {
-    public partial class eSpaContext1 : DbContext
+    public partial class eSpaContext : DbContext
     {
-        public eSpaContext1()
+        public eSpaContext()
         {
         }
 
-        public eSpaContext1(DbContextOptions<eSpaContext1> options)
+        public eSpaContext(DbContextOptions<eSpaContext> options)
             : base(options)
         {
         }
@@ -27,13 +27,14 @@ namespace eSpa.Service.Database
         public virtual DbSet<Uloga> Ulogas { get; set; } = null!;
         public virtual DbSet<Usluga> Uslugas { get; set; } = null!;
         public virtual DbSet<Zaposlenik> Zaposleniks { get; set; } = null!;
+        public virtual DbSet<ZaposlenikSlike> ZaposlenikSlikes { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=eSpa;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=localhost; Initial Catalog=eSpa; Integrated Security=True;");
             }
         }
 
@@ -109,10 +110,12 @@ namespace eSpa.Service.Database
 
                 entity.Property(e => e.IsBlokiran).HasColumnName("isBlokiran");
 
+                entity.Property(e => e.IsZaposlenik).HasColumnName("isZaposlenik");
+
                 entity.Property(e => e.KorisnickoIme)
-                    .HasMaxLength(10)
-                    .HasColumnName("korisnickoIme")
-                    .IsFixedLength();
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("korisnickoIme");
 
                 entity.Property(e => e.LozinkaHash).HasColumnName("lozinkaHash");
 
@@ -137,7 +140,7 @@ namespace eSpa.Service.Database
             {
                 entity.ToTable("KorisnikUloga");
 
-                entity.Property(e => e.KorisnikulogaId).HasColumnName("korisnikuloga_id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DatumDodele)
                     .HasColumnType("date")
@@ -306,6 +309,8 @@ namespace eSpa.Service.Database
             {
                 entity.ToTable("Zaposlenik");
 
+                entity.Property(e => e.Biografija).HasColumnType("text");
+
                 entity.Property(e => e.DatumZaposlenja).HasColumnType("datetime");
 
                 entity.Property(e => e.Napomena).HasColumnType("text");
@@ -320,6 +325,29 @@ namespace eSpa.Service.Database
                     .WithMany(p => p.Zaposleniks)
                     .HasForeignKey(d => d.KorisnikId)
                     .HasConstraintName("FK__Zaposleni__Koris__6FE99F9F");
+
+                entity.HasOne(d => d.Slika)
+                    .WithMany(p => p.Zaposleniks)
+                    .HasForeignKey(d => d.SlikaId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_Zaposlenik_Slika");
+            });
+
+            modelBuilder.Entity<ZaposlenikSlike>(entity =>
+            {
+                entity.ToTable("ZaposlenikSlike");
+
+                entity.Property(e => e.DatumPostavljanja)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Naziv)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Tip)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
