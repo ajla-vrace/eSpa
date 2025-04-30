@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:espa_admin/models/novost.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
 import 'package:espa_admin/screens/novosti.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +23,11 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
   late NovostProvider _novostProvider;
-
+  var _image;
   SearchResult<Novost>? novostResult;
   bool isLoading = true;
+  
+  
 
   @override
   void initState() {
@@ -33,6 +38,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       'datumKreiranja': widget.novost?.datumKreiranja,
       'korisnickoIme': widget.novost?.autor?.korisnickoIme,
       'status': widget.novost?.status,
+      'slika': widget.novost?.slika,
     };
 
     _novostProvider = context.read<NovostProvider>();
@@ -48,6 +54,29 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
     });
   }
 
+  Future<void> _pickImage() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        withData: true,
+      );
+
+      if (result != null) {
+        setState(() {
+          _image = result.files.single.bytes;
+          //_fileName = result.files.single.name;
+          //_fileType = result.files.single.extension ??
+          'Unknown'; // Spremamo odabranu sliku u memoriju
+        });
+        print("✅ Slika odabrana!");
+      } else {
+        print("❌ Nema izabrane slike");
+      }
+    } catch (e) {
+      print("❌ Greška pri odabiru slike: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
@@ -55,7 +84,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       // ignore: sort_child_properties_last
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(160.0), // Odmicanje od ivica ekrana
+          padding: const EdgeInsets.all(120.0), // Odmicanje od ivica ekrana
           child: Container(
             width: 500,
             padding: const EdgeInsets.all(30),
@@ -70,140 +99,6 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                 ),
               ],
             ),
-            /* child: Column(
-                children: [
-                  isLoading
-                      ? const CircularProgressIndicator()
-                      : _buildForm(),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (!(_formKey.currentState?.saveAndValidate() ?? false)) {
-                          print("Validacija nije prošla!");
-                          return;
-                        }
-                        var request = Map.from(_formKey.currentState!.value);
-
-                        var currentValues =
-                            Map.from(_formKey.currentState!.value);
-
-                        bool isChanged = false;
-                        print("Initial Values: $_initialValue");
-                      print("Current Values: $currentValues");
-                        _initialValue.forEach((key, value) {
-                          if (currentValues[key] != value) {
-                            isChanged = true;
-                          }
-                        });
-
-                        if (!isChanged) {
-                          Navigator.pop(context, false);
-                          return;
-                        }
-
-                        try {
-                          if (widget.novost == null) {
-                            await _novostProvider.insert(request);
-                          } else {
-                            await _novostProvider.update(
-                                widget.novost!.id!, request);
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NovostPage(),
-                            ),
-                          );
-                        } on Exception catch (e) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text(e.toString()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text("Sačuvaj"),
-                    ),
-                  ),
-                ],
-              ),*/
-/*
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min, // Sprečava prekomerno širenje
-                children: [
-                  isLoading ? const CircularProgressIndicator() : _buildForm(),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (!(_formKey.currentState?.saveAndValidate() ??
-                            false)) {
-                          print("Validacija nije prošla!");
-                          return;
-                        }
-                        var request = Map.from(_formKey.currentState!.value);
-                        var currentValues =
-                            Map.from(_formKey.currentState!.value);
-
-                        bool isChanged = false;
-                        print("Initial Values: $_initialValue");
-                        print("Current Values: $currentValues");
-                        _initialValue.forEach((key, value) {
-                          if (currentValues[key] != value) {
-                            isChanged = true;
-                          }
-                        });
-
-                        if (!isChanged) {
-                          Navigator.pop(context, false);
-                          return;
-                        }
-
-                        try {
-                          if (widget.novost == null) {
-                            await _novostProvider.insert(request);
-                          } else {
-                            await _novostProvider.update(
-                                widget.novost!.id!, request);
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NovostPage()),
-                          );
-                        } on Exception catch (e) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text(e.toString()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text("Sačuvaj"),
-                    ),
-                  ),
-                ],
-              ),
-            ),*/
-
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min, // Sprečava prekomerno širenje
@@ -212,11 +107,6 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      /* Text(
-                        widget.novost?.naslov ?? "Novost details",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),*/
                       Spacer(), // Gura dugme skroz desno
                       IconButton(
                         icon: Icon(Icons.close, color: Colors.black54),
@@ -257,6 +147,11 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                           var currentValues =
                               Map.from(_formKey.currentState!.value);
 
+                          if (_image != null) {
+                            String imageBase64 = base64Encode(_image!);
+                            request['slikaBase64'] = imageBase64;
+                          }
+
                           bool isChanged = false;
                           print("Initial Values: $_initialValue");
                           print("Current Values: $currentValues");
@@ -275,40 +170,39 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                             if (widget.novost == null) {
                               await _novostProvider.insert(request);
                               ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Novost uspješno dodana.",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                const SnackBar(
+                                  content: Text(
+                                    "Novost uspješno dodana.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  backgroundColor:
+                                      Colors.green, // Dodaj zelenu pozadinu
+                                  behavior: SnackBarBehavior
+                                      .floating, // Opcionalno za lepši prikaz
+                                  duration: Duration(seconds: 3),
                                 ),
-                                backgroundColor:
-                                    Colors.green, // Dodaj zelenu pozadinu
-                                behavior: SnackBarBehavior
-                                    .floating, // Opcionalno za lepši prikaz
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
+                              );
                             } else {
                               await _novostProvider.update(
                                   widget.novost!.id!, request);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Novost uspješno modifikovana.",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Novost uspješno modifikovana.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  backgroundColor:
+                                      Colors.green, // Dodaj zelenu pozadinu
+                                  behavior: SnackBarBehavior
+                                      .floating, // Opcionalno za lepši prikaz
+                                  duration: Duration(seconds: 3),
                                 ),
-                                backgroundColor:
-                                    Colors.green, // Dodaj zelenu pozadinu
-                                behavior: SnackBarBehavior
-                                    .floating, // Opcionalno za lepši prikaz
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
+                              );
                             }
-                            
 
                             Navigator.pushReplacement(
                               context,
@@ -361,10 +255,78 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
           _buildStatusDropdownField(
               "Status", "status"), // Ovdje koristiš novi dropdown
           SizedBox(height: 10),
+          _buildImagePicker(),
+          SizedBox(height: 10),
         ],
       ),
     );
   }
+/*
+  Widget _buildImagePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () async {
+            await _pickImage(); // Funkcija za odabir slike
+          },
+          child: _image != null
+              ? Image.memory(
+                  _image!, // Prikazivanje odabrane slike
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                )
+              : const Icon(Icons.camera_alt,
+                  size: 100,
+                  color: Colors
+                      .grey), // Prikaz ikone kamere ako slika nije odabrana
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () async {
+            await _pickImage(); // Ponovno odabir slike
+          },
+          child: const Text("Dodaj sliku"),
+        ),
+      ],
+    );
+  }*/
+   Widget _buildImagePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () async {
+            await _pickImage();
+          },
+          child: _image != null
+              ? Image.memory(
+                  _image!,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                )
+              : widget.novost?.slika != null
+                  ? Image.memory(
+                      base64Decode(widget.novost!.slika!),
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    )
+                  : const Icon(Icons.camera_alt, size: 100, color: Colors.grey),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () async {
+            await _pickImage();
+          },
+          child: const Text("Dodaj sliku"),
+        ),
+      ],
+    );
+  }
+
 
   Widget _buildInputField(String label, IconData icon, String name) {
     return FormBuilderTextField(

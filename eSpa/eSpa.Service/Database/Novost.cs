@@ -11,6 +11,7 @@ namespace eSpa.Service.Database
         public DateTime? DatumKreiranja { get; set; }
         public int AutorId { get; set; }
         public string? Status { get; set; }
+        public byte[]? Slika { get; set; }
 
         public virtual Korisnik Autor { get; set; } = null!;
     }

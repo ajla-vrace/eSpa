@@ -24,7 +24,7 @@ namespace eSpa.Service
 
             if (!string.IsNullOrWhiteSpace(search?.Korisnik))
             {
-                filteredQuery = filteredQuery.Where(x => x.Korisnik.KorisnickoIme.Contains(search.Korisnik));
+                filteredQuery = filteredQuery.Where(x => x.Korisnik.KorisnickoIme==(search.Korisnik));
             }
             if (!string.IsNullOrWhiteSpace(search?.Usluga))
             {

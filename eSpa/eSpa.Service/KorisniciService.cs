@@ -268,7 +268,7 @@ namespace eSpa.Service
                 filteredQuery = filteredQuery.Where(x =>
                     x.Ime.Contains(search.Ime) &&
                     x.Prezime.Contains(search.Prezime) &&
-                    x.KorisnickoIme.Contains(search.KorisnickoIme) &&
+                    x.KorisnickoIme==(search.KorisnickoIme) &&
                     x.Status == search.Status);
             }
             else
@@ -286,7 +286,7 @@ namespace eSpa.Service
 
                 if (!string.IsNullOrWhiteSpace(search?.KorisnickoIme))
                 {
-                    filteredQuery = filteredQuery.Where(x => x.KorisnickoIme.Contains(search.KorisnickoIme));
+                    filteredQuery = filteredQuery.Where(x => x.KorisnickoIme==(search.KorisnickoIme));
                 }
 
                 if (!string.IsNullOrWhiteSpace(search?.Status))
@@ -506,8 +506,34 @@ namespace eSpa.Service
             
             return _mapper.Map<Model.Korisnik>(korisnik);
         }
-        
 
+        public async Task ChangePasswordAsync(ChangePasswordRequest model)
+        {
+            var user = await _context.Korisniks.FindAsync(model.Id);
+            if (user == null)
+            {
+                throw new Exception("Korisnik nije pronadjen.");
+            }
+
+            // Provjeri da li je stara lozinka tačna
+            if (user.LozinkaHash != GenerateHash(user.LozinkaSalt, model.StariPassword))
+            {
+                throw new Exception("Netacan stari password.");
+            }
+
+            // Provjeri da li su nova lozinka i potvrda iste
+            if (model.NoviPassword != model.PotvrdaPassword)
+            {
+                throw new Exception("Novi password i potvrda se ne podudaraju.");
+            }
+
+            // Šifriraj novu lozinku
+            user.LozinkaSalt = GenerateSalt();
+            user.LozinkaHash = GenerateHash(user.LozinkaSalt, model.NoviPassword);
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

@@ -18,7 +18,8 @@ namespace eSpa.Model.Requests
         public string Sadrzaj { get; set; } = null!;
 
         public string? Status { get; set; }
-        public bool? IsAdmin { get; set; }
+        public bool? IsAdmin { get; set; }//provjeriti ovo
+        public string SlikaBase64 { get; set; } = null!;
         // Opcionalno, ako želiš da se može menjati autor
         // public int? AutorID { get; set; }
         //public DateTime Datum { get; set; }

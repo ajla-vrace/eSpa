@@ -79,7 +79,7 @@ namespace eSpa.Service
             {
                 string korisnikSearch = search.Korisnik.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Korisnik.KorisnickoIme.ToLower().Contains(korisnikSearch)
+                    x.Korisnik.KorisnickoIme.ToLower()==(korisnikSearch)
                 );
             }
             // Ako je unesen samo naziv usluge

@@ -526,7 +526,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
         if (name == "korisnickoIme") {
           // Validacija za korisničko ime (samo mala slova i brojevi)
           if (value.length <= 3) {
-            return 'Lozinka mora imati više od 3 karaktera';
+            return 'Korisnicko ime mora imati više od 3 karaktera';
           }
           if (!RegExp(r'^[a-z0-9]+$').hasMatch(value)) {
             return 'Korisničko ime može sadržavati samo mala slova i brojeve';

@@ -15,5 +15,6 @@ namespace eSpa.Model
         public int? AutorId { get; set; }
         public string? Status { get; set; }
         public Korisnik Autor { get; set; }
+        public byte[]? Slika { get; set; }
     }
 }

@@ -53,6 +53,8 @@ namespace eSpa.Model
         public string KorisnickoIme { get; set; } = null!;
         public string Status { get; set; } = null!;
         public bool? IsAdmin { get; set; }
+        public string LozinkaHash { get; set; } = null!;
+        public string LozinkaSalt { get; set; } = null!;
         public bool? IsBlokiran { get; set; }
         public bool? IsZaposlenik { get; set; }
 

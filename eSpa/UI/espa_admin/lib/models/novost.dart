@@ -14,8 +14,9 @@ class Novost {
   DateTime? datumKreiranja;
   int? autorId;
   String? status;
+  String? slika;
   Korisnik? autor;
-  Novost(this.id, this.naslov, this.sadrzaj, this.datumKreiranja,this.autorId, this.status, this.autor);
+  Novost(this.id, this.naslov, this.sadrzaj, this.datumKreiranja,this.autorId, this.status, this.slika, this.autor);
 
     /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

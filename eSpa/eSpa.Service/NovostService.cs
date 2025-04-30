@@ -187,6 +187,7 @@ namespace eSpa.Service
             //entity.DatumKreiranja = DateTime.Now;
             entity.Status = "Aktivna";
            entity.AutorId = GetCurrentUserId();
+            entity.Slika = Convert.FromBase64String(insert.SlikaBase64);
             _context.Novosts.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -201,7 +202,7 @@ namespace eSpa.Service
             {
                 throw new KeyNotFoundException("Novost nije pronađena.");
             }
-
+            entity.Slika = Convert.FromBase64String(update.SlikaBase64);
             _mapper.Map(update, entity);
             entity.DatumKreiranja = DateTime.Now;
 

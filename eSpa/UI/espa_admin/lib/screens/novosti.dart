@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:espa_admin/models/novost.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
@@ -83,7 +85,7 @@ class _NovostiPageState extends State<NovostPage> {
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
                 columnSpacing:
-                    constraints.maxWidth * 0.1, // Prostor između kolona
+                    constraints.maxWidth * 0.05, // Prostor između kolona
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -123,6 +125,12 @@ class _NovostiPageState extends State<NovostPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
+                   DataColumn(
+                    label: Text(
+                      "Slika",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   DataColumn(
                     label: Text(
                       "",
@@ -142,6 +150,18 @@ class _NovostiPageState extends State<NovostPage> {
                           .format(novost.datumKreiranja ?? DateTime.now()))),
                       DataCell(Text(novost.autor?.korisnickoIme ?? "N/A")),
                       DataCell(Text(novost.status ?? "N/A")),
+                      DataCell(
+                        novost.slika != null
+                            ? Image.memory(
+                                base64Decode(novost.slika!), // Pristupamo slici putem 'slika' unutar 'zaposlenik.slika'
+                                width: 50, // Širina slike
+                                height: 50, // Visina slike
+                                fit: BoxFit.cover, // Prilagodba slike
+                              )
+                            : const Icon(Icons.account_circle,
+                                size:
+                                    50), // Ikona kao fallback ako slika nije dostupna
+                      ),
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
