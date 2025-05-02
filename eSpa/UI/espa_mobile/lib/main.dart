@@ -2,11 +2,14 @@ import 'package:espa_mobile/providers/kategorija_provider.dart';
 import 'package:espa_mobile/providers/komentar_provider.dart';
 import 'package:espa_mobile/providers/korisnikUloga_provider.dart';
 import 'package:espa_mobile/providers/korisnik_provider.dart';
+import 'package:espa_mobile/providers/novostKomentar_provider.dart';
 import 'package:espa_mobile/providers/novost_provider.dart';
+import 'package:espa_mobile/providers/ocjena_provider.dart';
 import 'package:espa_mobile/providers/rezervacija_provider.dart';
 import 'package:espa_mobile/providers/termin_provider.dart';
 import 'package:espa_mobile/providers/uloga_provider.dart';
 import 'package:espa_mobile/providers/usluga_provider.dart';
+import 'package:espa_mobile/providers/zaposlenikRecenzija_provider.dart';
 import 'package:espa_mobile/providers/zaposlenikSlika_provider.dart';
 import 'package:espa_mobile/providers/zaposlenik_provider.dart';
 import 'package:espa_mobile/screens/login.dart';
@@ -21,6 +24,9 @@ runApp(MultiProvider(providers: [
 ChangeNotifierProvider(create: (_) => KategorijaProvider()),
 ChangeNotifierProvider(create: (_) => NovostProvider()),
 ChangeNotifierProvider(create: (_) => KomentarProvider()),
+ChangeNotifierProvider(create: (_) => OcjenaProvider()),
+ChangeNotifierProvider(create: (_) => NovostKomentarProvider()),
+ChangeNotifierProvider(create: (_) => ZaposlenikRecenzijaProvider()),
 ChangeNotifierProvider(create: (_) => KorisnikProvider()),
 ChangeNotifierProvider(create: (_) => KorisnikUlogaProvider()),
 ChangeNotifierProvider(create: (_) => UlogaProvider()),

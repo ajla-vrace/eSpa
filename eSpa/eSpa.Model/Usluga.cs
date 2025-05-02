@@ -15,5 +15,6 @@ namespace eSpa.Model
         public string Trajanje { get; set; } = null!;
         public int KategorijaId { get; set; }
         public Kategorija Kategorija { get; set; }
+        public byte[]? Slika { get; set; }
     }
 }

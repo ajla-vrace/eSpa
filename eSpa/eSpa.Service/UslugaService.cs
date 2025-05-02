@@ -60,18 +60,31 @@ namespace eSpa.Service
             return filteredQuery;
         }
 
-        public override Task<Model.Usluga> Insert(UslugaInsertRequest insert)
+        public override async Task<Model.Usluga> Insert(UslugaInsertRequest insert)
         {
+            var entity = _mapper.Map<Database.Usluga>(insert);
+            entity.Slika = Convert.FromBase64String(insert.SlikaBase64);
+            _context.Uslugas.Add(entity);
+            await _context.SaveChangesAsync();
 
-            return base.Insert(insert);
+            return _mapper.Map<Model.Usluga>(entity);
 
         }
 
         public override async Task<Model.Usluga> Update(int id, UslugaUpdateRequest update)
         {
             var entity = await _context.Uslugas.FindAsync(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Usluga nije pronađena.");
+            }
+            entity.Slika = Convert.FromBase64String(update.SlikaBase64);
+            _mapper.Map(update, entity);
 
-            return await base.Update(id, update);
+            _context.Uslugas.Update(entity);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Usluga>(entity);
         }
 
 

@@ -18,6 +18,7 @@ namespace eSpa.Service.Database
         public decimal Cijena { get; set; }
         public string Trajanje { get; set; } = null!;
         public int KategorijaId { get; set; }
+        public byte[]? Slika { get; set; }
 
         public virtual Kategorija Kategorija { get; set; } = null!;
         public virtual ICollection<Komentar> Komentars { get; set; }

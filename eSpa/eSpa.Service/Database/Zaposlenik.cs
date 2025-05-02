@@ -5,6 +5,11 @@ namespace eSpa.Service.Database
 {
     public partial class Zaposlenik
     {
+        public Zaposlenik()
+        {
+            ZaposlenikRecenzijas = new HashSet<ZaposlenikRecenzija>();
+        }
+
         public int Id { get; set; }
         public int KorisnikId { get; set; }
         public DateTime DatumZaposlenja { get; set; }
@@ -16,5 +21,6 @@ namespace eSpa.Service.Database
 
         public virtual Korisnik Korisnik { get; set; } = null!;
         public virtual ZaposlenikSlike? Slika { get; set; }
+        public virtual ICollection<ZaposlenikRecenzija> ZaposlenikRecenzijas { get; set; }
     }
 }

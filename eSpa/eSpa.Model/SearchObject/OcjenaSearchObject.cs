@@ -8,6 +8,8 @@ namespace eSpa.Model.SearchObject
 {
     public class OcjenaSearchObject:BaseSearchObject
     {
-        public string? Ocjena { get; set; }
+        public string? Korisnik { get; set; }
+        public string? Usluga { get; set; }
+        public int? Ocjena { get; set; }
     }
 }

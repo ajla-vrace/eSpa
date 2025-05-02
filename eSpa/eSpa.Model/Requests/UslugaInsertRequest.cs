@@ -39,5 +39,6 @@ namespace eSpa.Model.Requests
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "KategorijaId mora biti validan pozitivan broj.")]
         public int KategorijaId { get; set; }
+        public string SlikaBase64 { get; set; } = null!;
     }
 }

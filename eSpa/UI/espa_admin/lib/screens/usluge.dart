@@ -1,5 +1,7 @@
 //import 'package:espa_admin/models/kategorija.dart';
 //import 'package:espa_admin/models/novost.dart';
+import 'dart:convert';
+
 import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/usluga.dart';
@@ -32,15 +34,15 @@ class _UslugePageState extends State<UslugaPage> {
   late UslugaProvider _uslugaProvider;
   //late KategorijaProvider _kategorijaProvider;
 
-  String? selectedKategorija="Sve";
-  
+  String? selectedKategorija = "Sve";
+
   List<Kategorija>? kategorije;
-  
+
   List<String?>? _kategorije; // Varijabla za pohranu odabrane kategorije
   //List<String> kategorije = [];
 
   //List<Kategorija>? _kategorije;
-  
+
   //var kategorije;
 
   String _shortenText(String text, int maxLength) {
@@ -55,7 +57,7 @@ class _UslugePageState extends State<UslugaPage> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _uslugaProvider = context.read<UslugaProvider>();
-   // _kategorijaProvider = context.read<KategorijaProvider>();
+    // _kategorijaProvider = context.read<KategorijaProvider>();
   }
 
   @override
@@ -103,7 +105,7 @@ class _UslugePageState extends State<UslugaPage> {
             child: SizedBox(
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
-                columnSpacing: 20,
+                columnSpacing: 15,
                 //OVDJE JE  // constraints.maxWidth * 0.2, // Prostor između kolona
                 /*headingRowColor: MaterialStateProperty.all(
                     Colors.lightBlue.shade100), // Boja zaglavlja
@@ -162,6 +164,12 @@ class _UslugePageState extends State<UslugaPage> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Slika",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -187,7 +195,19 @@ class _UslugePageState extends State<UslugaPage> {
                       //DataCell(Text(usluga.trajanje ?? "N/A")),
                       DataCell(Text('${usluga.trajanje ?? "N/A"} min')),
                       DataCell(Text(usluga.kategorija.naziv ?? "N/A")),
-
+                      DataCell(
+                        usluga.slika != null && usluga.slika!.isNotEmpty
+                            ? Image.memory(
+                                base64Decode(usluga
+                                    .slika!), // Pristupamo slici putem 'slika' unutar 'zaposlenik.slika'
+                                width: 50, // Širina slike
+                                height: 50, // Visina slike
+                                fit: BoxFit.cover, // Prilagodba slike
+                              )
+                            : const Icon(Icons.image_not_supported,
+                                size:
+                                    50), // Ikona kao fallback ako slika nije dostupna
+                      ),
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
@@ -315,7 +335,7 @@ class _UslugePageState extends State<UslugaPage> {
     );
   }
 
- /* Future<void> _loadKategorije1() async {
+  /* Future<void> _loadKategorije1() async {
     final kategorijeSve =
         await Provider.of<KategorijaProvider>(context, listen: false).get();
     setState(() {
@@ -329,21 +349,25 @@ class _UslugePageState extends State<UslugaPage> {
   }*/
 
   Future<void> _loadKategorije() async {
-  final kategorijeSve = await Provider.of<KategorijaProvider>(context, listen: false).get();
-   kategorije = kategorijeSve.result;
-print("kategorije: $kategorije");
- /* setState(() {
+    final kategorijeSve =
+        await Provider.of<KategorijaProvider>(context, listen: false).get();
+    kategorije = kategorijeSve.result;
+    print("kategorije: $kategorije");
+    /* setState(() {
     // Mapiraj kategorije i uzmi samo nazive
     _kategorije = kategorije
         ?.map((kategorija) => kategorija.naziv) // Uzimamo samo naziv
         .toList(); // Ovo vraća listu samo sa nazivima kategorija
         print("_kategorije je sada $_kategorije");
   });*/
-  setState(() {
+    setState(() {
       // Mapiraj kategorije i uzmi samo nazive
-      _kategorije = ["Sve", ...kategorije?.map((kategorija) => kategorija.naziv).toList() ?? []]; 
+      _kategorije = [
+        "Sve",
+        ...kategorije?.map((kategorija) => kategorija.naziv).toList() ?? []
+      ];
     });
-}
+  }
 
 /*
   DropdownButton<String?> buildKategorijaDropdown() {
@@ -455,9 +479,9 @@ print("kategorije: $kategorije");
                             _nazivController.clear();
                             _cijenaController.clear();
                             _trajanjeController.clear();
-                             setState(() {
-                              selectedKategorija= "Sve"; 
-                            });// Briše unos iz polja
+                            setState(() {
+                              selectedKategorija = "Sve";
+                            }); // Briše unos iz polja
                           },
                           tooltip: 'Obriši unos',
                         ),

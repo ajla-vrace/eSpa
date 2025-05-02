@@ -5,6 +5,11 @@ namespace eSpa.Service.Database
 {
     public partial class Novost
     {
+        public Novost()
+        {
+            NovostKomentars = new HashSet<NovostKomentar>();
+        }
+
         public int Id { get; set; }
         public string Naslov { get; set; } = null!;
         public string Sadrzaj { get; set; } = null!;
@@ -14,5 +19,6 @@ namespace eSpa.Service.Database
         public byte[]? Slika { get; set; }
 
         public virtual Korisnik Autor { get; set; } = null!;
+        public virtual ICollection<NovostKomentar> NovostKomentars { get; set; }
     }
 }

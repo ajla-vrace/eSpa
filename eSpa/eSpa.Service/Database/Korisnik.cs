@@ -9,9 +9,11 @@ namespace eSpa.Service.Database
         {
             Komentars = new HashSet<Komentar>();
             KorisnikUlogas = new HashSet<KorisnikUloga>();
+            NovostKomentars = new HashSet<NovostKomentar>();
             Novosts = new HashSet<Novost>();
             Ocjenas = new HashSet<Ocjena>();
             Rezervacijas = new HashSet<Rezervacija>();
+            ZaposlenikRecenzijas = new HashSet<ZaposlenikRecenzija>();
             Zaposleniks = new HashSet<Zaposlenik>();
         }
 
@@ -31,9 +33,11 @@ namespace eSpa.Service.Database
 
         public virtual ICollection<Komentar> Komentars { get; set; }
         public virtual ICollection<KorisnikUloga> KorisnikUlogas { get; set; }
+        public virtual ICollection<NovostKomentar> NovostKomentars { get; set; }
         public virtual ICollection<Novost> Novosts { get; set; }
         public virtual ICollection<Ocjena> Ocjenas { get; set; }
         public virtual ICollection<Rezervacija> Rezervacijas { get; set; }
+        public virtual ICollection<ZaposlenikRecenzija> ZaposlenikRecenzijas { get; set; }
         public virtual ICollection<Zaposlenik> Zaposleniks { get; set; }
     }
 }

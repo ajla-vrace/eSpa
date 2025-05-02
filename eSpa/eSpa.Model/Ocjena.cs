@@ -13,5 +13,7 @@ namespace eSpa.Model
         public int UslugaId { get; set; }
         public int Ocjena1 { get; set; }
         public DateTime Datum { get; set; }
+        public  Korisnik Korisnik { get; set; }
+        public  Usluga Usluga { get; set; }
     }
 }

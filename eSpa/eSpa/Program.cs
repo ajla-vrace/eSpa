@@ -61,6 +61,7 @@ builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<IZaposlenikService, ZaposlenikService>();
 //builder.Services.AddTransient<IKategorijaService, KategorijaService>();
 builder.Services.AddTransient<IKomentarService, KomentarService>();
+builder.Services.AddTransient<INovostKomentarService, NovostKomentarService>();
 builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IOcjenaService, OcjenaService>();
 builder.Services.AddTransient<ITerminService, TerminService>();
@@ -68,6 +69,7 @@ builder.Services.AddTransient<IRezervacijaService,RezervacijaService>();
 builder.Services.AddTransient<IZaposlenikSlikeService, ZaposlenikSlikeService>();
 builder.Services.AddTransient<IUlogaService, UlogaService>();
 builder.Services.AddTransient<IKorisnikUlogaService, KorisnikUlogaService>();
+builder.Services.AddTransient<IZaposlenikRecenzijaService, ZaposlenikRecenzijaService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

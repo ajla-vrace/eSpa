@@ -51,8 +51,8 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title:"Moje recenzije",
-       selectedIndex: 3,
+      title: "Moje recenzije",
+      selectedIndex: 3,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -60,12 +60,14 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
             const SizedBox(height: 10),
             const Text(
               'Moje recenzije',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
             Text(
               'Ukupno recenzija: $brojRecenzija',
-              style: const TextStyle(fontSize: 14, color: Colors.grey), textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             if (isLoading)
@@ -73,15 +75,15 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                 child: CircularProgressIndicator(),
               )
             else if (recenzije.isEmpty)
-            const Center(
+              const Center(
                 child: Text(
                   "Nemate nijednu recenziju.",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               )
-             // const Text("Nemate nijednu recenziju.")
+            // const Text("Nemate nijednu recenziju.")
             else
-              ListView.builder(
+              /*ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: recenzije.length,
@@ -121,6 +123,98 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Naziv usluge
+                                      Text(
+                                        recenzija.usluga?.naziv ??
+                                            "Nepoznata usluga",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      // Tekst recenzije
+                                      Text(
+                                        recenzija.tekst ?? "Nema teksta",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),*/
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: recenzije.length,
+                itemBuilder: (context, index) {
+                  final recenzija = recenzije[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Datum gore desno + ikonica za brisanje
+                            Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Text(
+                                    formatDate(recenzija.datum),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                // Ikonica za brisanje
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                      size: 20,
+                                    ),
+                                    onPressed: () async {
+                                      // Dodajte logiku za brisanje recenzije
+                                     // await  jfnjk(recenzija);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            // Ikonica levo, a sve ostalo pored nje
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(Icons.rate_review,
+                                    color: Colors.green, size: 30),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Naziv usluge
                                       Text(

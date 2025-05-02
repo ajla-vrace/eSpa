@@ -21,12 +21,14 @@ namespace eSpa.Service.Database
         public virtual DbSet<Korisnik> Korisniks { get; set; } = null!;
         public virtual DbSet<KorisnikUloga> KorisnikUlogas { get; set; } = null!;
         public virtual DbSet<Novost> Novosts { get; set; } = null!;
+        public virtual DbSet<NovostKomentar> NovostKomentars { get; set; } = null!;
         public virtual DbSet<Ocjena> Ocjenas { get; set; } = null!;
         public virtual DbSet<Rezervacija> Rezervacijas { get; set; } = null!;
         public virtual DbSet<Termin> Termins { get; set; } = null!;
         public virtual DbSet<Uloga> Ulogas { get; set; } = null!;
         public virtual DbSet<Usluga> Uslugas { get; set; } = null!;
         public virtual DbSet<Zaposlenik> Zaposleniks { get; set; } = null!;
+        public virtual DbSet<ZaposlenikRecenzija> ZaposlenikRecenzijas { get; set; } = null!;
         public virtual DbSet<ZaposlenikSlike> ZaposlenikSlikes { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -181,6 +183,27 @@ namespace eSpa.Service.Database
                     .HasConstraintName("FK__Novost__AutorID__72C60C4A");
             });
 
+            modelBuilder.Entity<NovostKomentar>(entity =>
+            {
+                entity.ToTable("NovostKomentar");
+
+                entity.Property(e => e.DatumKreiranja)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Korisnik)
+                    .WithMany(p => p.NovostKomentars)
+                    .HasForeignKey(d => d.KorisnikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__NovostKom__Koris__17F790F9");
+
+                entity.HasOne(d => d.Novost)
+                    .WithMany(p => p.NovostKomentars)
+                    .HasForeignKey(d => d.NovostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__NovostKom__Novos__17036CC0");
+            });
+
             modelBuilder.Entity<Ocjena>(entity =>
             {
                 entity.ToTable("Ocjena");
@@ -331,6 +354,27 @@ namespace eSpa.Service.Database
                     .HasForeignKey(d => d.SlikaId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("FK_Zaposlenik_Slika");
+            });
+
+            modelBuilder.Entity<ZaposlenikRecenzija>(entity =>
+            {
+                entity.ToTable("ZaposlenikRecenzija");
+
+                entity.Property(e => e.DatumKreiranja)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Korisnik)
+                    .WithMany(p => p.ZaposlenikRecenzijas)
+                    .HasForeignKey(d => d.KorisnikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Zaposleni__Koris__1DB06A4F");
+
+                entity.HasOne(d => d.Zaposlenik)
+                    .WithMany(p => p.ZaposlenikRecenzijas)
+                    .HasForeignKey(d => d.ZaposlenikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Zaposleni__Zapos__1CBC4616");
             });
 
             modelBuilder.Entity<ZaposlenikSlike>(entity =>
