@@ -230,12 +230,13 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
             child: TextFormField(
               controller: _komentarController,
               maxLines: 3,
+               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: const InputDecoration(
                 hintText: 'Unesite vaš komentar',
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
-                if (value == null) {
+                if (value!.isEmpty) {
                   return 'Komentar ne može biti prazan';
                 }
                 if (value.trim().isEmpty) {

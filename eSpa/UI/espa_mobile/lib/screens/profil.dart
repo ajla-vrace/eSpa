@@ -1,8 +1,11 @@
 import 'package:espa_mobile/models/korisnik.dart';
 import 'package:espa_mobile/models/search_result.dart';
 import 'package:espa_mobile/providers/korisnik_provider.dart';
+import 'package:espa_mobile/screens/moje_ocjene_usluga.dart';
 import 'package:espa_mobile/screens/moje_recenzije.dart';
+import 'package:espa_mobile/screens/moje_recenzijeZaposlenika.dart';
 import 'package:espa_mobile/screens/moje_rezervacije.dart';
+import 'package:espa_mobile/screens/moji_novostKomentari.dart';
 import 'package:espa_mobile/screens/moji_podaci.dart';
 import 'package:espa_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -117,6 +120,39 @@ class _KorisnickiProfilScreenState extends State<KorisnickiProfilScreen> {
                     );
                   }),
                   const SizedBox(height: 12),
+                  //const SizedBox(height: 12),
+                  _buildButton(
+                      context, "Moji komentari za novost", Icons.comment, () {
+                    // Navigacija ili logika
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MojiKomentariScreen()),
+                    );
+                  }),
+                  const SizedBox(height: 12),
+                  // const SizedBox(height: 12),
+                  //const SizedBox(height: 12),
+                  _buildButton(
+                      context, "Moje ocjene za uslugu", Icons.comment, () {
+                    // Navigacija ili logika
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MojeOcjeneScreen()),
+                    );
+                  }),
+                  const SizedBox(height: 12),
+                   _buildButton(
+                      context, "Moje recenzije zaposlenika", Icons.comment, () {
+                    // Navigacija ili logika
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MojeRecenzijeZaposlenikaScreen()),
+                    );
+                  }),
+                  const SizedBox(height: 12),
                   _buildButton(context, "Moje recenzije", Icons.rate_review,
                       () {
                     // Navigacija ili logika
@@ -128,7 +164,7 @@ class _KorisnickiProfilScreenState extends State<KorisnickiProfilScreen> {
                   }),
                 ],
               ),
-            ),
+            ), 
             const SizedBox(height: 32),
           ],
         ),

@@ -1,22 +1,22 @@
+import 'package:espa_mobile/models/novostKomentar.dart';
+import 'package:espa_mobile/providers/novostKomentar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:espa_mobile/models/komentar.dart';
-import 'package:espa_mobile/providers/komentar_provider.dart';
 import 'package:espa_mobile/widgets/master_screen.dart';
 import 'package:espa_mobile/utils/util.dart';
 
-class MojeRecenzijeScreen extends StatefulWidget {
-  const MojeRecenzijeScreen({super.key});
+class MojiKomentariScreen extends StatefulWidget {
+  const MojiKomentariScreen({super.key});
 
   @override
-  State<MojeRecenzijeScreen> createState() => _MojeRecenzijeScreenState();
+  State<MojiKomentariScreen> createState() => _MojiKomentariScreenState();
 }
 
-class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
-  List<Komentar> recenzije = [];
+class _MojiKomentariScreenState extends State<MojiKomentariScreen> {
+  List<NovostKomentar> recenzije = [];
   bool isLoading = true;
   int brojRecenzija = 0;
-  late KomentarProvider _recenzijaProvider;
+  late NovostKomentarProvider _recenzijaProvider;
 
   String formatDate(DateTime? date) {
     if (date == null) return "Nepoznato";
@@ -32,7 +32,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
   Future<void> _loadRecenzije() async {
     final korisnickoIme = await getUserName();
     if (korisnickoIme != null) {
-      _recenzijaProvider = context.read<KomentarProvider>();
+      _recenzijaProvider = context.read<NovostKomentarProvider>();
       final data = await _recenzijaProvider.get(filter: {
         'korisnik': korisnickoIme,
       });
@@ -52,7 +52,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: "Moje recenzije",
+      title: "Moji komentari za novosti",
       selectedIndex: 3,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -60,13 +60,13 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
           children: [
             const SizedBox(height: 10),
             const Text(
-              'Moje recenzije',
+              'Moji komentari za novosti',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
             Text(
-              'Ukupno recenzija: $brojRecenzija',
+              'Ukupno komentara: $brojRecenzija',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
@@ -78,7 +78,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
             else if (recenzije.isEmpty)
               const Center(
                 child: Text(
-                  "Nemate nijednu recenziju.",
+                  "Nemate nijedan komentar za novosti.",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               )
@@ -106,7 +106,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  recenzija.usluga!.naziv ?? "Nepoznata usluga",
+                                  recenzija.novost!.naslov ?? "Nepoznata novost",
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -124,8 +124,8 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                   final _formKey = GlobalKey<FormState>();
                                   final TextEditingController _controller =
                                       TextEditingController(
-                                          text: recenzija.tekst);
-                                  String originalText = recenzija.tekst ?? '';
+                                          text: recenzija.sadrzaj);
+                                  String originalText = recenzija.sadrzaj ?? '';
                                   bool isChanged = false;
 
                                   await showDialog(
@@ -191,7 +191,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                                               .update(
                                                                   recenzija.id!,
                                                                   {
-                                                                'tekst':
+                                                                'sadrzaj':
                                                                     _controller
                                                                         .text
                                                                         .trim(),
@@ -271,7 +271,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                       return AlertDialog(
                                         title: const Text("Potvrda brisanja"),
                                         content: const Text(
-                                            "Da li ste sigurni da želite obrisati ovu recenziju?"),
+                                            "Da li ste sigurni da želite obrisati ovaj komentar za novost?"),
                                         actions: [
                                           TextButton(
                                             child: const Text("Odustani"),
@@ -297,7 +297,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                   if (confirm == true) {
                                     try {
                                       final komentarProvider =
-                                          context.read<KomentarProvider>();
+                                          context.read<NovostKomentarProvider>();
                                       await komentarProvider
                                           .delete(recenzija.id!);
 
@@ -310,7 +310,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                           .showSnackBar(
                                         const SnackBar(
                                           content: Text(
-                                            "Recenzija uspješno obrisana.",
+                                            "Komentar uspješno obrisan.",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
@@ -325,7 +325,7 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                                           .showSnackBar(
                                         const SnackBar(
                                           content: Text(
-                                              "Greška prilikom brisanja recenzije."),
+                                              "Greška prilikom brisanja komentara."),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
@@ -336,11 +336,11 @@ class _MojeRecenzijeScreenState extends State<MojeRecenzijeScreen> {
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text(recenzija.tekst ?? "",
+                          Text(recenzija.sadrzaj ?? "",
                               style: const TextStyle(fontSize: 14)),
                           const SizedBox(height: 4),
                           Text(
-                            formatDate(recenzija.datum),
+                            formatDate(recenzija.datumKreiranja),
                             style: const TextStyle(
                               //fontStyle: FontStyle.italic,
                               fontSize: 12,

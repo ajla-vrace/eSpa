@@ -122,21 +122,22 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                   TextFormField(
                     controller: _komentarController,
                     maxLines: 3,
+                    autovalidateMode: AutovalidateMode.onUserInteraction, 
                     decoration: const InputDecoration(
                       hintText: 'Unesite vaš komentar (opcionalno)',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value != null && value.trim().isNotEmpty) {
-                        final trimmed = value.trim();
-                        if (!RegExp(r'^[a-zA-ZšđčćžŠĐČĆŽ]').hasMatch(trimmed)) {
-                          return 'Komentar mora početi slovom';
-                        }
-                        if (trimmed.length < 3) {
-                          return 'Komentar mora imati najmanje 3 znaka';
-                        }
+                      if (value == null || value.isEmpty) {
+                        return null;
+                      } else if (value.trim().isEmpty) {
+                        // Ako je komentar samo sa razmacima
+                        return 'Komentar ne može imati samo razmake';
+                      } else if (value.trim().length < 3) {
+                        // Ako je komentar prekratak (manje od 3 karaktera)
+                        return 'Komentar mora imati najmanje 3 karaktera';
                       }
-                      return null; // Komentar je opcionalan
+                      return null; // Ako nema problema sa komentarom, vraća null (validno je)
                     },
                   ),
                 ],

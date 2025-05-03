@@ -30,11 +30,11 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
 
   // ignore: unused_field
   bool _isLoading = true;
-
+  
   String? korisnickoIme;
 
   SearchResult<Korisnik>? user;
-
+  
   int? korisnikId;
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
     }
   }
 
-  Future<void> _loadUserData() async {
+Future<void> _loadUserData() async {
     // Dohvati korisničko ime iz SharedPreferences
     korisnickoIme = (await getUserName())!;
     // Ako korisničko ime nije null, nastavi sa dohvatanjem podataka o korisniku
@@ -94,7 +94,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
     }
   }
 
-  void _showAddKomentarDialog() {
+void _showAddKomentarDialog() {
     final _formKey = GlobalKey<FormState>();
     final _komentarController = TextEditingController();
 
@@ -108,6 +108,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
             child: TextFormField(
               controller: _komentarController,
               maxLines: 3,
+               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: const InputDecoration(
                 hintText: 'Unesite vaš komentar',
                 border: OutlineInputBorder(),
@@ -143,8 +144,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   try {
-                    final komentarProvider =
-                        context.read<NovostKomentarProvider>();
+                    final komentarProvider = context.read<NovostKomentarProvider>();
 
                     await komentarProvider.insert({
                       'korisnikId': korisnikId,
@@ -178,6 +178,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
       },
     );
   }
+
 
   String formatDatum(DateTime? datum) {
     if (datum == null) return "Nepoznat datum";
@@ -273,8 +274,8 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.add_comment,
-                                color: Colors.teal),
+                            icon: const Icon(Icons.add_comment, 
+                            color: Colors.teal),
                             tooltip: 'Dodaj komentar',
                             onPressed: () => _showAddKomentarDialog(),
                           ),
@@ -296,12 +297,9 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
                               margin: const EdgeInsets.only(bottom: 12),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors
-                                    .blueGrey[50], // Dodavanje boje pozadine
-                                borderRadius: BorderRadius.circular(
-                                    12), // Zaobljeni kutovi
-                                border: Border.all(
-                                    color: Colors.blueGrey.shade200), // Ivice
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey.shade300),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
