@@ -6,12 +6,12 @@ import 'package:espa_admin/models/zaposlenik.dart';
 import 'package:espa_admin/providers/uloga_provider.dart';
 //import 'package:espa_admin/providers/zaposlenikSlike_provider.dart';
 import 'package:espa_admin/providers/zaposlenik_provider.dart';
+import 'package:espa_admin/screens/zaposlenikRecenzije.dart';
 import 'package:espa_admin/screens/zaposlenik_detalji.dart';
 import 'package:espa_admin/screens/zaposlenik_edit.dart';
 import 'package:espa_admin/screens/zaposlenik_info.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ZaposlenikPage extends StatefulWidget {
@@ -190,12 +190,12 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  DataColumn(
+                  /*DataColumn(
                     label: Text(
                       "DatumZaposlenja",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
+                  ),*/
                   DataColumn(
                     label: Text(
                       "Struka",
@@ -230,8 +230,8 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                       //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
                       DataCell(Text(zaposlenik.korisnik?.ime ?? "N/A")),
                       DataCell(Text(zaposlenik.korisnik?.prezime ?? "N/A")),
-                      DataCell(Text(DateFormat('dd.MM.yyyy.').format(
-                          zaposlenik.datumZaposlenja ?? DateTime.now()))),
+                      //DataCell(Text(DateFormat('dd.MM.yyyy.').format(
+                      //zaposlenik.datumZaposlenja ?? DateTime.now()))),
                       //DataCell(Text(zaposlenik.struka ?? "N/A")),
                       DataCell(
                         SizedBox(
@@ -288,6 +288,18 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                           mainAxisAlignment: MainAxisAlignment
                               .end, // Poravnavanje ikonica desno
                           children: [
+                            IconButton(
+                                icon: const Icon(Icons.comment),
+                                tooltip: "Recenzije",
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ZaposlenikRecenzijePage(
+                                         zaposlenik: zaposlenik),
+                                    ),
+                                  );
+                                }),
                             IconButton(
                                 icon: const Icon(Icons.info),
                                 onPressed: () {

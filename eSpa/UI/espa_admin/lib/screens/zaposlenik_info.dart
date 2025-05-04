@@ -135,42 +135,18 @@ class _ZaposlenikInfoPageState extends State<ZaposlenikInfoPage> {
       child: Column(
         children: [
           _buildNameFields(),
-          /* _buildDisabledField(
-              "Ime", "ime", _initialValue['ime']),
-          const SizedBox(height: 10),
-           _buildDisabledField(
-              "Prezime", "prezime", _initialValue['prezime']),*/
+        
           const SizedBox(height: 10),
            _buildDisabledField(
               "Email", "email", _initialValue['email']),
           const SizedBox(height: 10),
           _buildPhoneAndRegistrationDateFields(),
-         /*  _buildDisabledField(
-              "Telefon", "telefon", _initialValue['telefon']),
-          const SizedBox(height: 10),
-           _buildDisabledField(
-              "Datum registracije",
-              "datumRegistracije",
-              _initialValue['datumRegistracije'] != null
-                  ? DateFormat('d.M.yyyy')
-                      .format(DateTime.parse(_initialValue['datumRegistracije'].toString()))
-                  : ''),*/
-         // _buildDisabledField(
-            //  "Datum registracije", "datumRegistracije", _initialValue['datumRegistracije']),
+       
           const SizedBox(height: 10),
           _buildDisabledField("Korisnicko ime", "korisnickoIme", _initialValue['korisnickoIme']),
           const SizedBox(height: 10),
           _buildStatusAndDatumZaposlenjaFields(),
-         /* _buildDisabledField("Status", "status", _initialValue['status']),
-          const SizedBox(height: 10),
-          //_buildDisabledField("Datum", "datum", _initialValue['datum']?.toString()),
-          _buildDisabledField(
-              "Datum zaposlenja",
-              "datumZaposlenja",
-              _initialValue['datumZaposlenja'] != null
-                  ? DateFormat('d.M.yyyy')
-                      .format(DateTime.parse(_initialValue['datumZaposlenja'].toString()))
-                  : ''),*/
+        
                   const SizedBox(height: 10),
 
                    _buildDisabledField("Struka", "struka", _initialValue['struka']),
@@ -266,21 +242,7 @@ Widget _buildNameFields() {
       ),
     );
   }
-  /*Widget _buildProfileImage(Uint8List? imageData) {
-  return imageData != null
-      ? Image.memory(
-          imageData,
-          width: 100,
-          height: 100,
-          fit: BoxFit.cover,
-        )
-      : const Icon(
-          Icons.account_circle,
-          size: 100,
-          color: Colors.grey,
-        );
-}
-*/
+  
 Widget _buildProfileImage(String? slika) {
   if (slika != null && slika.isNotEmpty) {
     try {
@@ -305,39 +267,5 @@ Widget _buildProfileImage(String? slika) {
     color: Colors.grey,
   );
 }
-/*
-  Widget _buildDisabledField3(String label, String name, String? value) {
-    return Container(
-      height: 80, // Fiksna visina polja
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.grey[200],
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical, // Omogućava vertikalni skrol
-        physics:
-            const AlwaysScrollableScrollPhysics(), // Osigurava da skrol uvek bude dostupan
-        child: FormBuilderTextField(
-          name: name,
-          initialValue: value,
-          enabled: false, // Onemogućava uređivanje
-          maxLines: null, // Omogućava neograničen broj linija
-          style: const TextStyle(
-            color: Color.fromARGB(221, 87, 87, 87),
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-          decoration: InputDecoration(
-            labelText: label,
-            //alignLabelWithHint: true, // ✅ Popravlja problem sa labelom
-            border: InputBorder.none, // Omogućava normalan border
-            filled: true, // Uklanja unutrašnji border
-            contentPadding: const EdgeInsets.all(10), // Dodatni razmak od ivica
-            fillColor: const Color.fromARGB(255, 240, 240, 240),
-          ),
-        ),
-      ),
-    );
-  }*/
+
 }
