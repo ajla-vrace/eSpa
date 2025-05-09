@@ -1,7 +1,9 @@
+import 'package:espa_mobile/providers/favorit_provider.dart';
 import 'package:espa_mobile/providers/kategorija_provider.dart';
 import 'package:espa_mobile/providers/komentar_provider.dart';
 import 'package:espa_mobile/providers/korisnikUloga_provider.dart';
 import 'package:espa_mobile/providers/korisnik_provider.dart';
+import 'package:espa_mobile/providers/novostInterakcija_provider.dart';
 import 'package:espa_mobile/providers/novostKomentar_provider.dart';
 import 'package:espa_mobile/providers/novost_provider.dart';
 import 'package:espa_mobile/providers/ocjena_provider.dart';
@@ -31,8 +33,10 @@ ChangeNotifierProvider(create: (_) => KorisnikProvider()),
 ChangeNotifierProvider(create: (_) => KorisnikUlogaProvider()),
 ChangeNotifierProvider(create: (_) => UlogaProvider()),
 ChangeNotifierProvider(create: (_) => UslugaProvider()),
+ChangeNotifierProvider(create: (_) => FavoritProvider()),
 ChangeNotifierProvider(create: (_) => TerminProvider()),
 ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
+ChangeNotifierProvider(create: (_) => NovostInterakcijaProvider()),
 ChangeNotifierProvider(create: (_) => ZaposlenikProvider()),
 ChangeNotifierProvider(create: (_) => ZaposlenikSlikeProvider()),
 
@@ -69,6 +73,10 @@ class MyApp extends StatelessWidget {
        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 7, 79, 34)),
         useMaterial3: false,
       ),
+      routes: {        // Početna stranica (npr. HomePage)
+        '/login': (context) => LoginPage(),   // Ovdje definiraš login rutu
+        // Dodaj sve druge rute ovde
+      },
      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
      home:  LoginPage(),
     );

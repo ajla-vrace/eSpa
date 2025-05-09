@@ -28,6 +28,7 @@ namespace eSpa.Model.Requests
 
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string PasswordPotvrda { get; set; }
+        public int? SlikaId { get; set; }
 
     }
 }

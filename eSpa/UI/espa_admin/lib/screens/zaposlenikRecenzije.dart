@@ -17,7 +17,8 @@ class ZaposlenikRecenzijePage extends StatefulWidget {
   const ZaposlenikRecenzijePage({Key? key, this.zaposlenik}) : super(key: key);
 
   @override
-  State<ZaposlenikRecenzijePage> createState() => _ZaposlenikRecenzijePageState();
+  State<ZaposlenikRecenzijePage> createState() =>
+      _ZaposlenikRecenzijePageState();
 }
 
 class _ZaposlenikRecenzijePageState extends State<ZaposlenikRecenzijePage> {
@@ -38,8 +39,8 @@ class _ZaposlenikRecenzijePageState extends State<ZaposlenikRecenzijePage> {
   Future initForm() async {
     komentarResult = await _komentarProvider.get();
     zaposlenikRecenzijaResult = await _zaposlenikRecenzijaProvider.get(filter: {
-        'Zaposlenik': widget.zaposlenik!.korisnik!.korisnickoIme,
-      });
+      'Zaposlenik': widget.zaposlenik!.korisnik!.korisnickoIme,
+    });
     setState(() {
       isLoading = false;
     });
@@ -85,11 +86,20 @@ class _ZaposlenikRecenzijePageState extends State<ZaposlenikRecenzijePage> {
                               ),
                             ],
                           ),
-                           _buildRecenzijeList(),
+                          const Text(
+                            "Recenzije za zaposlenika",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          _buildRecenzijeList(),
                           const SizedBox(height: 20),
                           _buildBackButton(), // Dugme za nazad
                           const SizedBox(height: 20),
-                         
                         ],
                       ),
               ),
@@ -106,7 +116,8 @@ class _ZaposlenikRecenzijePageState extends State<ZaposlenikRecenzijePage> {
         Navigator.pop(context); // Vrati se nazad
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 152, 152, 152), // Tamnija nijansa za dugme
+        backgroundColor: const Color.fromARGB(
+            255, 152, 152, 152), // Tamnija nijansa za dugme
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -119,6 +130,7 @@ class _ZaposlenikRecenzijePageState extends State<ZaposlenikRecenzijePage> {
     );
   }
 
+/*
   Widget _buildRecenzijeList() {
     if (zaposlenikRecenzijaResult?.result == null || zaposlenikRecenzijaResult?.result.isEmpty == true) {
       return const Center(child: Text('Nema recenzija za ovog zaposlenika.'));
@@ -161,6 +173,187 @@ class _ZaposlenikRecenzijePageState extends State<ZaposlenikRecenzijePage> {
             ),
           );
         },
+      ),
+    );
+  }*/
+  /*
+  Widget _buildRecenzijeList() {
+    if (zaposlenikRecenzijaResult?.result == null ||
+        zaposlenikRecenzijaResult!.result.isEmpty) {
+      return const Center(child: Text('Nema recenzija za ovog zaposlenika.'));
+    }
+
+    return Expanded(
+      child: ListView.builder(
+        itemCount: zaposlenikRecenzijaResult!.result.length,
+        itemBuilder: (context, index) {
+          var recenzija = zaposlenikRecenzijaResult!.result[index];
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF9F9F9),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.person, color: Colors.blueGrey),
+                    const SizedBox(width: 8),
+                    Text(
+                      recenzija.korisnik?.ime ?? 'Nepoznato ime',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.orangeAccent),
+                    const SizedBox(width: 5),
+                    Text(
+                      '${recenzija.ocjena ?? 'N/A'} / 5',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.comment, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        recenzija.komentar ?? 'Nema komentara',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today,
+                        color: Colors.grey, size: 16),
+                    const SizedBox(width: 6),
+                    Text(
+                      recenzija.datumKreiranja != null
+                          ? DateFormat('dd.MM.yyyy')
+                              .format(recenzija.datumKreiranja!)
+                          : 'Nema datuma',
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }*/
+  Widget _buildRecenzijeList() {
+    if (zaposlenikRecenzijaResult?.result == null ||
+        zaposlenikRecenzijaResult!.result.isEmpty) {
+      return const Center(child: Text('Nema recenzija za ovog zaposlenika.'));
+    }
+
+    return Flexible(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: 500, // ili koliko želiš da bude maksimalna visina
+        ),
+        child: ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          itemCount: zaposlenikRecenzijaResult!.result.length,
+          itemBuilder: (context, index) {
+            final recenzija = zaposlenikRecenzijaResult!.result[index];
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.person, color: Colors.blueGrey),
+                      const SizedBox(width: 8),
+                      Text(
+                        recenzija.korisnik?.ime ?? 'Nepoznato ime',
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.orangeAccent),
+                      const SizedBox(width: 5),
+                      Text(
+                        '${recenzija.ocjena ?? 'N/A'} / 5',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.comment, color: Colors.grey),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          recenzija.komentar ?? 'Nema komentara',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today,
+                          color: Colors.grey, size: 16),
+                      const SizedBox(width: 6),
+                      Text(
+                        recenzija.datumKreiranja != null
+                            ? DateFormat('dd.MM.yyyy')
+                                .format(recenzija.datumKreiranja!)
+                            : 'Nema datuma',
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

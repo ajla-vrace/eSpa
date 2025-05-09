@@ -14,8 +14,8 @@ class Usluga {
   double? cijena;
   String? trajanje;
   int? kategorijaId;
-   String? slika;
-  Kategorija kategorija;
+  String? slika;
+  Kategorija? kategorija;
   Usluga(this.id, this.naziv, this.opis, this.cijena, this.trajanje, this.kategorijaId,this.slika,this.kategorija);
 
     /// A necessary factory constructor for creating a new User instance

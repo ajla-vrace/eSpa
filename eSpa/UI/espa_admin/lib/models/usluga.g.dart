@@ -14,7 +14,9 @@ Usluga _$UslugaFromJson(Map<String, dynamic> json) => Usluga(
       json['trajanje'] as String?,
       (json['kategorijaId'] as num?)?.toInt(),
       json['slika'] as String?,
-      Kategorija.fromJson(json['kategorija'] as Map<String, dynamic>),
+      json['kategorija'] == null
+          ? null
+          : Kategorija.fromJson(json['kategorija'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UslugaToJson(Usluga instance) => <String, dynamic>{

@@ -15,12 +15,7 @@ class MojeRezervacijeScreen extends StatefulWidget {
 class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
   List<Rezervacija> rezervacije = [];
   bool isLoading = true;
-  int brojRezervacija = 0;
-
-  String formatTime(String? time) {
-    if (time == null || !time.contains(":")) return "Nepoznato";
-    return time.substring(0, 5); // npr. 11:00
-  }
+  String? selectedStatus;
 
   @override
   void initState() {
@@ -38,7 +33,6 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
 
       setState(() {
         rezervacije = data.result;
-        brojRezervacija = data.count;
         isLoading = false;
       });
     } else {
@@ -48,10 +42,41 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
     }
   }
 
+  String formatDate(DateTime? date) {
+    if (date == null) return "Nepoznato";
+    return "${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}.";
+  }
+
+  String formatTime(String? time) {
+    if (time == null || !time.contains(":")) return "Nepoznato";
+    return time.substring(0, 5); // npr. 11:00
+  }
+
+  Color getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'aktivna':
+        return Colors.green;
+      case 'završena':
+        return Colors.blue;
+      case 'otkazana':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Filtriraj po statusu ako je odabran
+    final filtriraneRezervacije = selectedStatus == null
+        ? rezervacije
+        : rezervacije
+            .where(
+                (r) => r.status?.toLowerCase() == selectedStatus!.toLowerCase())
+            .toList();
+
     return MasterScreenWidget(
-      title:"Moje rezervacije",
+      title: "Moje rezervacije",
       selectedIndex: 3,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -65,16 +90,46 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Ukupno rezervacija: $brojRezervacija',
+              'Ukupno rezervacija: ${filtriraneRezervacije.length}',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical:5.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Status",
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  value: selectedStatus,
+                  items: <String?>[null, 'Aktivna', 'Zavrsena', 'Otkazana']
+                      .map<DropdownMenuItem<String>>((String? value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value ?? 'Sve'),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedStatus = newValue;
+                    });
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             if (isLoading)
-              const Center(
-                child: CircularProgressIndicator(),
-              )
-            else if (rezervacije.isEmpty)
+              const Center(child: CircularProgressIndicator())
+            else if (filtriraneRezervacije.isEmpty)
               const Center(
                 child: Text(
                   "Nemate nijednu rezervaciju.",
@@ -85,9 +140,9 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: rezervacije.length,
+                itemCount: filtriraneRezervacije.length,
                 itemBuilder: (context, index) {
-                  final rezervacija = rezervacije[index];
+                  final rezervacija = filtriraneRezervacije.reversed.toList()[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 4.0),
@@ -108,9 +163,7 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 6),
-                          Text(
-                            "Datum: ${formatDate(rezervacija.datum)}",
-                          ),
+                          Text("Datum: ${formatDate(rezervacija.datum)}"),
                           Text(
                               "Vrijeme: ${formatTime(rezervacija.termin?.pocetak)}"),
                           const SizedBox(height: 4),
@@ -131,23 +184,5 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
         ),
       ),
     );
-  }
-
-  String formatDate(DateTime? date) {
-    if (date == null) return "Nepoznato";
-    return "${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}.";
-  }
-
-  Color getStatusColor(String? status) {
-    switch (status?.toLowerCase()) {
-      case 'aktivna':
-        return Colors.green;
-      case 'završena':
-        return Colors.blue;
-      case 'otkazana':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 }

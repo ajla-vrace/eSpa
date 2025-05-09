@@ -1,5 +1,6 @@
 import 'package:espa_mobile/providers/novost_provider.dart';
 import 'package:espa_mobile/screens/home.dart';
+import 'package:espa_mobile/screens/registracija.dart';
 import 'package:espa_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,16 +42,17 @@ class _LoginPageState extends State<LoginPage> {
             constraints: BoxConstraints(maxWidth: width * 0.9),
             child: Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
                   children: [
-                    Image.network(
+                    /* Image.network(
                       "https://www.fit.ba/content/public/images/og-image.jpg",
                       height: 100,
                       width: 100,
-                    ),
+                    ),*/
                     const SizedBox(height: 30),
                     TextFormField(
                       controller: _usernameController,
@@ -81,6 +83,25 @@ class _LoginPageState extends State<LoginPage> {
                               child: const Text("Login"),
                             ),
                           ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Nemaš profil?"),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegistracijaScreen()),
+                            );
+                          },
+                          child: Text(
+                            "Registruj se",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

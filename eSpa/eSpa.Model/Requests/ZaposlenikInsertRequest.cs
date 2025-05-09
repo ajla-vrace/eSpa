@@ -22,5 +22,6 @@ namespace eSpa.Model.Requests
         public string? Napomena { get; set; }
         public string? Biografija { get; set; }
         public int? SlikaId { get; set; }
+        public int KategorijaId { get; set; }
     }
 }

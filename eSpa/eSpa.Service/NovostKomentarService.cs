@@ -27,8 +27,8 @@ namespace eSpa.Service
                 string korisnikSearch = search.Korisnik.ToLower();
                 string novostSearch = search.Novost.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Korisnik.KorisnickoIme.ToLower().Contains(korisnikSearch) &&
-                    x.Novost.Naslov.ToLower().Contains(novostSearch)
+                    x.Korisnik.KorisnickoIme.ToLower()==(korisnikSearch) &&
+                    x.Novost.Naslov.ToLower()==(novostSearch)
                 );
             }
             // Ako je unesen samo username
@@ -44,7 +44,7 @@ namespace eSpa.Service
             {
                 string novostSearch = search.Novost.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Novost.Naslov.ToLower().Contains(novostSearch)
+                    x.Novost.Naslov.ToLower()==(novostSearch)
                 );
             }
 

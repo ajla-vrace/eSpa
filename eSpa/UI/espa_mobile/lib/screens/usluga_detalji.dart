@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:espa_mobile/models/favorit.dart';
 import 'package:espa_mobile/models/komentar.dart';
 import 'package:espa_mobile/models/korisnik.dart';
 import 'package:espa_mobile/models/ocjena.dart';
 import 'package:espa_mobile/models/search_result.dart';
+import 'package:espa_mobile/providers/favorit_provider.dart';
 import 'package:espa_mobile/providers/komentar_provider.dart';
 import 'package:espa_mobile/providers/korisnik_provider.dart';
 import 'package:espa_mobile/providers/ocjena_provider.dart';
+import 'package:espa_mobile/screens/kreiraj_rezervaciju.dart';
 import 'package:espa_mobile/utils/util.dart';
 import 'package:espa_mobile/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,23 +28,24 @@ class UslugaDetailScreen extends StatefulWidget {
 
 class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
   Uint8List? slikaBytes;
-
   // ignore: unused_field
   bool? _isLoading = true;
   // ignore: unused_field
   bool? _isLoadingOcjene = true;
-
   List<Komentar>? _komentari;
   List<Ocjena>? _ocjene;
-
   int? ukupnoKomentara = 0;
-
   late String korisnickoIme;
-
   SearchResult<Korisnik>? user;
-
+  Korisnik? korisnik;
   int? korisnikId;
+  late FavoritProvider _favoritProvider;
+  late KorisnikProvider _korisnikProvider;
+  //bool _jeFavorit = false;
+  List<Favorit>? data = [];
+  var dataKorisnik;
 
+  bool jeFavoritBool = false;
   double? getProsjecnaOcjena() {
     if (_ocjene == null || _ocjene!.isEmpty) return null;
     double suma = _ocjene!
@@ -53,12 +57,21 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
   @override
   void initState() {
     super.initState();
+    _korisnikProvider = context.read<KorisnikProvider>();
+    _favoritProvider = context.read<FavoritProvider>();
     _loadUserData();
     _loadSlika();
     _loadKomentari();
     _loadOcjene();
+
+    // _provjeriFavorit();
   }
 
+/*void initialoze() async{
+  await _loadUserData();
+  await _provjeriFavorit();
+
+  }*/
   void _loadSlika() {
     if (widget.usluga.slika != null && widget.usluga.slika!.isNotEmpty) {
       try {
@@ -106,22 +119,81 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
   Future<void> _loadUserData() async {
     // Dohvati korisničko ime iz SharedPreferences
     korisnickoIme = (await getUserName())!;
+    print("KORISNICKO IME: $korisnickoIme");
     // Ako korisničko ime nije null, nastavi sa dohvatanjem podataka o korisniku
     // ignore: unnecessary_null_comparison
     if (korisnickoIme != null) {
       try {
         // Koristi provider za dohvatanje korisničkih podataka prema korisničkom imenu
-        var korisniciProvider = context.read<KorisnikProvider>();
-        user = await korisniciProvider
+
+        user = await _korisnikProvider
             .get(filter: {'korisnickoIme': korisnickoIme});
         // Ako su podaci uspešno učitani, update-uj state
         setState(() {
           korisnikId = user!.result[0].id;
+          print("korisnik id----------------> $korisnikId");
+          korisnik = user!.result[0];
+          print("korisnik ------------------>$korisnik");
         });
+        if (korisnikId != null) {
+          await _provjeriFavorit();
+        }
       } catch (e) {
+        print("greska na load korisnik --------> ${e.toString()}");
         // Ako dođe do greške prilikom učitavanja, možeš staviti fallback ili prikazati error poruku
         print("Greška pri učitavanju korisničkih podataka: $e");
       }
+    }
+  }
+
+  Future<void> _toggleFavorit() async {
+    if (jeFavoritBool) {
+      print("u jefavoriboll true smo");
+      // Ako već postoji, pronađi ID favorita
+      final favorit = widget.usluga.favorits!.firstWhere(
+          (f) => f.korisnikId == korisnikId && f.uslugaId == widget.usluga.id);
+      print("FINAL FAVORIT ---------------> $favorit");
+      // Pozovi DELETE na API
+      await _favoritProvider
+          .delete(favorit.id!); // prilagodi naziv metodi i servisu
+      setState(() {
+        widget.usluga.favorits!.remove(favorit);
+        print("WIDGE:FAVORITS ${widget.usluga.favorits}");
+        jeFavoritBool = false;
+      });
+    } else {
+      // Dodaj novi favorit
+      final favoritData = {
+        "korisnikId": korisnikId,
+        "uslugaId": widget.usluga.id,
+        "isFavorit": true
+      };
+      print("FAVORIT DATA -------------->$favoritData");
+      final noviFavorit = await _favoritProvider.insert(favoritData);
+
+      /*final noviFavorit = await _favoritProvider
+          .insert({"korisnikId": korisnikId, "uslugaId": widget.usluga.id});*/
+
+      setState(() {
+        widget.usluga.favorits!.add(noviFavorit);
+        print(
+            "FAVORITI NAKON INSERT --------------> ${widget.usluga.favorits}");
+        jeFavoritBool = true;
+      });
+    }
+  }
+
+  Future<void> _provjeriFavorit() async {
+    print(" u provjeriFavorit smo");
+    print("FAVORITSSSSS->>>>>>>>>>>>>>>>>>>>${widget.usluga.favorits}");
+    if (widget.usluga.favorits != null) {
+      print("u ifu smo je li favorits null");
+      print("KORISNID $korisnikId");
+      print("USLUGA ID ${widget.usluga.id}");
+      jeFavoritBool = widget.usluga.favorits!.any(
+          (f) => f.korisnikId == korisnikId && f.uslugaId == widget.usluga.id);
+
+      print("je li favorit bool ----------->$jeFavoritBool");
     }
   }
 
@@ -230,7 +302,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
             child: TextFormField(
               controller: _komentarController,
               maxLines: 3,
-               autovalidateMode: AutovalidateMode.onUserInteraction,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: const InputDecoration(
                 hintText: 'Unesite vaš komentar',
                 border: OutlineInputBorder(),
@@ -328,22 +400,70 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Slika usluge
-                Container(
-                  height: 220,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                  ),
-                  child: slikaBytes != null
-                      ? Image.memory(
-                          slikaBytes!,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(
-                          Icons.image_not_supported,
-                          size: 60,
-                          color: Colors.grey,
+                Stack(
+                  children: [
+                    Container(
+                      height: 220,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
+                      ),
+                      child: slikaBytes != null
+                          ? ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: Image.memory(
+                                slikaBytes!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 220,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.image_not_supported,
+                              size: 60,
+                              color: Colors.grey,
+                            ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: IconButton(
+                        icon: Icon(
+                          jeFavoritBool
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: jeFavoritBool ? Colors.red : Colors.grey,
+                        ),
+                        onPressed: () async {
+                          _toggleFavorit();
+                          /*var uslugaId = widget.usluga.id;
+
+                          if (_jeFavorit) {
+                            
+                          } else {
+                            // dodaj u favorite
+                            await _favoritProvider.insert({
+                              'korisnikId': korisnikId,
+                              'uslugaId': uslugaId,
+                              'isFavorit': true,
+                              'datum': DateTime.now().toIso8601String(),
+                            });
+                          }
+
+                          setState(() {
+                            _jeFavorit = !_jeFavorit;
+                          });*/
+                        },
+                      ),
+                    ),
+                  ],
                 ),
 
                 Padding(
@@ -359,39 +479,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      // const SizedBox(height: 12),
                       const SizedBox(height: 6),
-                      /* if (_ocjene != null && _ocjene!.isNotEmpty)
-                        Row(
-                          children: [
-                            /* const Icon(Icons.star,
-                                color: Color.fromARGB(255, 248, 191, 20),
-                                size: 20),*/
-                            IconButton(
-                              icon: Icon(Icons.star_border),
-                              onPressed: () => _showAddOcjenaDialog(),
-                            ),
-                            const SizedBox(width: 4),
-                            /*Text(
-                              "${getProsjecnaOcjena()!.toStringAsFixed(1)} / 5.0",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                            ),*/
-                            GestureDetector(
-                              onTap: () =>
-                                  _showAddOcjenaDialog(), // Klik na prikazanu prosječnu ocjenu
-                              child: Text(
-                                "${getProsjecnaOcjena()!.toStringAsFixed(1)} / 5.0",
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),*/
 
                       if (_ocjene != null)
                         Row(
@@ -433,44 +521,6 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                           ],
                         ),
 
-                      /*if (_ocjene != null && _ocjene!.isNotEmpty)
-                        Row(
-                          children: [
-                            // Zvjezdice
-                            ...List.generate(5, (index) {
-                              double prosjek = getProsjecnaOcjena()!;
-                              return Icon(
-                                index < prosjek.floor()
-                                    ? Icons.star
-                                    : Icons.star_border,
-                                color: const Color.fromARGB(255, 219, 235, 53),
-                                size: 24,
-                              );
-                            }),
-
-                            const SizedBox(width: 8),
-
-                            // Broj ocjena
-                            Text(
-                              '(${_ocjene!.length})',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black54,
-                              ),
-                            ),
-
-                            const SizedBox(width: 8),
-
-                            // Ikonica za dodavanje nove ocjene
-                            IconButton(
-                              icon: const Icon(Icons.star_border_purple500_outlined),
-                              tooltip: 'Dodaj ocjenu',
-                              color: Colors.teal,
-                              onPressed: _showAddOcjenaDialog,
-                            ),
-                          ],
-                        ),*/
-
                       const SizedBox(height: 6),
                       // Trajanje
                       Row(
@@ -509,6 +559,18 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                           onPressed: () {
                             // Ovdje ide logika za otvaranje forme za rezervaciju
                             // Na primjer: Navigator.push(...);
+                            if (korisnikId != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      KreirajRezervacijuScreen(
+                                    korisnikId: korisnikId!,
+                                    usluga: widget.usluga,
+                                  ),
+                                ),
+                              );
+                            }
                           },
                           child: const Text("Rezerviši termin"),
                         ),

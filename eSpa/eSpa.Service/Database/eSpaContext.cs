@@ -16,14 +16,17 @@ namespace eSpa.Service.Database
         {
         }
 
+        public virtual DbSet<Favorit> Favorits { get; set; } = null!;
         public virtual DbSet<Kategorija> Kategorijas { get; set; } = null!;
         public virtual DbSet<Komentar> Komentars { get; set; } = null!;
         public virtual DbSet<Korisnik> Korisniks { get; set; } = null!;
         public virtual DbSet<KorisnikUloga> KorisnikUlogas { get; set; } = null!;
         public virtual DbSet<Novost> Novosts { get; set; } = null!;
+        public virtual DbSet<NovostInterakcija> NovostInterakcijas { get; set; } = null!;
         public virtual DbSet<NovostKomentar> NovostKomentars { get; set; } = null!;
         public virtual DbSet<Ocjena> Ocjenas { get; set; } = null!;
         public virtual DbSet<Rezervacija> Rezervacijas { get; set; } = null!;
+        public virtual DbSet<SlikaProfila> SlikaProfilas { get; set; } = null!;
         public virtual DbSet<Termin> Termins { get; set; } = null!;
         public virtual DbSet<Uloga> Ulogas { get; set; } = null!;
         public virtual DbSet<Usluga> Uslugas { get; set; } = null!;
@@ -42,6 +45,31 @@ namespace eSpa.Service.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Favorit>(entity =>
+            {
+                entity.ToTable("Favorit");
+
+                entity.Property(e => e.Datum)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsFavorit)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Korisnik)
+                    .WithMany(p => p.Favorits)
+                    .HasForeignKey(d => d.KorisnikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Favorit__Korisni__282DF8C2");
+
+                entity.HasOne(d => d.Usluga)
+                    .WithMany(p => p.Favorits)
+                    .HasForeignKey(d => d.UslugaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Favorit__UslugaI__29221CFB");
+            });
+
             modelBuilder.Entity<Kategorija>(entity =>
             {
                 entity.ToTable("Kategorija");
@@ -136,6 +164,11 @@ namespace eSpa.Service.Database
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("telefon");
+
+                entity.HasOne(d => d.Slika)
+                    .WithMany(p => p.Korisniks)
+                    .HasForeignKey(d => d.SlikaId)
+                    .HasConstraintName("FK_Korisnik_SlikaId");
             });
 
             modelBuilder.Entity<KorisnikUloga>(entity =>
@@ -181,6 +214,27 @@ namespace eSpa.Service.Database
                     .WithMany(p => p.Novosts)
                     .HasForeignKey(d => d.AutorId)
                     .HasConstraintName("FK__Novost__AutorID__72C60C4A");
+            });
+
+            modelBuilder.Entity<NovostInterakcija>(entity =>
+            {
+                entity.ToTable("NovostInterakcija");
+
+                entity.Property(e => e.Datum)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Korisnik)
+                    .WithMany(p => p.NovostInterakcijas)
+                    .HasForeignKey(d => d.KorisnikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__NovostInt__Koris__2DE6D218");
+
+                entity.HasOne(d => d.Novost)
+                    .WithMany(p => p.NovostInterakcijas)
+                    .HasForeignKey(d => d.NovostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__NovostInt__Novos__2CF2ADDF");
             });
 
             modelBuilder.Entity<NovostKomentar>(entity =>
@@ -270,6 +324,25 @@ namespace eSpa.Service.Database
                     .HasForeignKey(d => d.UslugaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Rezervaci__uslug__34C8D9D1");
+
+                entity.HasOne(d => d.Zaposlenik)
+                    .WithMany(p => p.Rezervacijas)
+                    .HasForeignKey(d => d.ZaposlenikId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Rezervacija_Zaposlenik");
+            });
+
+            modelBuilder.Entity<SlikaProfila>(entity =>
+            {
+                entity.ToTable("SlikaProfila");
+
+                entity.Property(e => e.DatumPostavljanja).HasColumnType("datetime");
+
+                entity.Property(e => e.Naziv).HasMaxLength(255);
+
+                entity.Property(e => e.Tip)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Termin>(entity =>
@@ -343,6 +416,12 @@ namespace eSpa.Service.Database
                     .HasDefaultValueSql("('Aktivan')");
 
                 entity.Property(e => e.Struka).HasMaxLength(100);
+
+                entity.HasOne(d => d.Kategorija)
+                    .WithMany(p => p.Zaposleniks)
+                    .HasForeignKey(d => d.KategorijaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Zaposlenik_Kategorija");
 
                 entity.HasOne(d => d.Korisnik)
                     .WithMany(p => p.Zaposleniks)

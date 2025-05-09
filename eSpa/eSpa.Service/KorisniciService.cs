@@ -294,7 +294,8 @@ namespace eSpa.Service
                     filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
                 }
             }
-
+            filteredQuery = filteredQuery
+                                .Include(x => x.Slika);
             return filteredQuery;
         }
 
@@ -380,6 +381,7 @@ namespace eSpa.Service
             entity.DatumRegistracije = DateTime.Now;
             entity.IsAdmin = false;
             entity.IsBlokiran = false;
+            entity.IsZaposlenik = false;
             entity.Status = "Aktivan";
             entity.LozinkaSalt = GenerateSalt();
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Password);
@@ -448,9 +450,23 @@ namespace eSpa.Service
                     }
                 }
             }
+            if (update.SlikaId.HasValue && update.SlikaId != entity.SlikaId)
+            {
+                // Ako već postoji stara slika, brišemo je iz baze
+                if (entity.SlikaId.HasValue)
+                {
+                    var staraSlika = await _context.SlikaProfilas.FindAsync(entity.SlikaId.Value);
+                    if (staraSlika != null)
+                    {
+                        _context.SlikaProfilas.Remove(staraSlika);
+                    }
+                }
 
+                // Dodaj novu vezu prema slici
+                entity.SlikaId = update.SlikaId;
+            }
 
-            _context.Korisniks.Update(entity);
+                _context.Korisniks.Update(entity);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Model.Korisnik>(entity);

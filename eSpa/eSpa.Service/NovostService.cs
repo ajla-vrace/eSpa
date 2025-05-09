@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace eSpa.Service
 {
-    public class NovostService:BaseCRUDService<Model.Novost,Database.Novost,NovostSearchObject,NovostInsertRequest,NovostUpdateRequest>,INovostService
+    public class NovostService : BaseCRUDService<Model.Novost, Database.Novost, NovostSearchObject, NovostInsertRequest, NovostUpdateRequest>, INovostService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -59,7 +59,8 @@ namespace eSpa.Service
             }
 
 
-            filteredQuery = filteredQuery.Include(x => x.Autor);
+            filteredQuery = filteredQuery.Include(x => x.Autor)
+                .Include(x => x.NovostInterakcijas);
 
 
             return filteredQuery;
@@ -186,8 +187,13 @@ namespace eSpa.Service
             entity.DatumKreiranja = DateTime.Now;
             //entity.DatumKreiranja = DateTime.Now;
             entity.Status = "Aktivna";
-           entity.AutorId = GetCurrentUserId();
-            entity.Slika = Convert.FromBase64String(insert.SlikaBase64);
+            entity.AutorId = GetCurrentUserId();
+            if (!string.IsNullOrEmpty(insert.SlikaBase64))
+            {
+                entity.Slika = Convert.FromBase64String(insert.SlikaBase64);
+            }
+
+            //entity.Slika = Convert.FromBase64String(insert.SlikaBase64);
             _context.Novosts.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -202,7 +208,12 @@ namespace eSpa.Service
             {
                 throw new KeyNotFoundException("Novost nije pronađena.");
             }
-            entity.Slika = Convert.FromBase64String(update.SlikaBase64);
+            if (!string.IsNullOrEmpty(update.SlikaBase64))
+            {
+                entity.Slika = Convert.FromBase64String(update.SlikaBase64);
+            }
+
+            // entity.Slika = Convert.FromBase64String(update.SlikaBase64);
             _mapper.Map(update, entity);
             entity.DatumKreiranja = DateTime.Now;
 
@@ -212,7 +223,7 @@ namespace eSpa.Service
             return _mapper.Map<Model.Novost>(entity);
         }
 
-        public override async Task<Model.Novost> Delete(int id)
+        /*public override async Task<Model.Novost> Delete(int id)
         {
             var entity = _context.Novosts.Find(id);
             if (entity == null)
@@ -223,6 +234,27 @@ namespace eSpa.Service
             _context.Novosts.Remove(entity);
            await  _context.SaveChangesAsync();
             return _mapper.Map<Model.Novost>(entity);
+        }*/
+        public override async Task<Model.Novost> Delete(int id)
+        {
+            var entity = _context.Novosts.Find(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Novost nije pronađena.");
+            }
+
+            // Pronađi sve komentare povezane sa ovom novosti
+            var komentari = _context.NovostKomentars.Where(k => k.NovostId == id).ToList();
+
+            // Izbriši komentare
+            _context.NovostKomentars.RemoveRange(komentari);
+
+            // Izbriši novost
+            _context.Novosts.Remove(entity);
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<Model.Novost>(entity);
         }
+
     }
 }

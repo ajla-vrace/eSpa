@@ -194,7 +194,7 @@ class _UslugePageState extends State<UslugaPage> {
                           '${usluga.cijena?.toStringAsFixed(0) ?? "N/A"} KM')),
                       //DataCell(Text(usluga.trajanje ?? "N/A")),
                       DataCell(Text('${usluga.trajanje ?? "N/A"} min')),
-                      DataCell(Text(usluga.kategorija.naziv ?? "N/A")),
+                      DataCell(Text(usluga.kategorija!.naziv ?? "N/A")),
                       DataCell(
                         usluga.slika != null && usluga.slika!.isNotEmpty
                             ? Image.memory(

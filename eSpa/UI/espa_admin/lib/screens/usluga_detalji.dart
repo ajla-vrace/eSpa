@@ -40,6 +40,7 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
       'trajanje': widget.usluga?.trajanje?.toString(),
       'kategorijaId': widget.usluga?.kategorijaId?.toString(),
       'slika': widget.usluga?.slika,
+      'kategorija': widget.usluga?.kategorija,
     };
 
     _kategorijaProvider = context.read<KategorijaProvider>();
@@ -347,12 +348,13 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
                                 builder: (context) => UslugaPage(),
                               ),
                             );
+                          // ignore: unused_catch_clause
                           } on Exception catch (e) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: Text("Error"),
-                                content: Text(e.toString()),
+                                content: /*Text(e.toString())*/Text("Usluga s ovim nazivom vec postoji."),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),

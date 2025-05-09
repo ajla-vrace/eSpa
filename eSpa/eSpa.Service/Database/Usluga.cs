@@ -7,6 +7,7 @@ namespace eSpa.Service.Database
     {
         public Usluga()
         {
+            Favorits = new HashSet<Favorit>();
             Komentars = new HashSet<Komentar>();
             Ocjenas = new HashSet<Ocjena>();
             Rezervacijas = new HashSet<Rezervacija>();
@@ -21,6 +22,7 @@ namespace eSpa.Service.Database
         public byte[]? Slika { get; set; }
 
         public virtual Kategorija Kategorija { get; set; } = null!;
+        public virtual ICollection<Favorit> Favorits { get; set; }
         public virtual ICollection<Komentar> Komentars { get; set; }
         public virtual ICollection<Ocjena> Ocjenas { get; set; }
         public virtual ICollection<Rezervacija> Rezervacijas { get; set; }

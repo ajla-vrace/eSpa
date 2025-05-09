@@ -26,7 +26,7 @@ namespace eSpa.Service
             {
                 var korisnikSearch = search.Korisnik.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Korisnik.KorisnickoIme.ToLower().Contains(korisnikSearch));
+                    x.Korisnik.KorisnickoIme.ToLower()==(korisnikSearch));
             }
 
             if (!string.IsNullOrWhiteSpace(search?.Usluga))
@@ -107,6 +107,24 @@ namespace eSpa.Service
 
             return _mapper.Map<Model.Ocjena>(entity);
         }
+        public async Task<List<Model.Requests.UslugaOcjenaRequest>> GetUslugeProsjecneOcjene()
+        {
+            var result = await _context.Ocjenas
+                .GroupBy(o => o.UslugaId) // Grupiramo prema ID-u usluge
+                .Select(g => new Model.Requests.UslugaOcjenaRequest
+                {
+                    UslugaId = g.Key, // ID usluge
+                    Naziv = g.FirstOrDefault().Usluga.Naziv, // Naziv usluge, uzimamo prvi element iz grupe
+                    Sifra = "U" + g.Key.ToString(), // Dodajemo šifru sa prefiksom "U" + ID usluge
+                    ProsjecnaOcjena = g.Average(o => (double?)o.Ocjena1) ?? 0 // Izračunavamo prosječnu ocjenu
+                })
+                .ToListAsync();
+
+            return result;
+        }
+       
+
+
 
     }
 }

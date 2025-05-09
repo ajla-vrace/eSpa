@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:espa_admin/models/novost.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
+import 'package:espa_admin/screens/novostKomentar.dart';
 import 'package:espa_admin/screens/novost_detalji.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +126,7 @@ class _NovostiPageState extends State<NovostPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                   DataColumn(
+                  DataColumn(
                     label: Text(
                       "Slika",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -151,9 +152,10 @@ class _NovostiPageState extends State<NovostPage> {
                       DataCell(Text(novost.autor?.korisnickoIme ?? "N/A")),
                       DataCell(Text(novost.status ?? "N/A")),
                       DataCell(
-                        novost.slika != null
+                        novost.slika != null && novost.slika!.isNotEmpty
                             ? Image.memory(
-                                base64Decode(novost.slika!), // Pristupamo slici putem 'slika' unutar 'zaposlenik.slika'
+                                base64Decode(novost
+                                    .slika!), // Pristupamo slici putem 'slika' unutar 'zaposlenik.slika'
                                 width: 50, // Širina slike
                                 height: 50, // Visina slike
                                 fit: BoxFit.cover, // Prilagodba slike
@@ -167,6 +169,18 @@ class _NovostiPageState extends State<NovostPage> {
                           mainAxisAlignment: MainAxisAlignment
                               .end, // Poravnavanje ikonica desno
                           children: [
+                            IconButton(
+                                icon: const Icon(Icons.comment),
+                                tooltip: "Recenzije",
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          NovostKomentarPage(novost: novost),
+                                    ),
+                                  );
+                                }),
                             IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () {
@@ -332,7 +346,20 @@ class _NovostiPageState extends State<NovostPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                       /* IconButton(
+                        //const SizedBox(width: 10),
+                        IconButton(
+                          icon: Icon(Icons.backspace, color: Colors.red),
+                          onPressed: () {
+                            _naslovController.clear();
+                            _autorController.clear();
+                            setState(() {
+                              _selectedStatus = "Sve";
+                            });
+                          },
+                          tooltip: 'Obriši unos',
+                        ),
+                        const SizedBox(width: 10),
+                        /* IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _naslovController.clear();
@@ -344,7 +371,7 @@ class _NovostiPageState extends State<NovostPage> {
                           },
                           tooltip: 'Obriši unos',
                         ),*/
-                         const SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(

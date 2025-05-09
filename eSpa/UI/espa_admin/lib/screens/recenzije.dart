@@ -50,6 +50,7 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
     super.initState();
     _loadKomentari();
     _loadOcjene();
+    loadProsjek();
   }
 
   Future<void> _loadKomentari() async {
@@ -69,6 +70,37 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
         _isKomentarLoading = false;
       });
     }
+  }
+
+  /*Future<void> loadProsjek() async {
+    
+    var nesto=Provider.of<OcjenaProvider>(context, listen: false).getUslugeProsjecneOcjene();
+    //var nesto = await _ocjenaProvider.getUslugeProsjecneOcjene();
+    print("NESTO ----------------------------------------> : ${nesto}");
+    
+  }*/
+  Future<void> loadProsjek() async {
+    // Čekaj da se podaci učitaju
+    var nesto = await Provider.of<OcjenaProvider>(context, listen: false)
+        .getUslugeProsjecneOcjene();
+
+    // Ako je nesto lista, možeš proći kroz sve elemente i ispisati
+    // ignore: unnecessary_type_check
+    if (nesto is List) {
+      for (var item in nesto) {
+        print(
+            "Usluga ID: ${item['uslugaId']}, Prosječna ocjena: ${item['prosjecnaOcjena']}");
+      }
+    } else {
+      print("Podaci nisu u formatu liste");
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Podaci'),
+        content: Text(nesto.toString()), // Prikazuje sve podatke kao string
+      ),
+    );
   }
 
   Future<void> _loadOcjene() async {
@@ -577,6 +609,12 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                                 // Pretraga ocjena
                                 var data =
                                     await _ocjenaProvider.get(filter: filter);
+                                print(
+                                    "DATA------------------------------------->$data");
+                                var nesto = await _ocjenaProvider
+                                    .getUslugeProsjecneOcjene();
+                                print(
+                                    "NESTO ----------------------------------------> : $nesto");
                                 setState(() {
                                   _ocjene = data.result;
                                 });

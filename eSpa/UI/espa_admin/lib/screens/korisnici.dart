@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:espa_admin/models/korisnik.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/korisnik_provider.dart';
@@ -124,12 +126,12 @@ class _KorisnikPageState extends State<KorisnikPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  DataColumn(
+                  /*DataColumn(
                     label: Text(
                       "Email",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
+                  ),*/
                   DataColumn(
                     label: Text(
                       "Korisnicko ime",
@@ -144,21 +146,58 @@ class _KorisnikPageState extends State<KorisnikPage> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Slika",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
-                rows: _korisnici.map((korisnik) {
+                rows: _korisnici.reversed.map((korisnik) {
                   return DataRow(
                     cells: [
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
                       DataCell(Text(korisnik.ime ?? "N/A")),
                       DataCell(Text(korisnik.prezime ?? "N/A")),
-                      DataCell(Text(korisnik.email ?? "N/A")),
+                      // DataCell(Text(korisnik.email ?? "N/A")),
+                     /* DataCell(
+                        SizedBox(
+                          width: 100, // prilagodi po potrebi
+                          child: Text(
+                            korisnik.email ?? "N/A",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                      ),*/
                       //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
-                      DataCell(Text(korisnik.korisnickoIme ?? "N/A")),
+                      // DataCell(Text(korisnik.korisnickoIme ?? "N/A")),
+                      DataCell(
+                        SizedBox(
+                          width: 100, // prilagodi po potrebi
+                          child: Text(
+                            korisnik.korisnickoIme ?? "N/A",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
+                      ),
                       DataCell(Text(korisnik.status ?? "N/A")),
+                      DataCell(
+                        korisnik.slika != null && korisnik.slika!.slika != null
+                            ? Image.memory(
+                                base64Decode(korisnik.slika!.slika!),
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                              )
+                            : const Icon(Icons.account_circle, size: 50),
+                      ),
+
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
@@ -189,13 +228,13 @@ class _KorisnikPageState extends State<KorisnikPage> {
 
                             IconButton(
                               icon: const Icon(Icons.do_not_disturb),
-                              color: korisnik.status=="Blokiran"
+                              color: korisnik.status == "Blokiran"
                                   ? Colors.grey
                                   : Colors.black,
                               /*color: korisnik.isBlokiran!
                                   ? Colors.grey
                                   : Colors.black,*/ // Siva ako je blokiran
-                              onPressed: korisnik.status=="Blokiran"
+                              onPressed: korisnik.status == "Blokiran"
                                   ? null // Ako je korisnik blokiran, dugme je onemogućeno
                                   : () async {
                                       final confirm = await showDialog<bool>(

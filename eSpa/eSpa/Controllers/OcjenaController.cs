@@ -10,9 +10,17 @@ namespace eSpa.Controllers
     [Route("[controller]")]
     public class OcjenaController : BaseCRUDController<Model.Ocjena,OcjenaSearchObject,OcjenaInsertRequest,OcjenaUpdateRequest>
     {
+        private readonly IOcjenaService _ocjenaService;
         public OcjenaController(ILogger<BaseController<Ocjena, OcjenaSearchObject>> logger, IOcjenaService service) : base(logger, service)
         {
-
+            _ocjenaService = service;
         }
+        [HttpGet("UslugeProsjecneOcjene")]
+        public async Task<IActionResult> GetUslugeProsjecneOcjene()
+        {
+            var data = await _ocjenaService.GetUslugeProsjecneOcjene();
+            return Ok(data); // Vraćamo podatke u odgovoru
+        }
+
     }
 }

@@ -57,12 +57,13 @@ namespace eSpa.Model
         public string LozinkaSalt { get; set; } = null!;
         public bool? IsBlokiran { get; set; }
         public bool? IsZaposlenik { get; set; }
+        public int? SlikaId { get; set; }
 
         // Ovdje ne bi trebali da budu kolekcije, jer model obično sadrži samo podatke koje ćemo poslati klijentima (npr. DTO)
         // Kolekcije tipa ICollection<Komentar>, ICollection<KorisnikUloga> itd. biće obuhvaćene posebnim modelima i/ili u servisima.
         public virtual ICollection<KorisnikUloga> KorisnikUlogas { get; set; } = new List<KorisnikUloga>();
         //public virtual ICollection<KorisnikUloga> KorisnikUloges { get; set; } = new HashSet<KorisnikUloga>();
-
+        public SlikaProfila? Slika { get; set; }
 
     }
 }

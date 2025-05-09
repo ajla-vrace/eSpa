@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/uloga.dart';
 import 'package:espa_admin/models/zaposlenik.dart';
+import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/providers/korisnikUloga_provider.dart';
 import 'package:espa_admin/providers/korisnik_provider.dart';
+import 'package:espa_admin/providers/slikaProfila_provider.dart';
 import 'package:espa_admin/providers/uloga_provider.dart';
-import 'package:espa_admin/providers/zaposlenikSlike_provider.dart';
+//import 'package:espa_admin/providers/zaposlenikSlike_provider.dart';
 import 'package:espa_admin/providers/zaposlenik_provider.dart';
 import 'package:espa_admin/screens/zaposlenici.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
@@ -30,8 +33,10 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
   late ZaposlenikProvider _zaposlenikProvider;
   late KorisnikProvider _korisnikProvider;
   late UlogaProvider _ulogaProvider;
+  late KategorijaProvider _kategorijaProvider;
   late KorisnikUlogaProvider _korisnikUlogaProvider;
-  late ZaposlenikSlikeProvider _zaposlenikSlikeProvider;
+  //late ZaposlenikSlikeProvider _zaposlenikSlikeProvider;
+  late SlikaProfilaProvider _slikaProfilaProvider;
   var slikaID;
   SearchResult<Zaposlenik>? zaposlenikResult;
   var uloge;
@@ -44,6 +49,8 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
   int? selectedUlogaId;
 
   var zaposlenik1;
+  List<Kategorija> _kategorije = [];
+  int? _selectedKategorijaId;
 
   //var _defaultUlogaId;
 
@@ -55,6 +62,20 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
         print("loaduloga $selectedUlogaId");
       }
     }
+  }
+
+  Future<void> loadKategorije() async {
+    var result = await _kategorijaProvider.get();
+
+    setState(() {
+      _kategorije = result.result;
+
+      // Postavi odabranu kategoriju iz zaposlenika ako postoji
+      if (widget.zaposlenik != null &&
+          widget.zaposlenik!.kategorijaId != null) {
+        _selectedKategorijaId = widget.zaposlenik!.kategorijaId;
+      }
+    });
   }
 
   @override
@@ -69,20 +90,27 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
       'napomena': widget.zaposlenik?.napomena,
       'biografija': widget.zaposlenik?.biografija,
       'slikaId': widget.zaposlenik?.slikaId,
-      'slika': widget.zaposlenik?.slika,
+      //'slika': widget.zaposlenik!.korisnik?.slika!,
       //'korisnikUlogas': widget.zaposlenik?.korisnik?.korisnikUlogas,
     };
     print("initial value u init state: $_initialValue");
 
     _zaposlenikProvider = context.read<ZaposlenikProvider>();
     _korisnikProvider = context.read<KorisnikProvider>();
-    _zaposlenikSlikeProvider = context.read<ZaposlenikSlikeProvider>();
+    //_zaposlenikSlikeProvider = context.read<ZaposlenikSlikeProvider>();
     _ulogaProvider = context.read<UlogaProvider>();
     _korisnikUlogaProvider = context.read<KorisnikUlogaProvider>();
+    _kategorijaProvider = context.read<KategorijaProvider>();
+    _slikaProfilaProvider = context.read<SlikaProfilaProvider>();
     initForm();
     loadUslugeData();
     _loadUloga();
+    loadKategorije();
     loadKorisnikData(widget.zaposlenik!.korisnikId!);
+
+    /* loadUslugeData().then((_) {
+    loadKategorije(); // poziv nakon što se učita zaposlenik
+  });*/
 
     //print("status $_initialValue");
 
@@ -189,6 +217,35 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
     }
   }
 
+  Widget _buildKategorijaDropdown() {
+    return FormBuilderDropdown<int>(
+      name: "kategorijaId",
+      initialValue: _selectedKategorijaId,
+      decoration: const InputDecoration(
+        labelText: "Kategorija",
+        prefixIcon: Icon(Icons.category),
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+        if (value == null) {
+          return 'Odaberite kategoriju';
+        }
+        return null;
+      },
+      items: _kategorije.map((kategorija) {
+        return DropdownMenuItem<int>(
+          value: kategorija.id,
+          child: Text(kategorija.naziv ?? ""),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          _selectedKategorijaId = value;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
@@ -268,6 +325,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
                                 (request['datumZaposlenja'] as DateTime)
                                     .toIso8601String();
                           }
+                          request['kategorijaId'] = _selectedKategorijaId;
 
                           try {
                             // Ako je korisnik odabrao novu sliku, prvo je uploaduj
@@ -289,12 +347,30 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
                               };
 
                               // print("⬆️ Upload slike...");
-                              var novaSlika = await _zaposlenikSlikeProvider
+                              /* var novaSlika = await _zaposlenikSlikeProvider
+                                  .insert(slikaRequest);*/
+
+                              var novaSlika = await _slikaProfilaProvider
                                   .insert(slikaRequest);
+
                               //print("novaslika: $novaSlika");
-                              request['slikaId'] =
-                                  novaSlika.id; // Postavi slikaId u request
+                              //OVDJE   _<<<<<<<<<<<<<<<<<<<<<<        request['slikaId'] =
+                              //  novaSlika.id; // Postavi slikaId u request
                               //print("✅ Slika spašena s ID: ${novaSlika.id}");
+                              //request['korisnik']['slikaId'] = novaSlika.id;
+
+                              var korisnikUpdateRequest = {
+                                "ime": widget.zaposlenik!.korisnik!.ime,
+                                "prezime": widget.zaposlenik!.korisnik!.prezime,
+                                "email": widget.zaposlenik!.korisnik!.email,
+                                "telefon": widget.zaposlenik!.korisnik!.telefon,
+                                "status": widget.zaposlenik!.korisnik!.status,
+                                "slikaId": novaSlika.id,
+                              };
+
+                              await _korisnikProvider.update(
+                                  widget.zaposlenik!.korisnikId!,
+                                  korisnikUpdateRequest);
                             }
 
                             /*if (widget.zaposlenik == null) {
@@ -464,7 +540,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
           SizedBox(height: 10),
           //_buildDropdownField("Status", Icons.date_range,
           //    "status"), // Ovdje koristiš novi dropdown
-         // SizedBox(height: 10),
+          // SizedBox(height: 10),
           // _buildInputField("Status", Icons.title, "status"),
           //SizedBox(height: 10),
           _buildInputFieldNapomena("Napomena", Icons.notes, "napomena"),
@@ -472,6 +548,8 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
           _buildInputField1("Biografija", Icons.description, "biografija"),
           SizedBox(height: 10),
           _buildRoleDropdown(),
+          SizedBox(height: 10),
+          _buildKategorijaDropdown(),
           SizedBox(height: 10),
           _buildImagePicker(),
         ],
@@ -782,9 +860,9 @@ if (name == "Ime") {
                   height: 100,
                   fit: BoxFit.cover,
                 )
-              : widget.zaposlenik?.slika != null
+              : widget.zaposlenik?.korisnik?.slika != null
                   ? Image.memory(
-                      base64Decode(widget.zaposlenik!.slika!.slika!),
+                      base64Decode(widget.zaposlenik!.korisnik!.slika!.slika!),
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,

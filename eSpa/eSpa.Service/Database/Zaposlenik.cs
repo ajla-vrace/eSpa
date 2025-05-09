@@ -7,6 +7,7 @@ namespace eSpa.Service.Database
     {
         public Zaposlenik()
         {
+            Rezervacijas = new HashSet<Rezervacija>();
             ZaposlenikRecenzijas = new HashSet<ZaposlenikRecenzija>();
         }
 
@@ -18,9 +19,12 @@ namespace eSpa.Service.Database
         public string? Napomena { get; set; }
         public string? Biografija { get; set; }
         public int? SlikaId { get; set; }
+        public int KategorijaId { get; set; }
 
+        public virtual Kategorija Kategorija { get; set; } = null!;
         public virtual Korisnik Korisnik { get; set; } = null!;
         public virtual ZaposlenikSlike? Slika { get; set; }
+        public virtual ICollection<Rezervacija> Rezervacijas { get; set; }
         public virtual ICollection<ZaposlenikRecenzija> ZaposlenikRecenzijas { get; set; }
     }
 }

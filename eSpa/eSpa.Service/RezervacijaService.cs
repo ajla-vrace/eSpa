@@ -26,19 +26,35 @@ namespace eSpa.Service
             {
                 filteredQuery = filteredQuery.Where(x => x.Korisnik.KorisnickoIme==(search.Korisnik));
             }
+            if (!string.IsNullOrWhiteSpace(search?.Kategorija))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Usluga.Kategorija.Naziv == (search.Kategorija));
+            }
             if (!string.IsNullOrWhiteSpace(search?.Usluga))
             {
                 filteredQuery = filteredQuery.Where(x => x.Usluga.Naziv.Contains(search.Usluga));
             }
+
             if (!string.IsNullOrWhiteSpace(search?.Status))
             {
                 filteredQuery = filteredQuery.Where(x => x.Status.Contains(search.Status));
             }
+            if (search?.TerminId.HasValue == true)
+            {
+                filteredQuery = filteredQuery.Where(x => x.TerminId == search.TerminId.Value);
+            }
 
+
+            if (search.Datum.HasValue)
+            {
+                filteredQuery = filteredQuery.Where(x => x.Datum.Date == search.Datum.Value.Date);
+            }
 
             filteredQuery = filteredQuery.Include(x => x.Korisnik)
                 .Include(x => x.Usluga).ThenInclude(x=>x.Kategorija)
-                .Include(x => x.Termin);
+                .Include(x => x.Termin)
+                  .Include(x => x.Zaposlenik)
+                ;
 
             return filteredQuery;
         }

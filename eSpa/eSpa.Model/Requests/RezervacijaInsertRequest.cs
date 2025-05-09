@@ -35,6 +35,8 @@ namespace eSpa.Model.Requests
 
         [Required(ErrorMessage = "Termin ID je obavezan.")]
         public int TerminId { get; set; }
+        [Required(ErrorMessage = "Zaposlenik ID je obavezan.")]
+        public int ZaposlenikId { get; set; }
 
         // Pošto je status automatski postavljen na 'Aktivna' u bazi, nije potrebno unositi ga prilikom kreiranja rezervacije
     }

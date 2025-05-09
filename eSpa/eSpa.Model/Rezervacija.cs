@@ -14,9 +14,12 @@ namespace eSpa.Model
         public DateTime Datum { get; set; }
         public int TerminId { get; set; }
         public string Status { get; set; } = null!;
+        public string? Napomena { get; set; }
+        public int ZaposlenikId { get; set; }
         public Korisnik Korisnik { get; set; }
-        public Termin Termin { get; set; } 
-        public Usluga Usluga { get; set; } 
+        public Usluga Usluga { get; set; }
+        public Zaposlenik Zaposlenik { get; set; }
+        public Termin Termin { get; set; }
 
     }
 }

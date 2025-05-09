@@ -6,6 +6,7 @@ import 'package:espa_admin/providers/novostKomentar_provider.dart';
 import 'package:espa_admin/providers/novost_provider.dart';
 import 'package:espa_admin/providers/ocjena_provider.dart';
 import 'package:espa_admin/providers/rezervacija_provider.dart';
+import 'package:espa_admin/providers/slikaProfila_provider.dart';
 import 'package:espa_admin/providers/termin_provider.dart';
 import 'package:espa_admin/providers/uloga_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
@@ -34,6 +35,7 @@ ChangeNotifierProvider(create: (_) => TerminProvider()),
 ChangeNotifierProvider(create: (_) => KomentarProvider()),
 ChangeNotifierProvider(create: (_) => OcjenaProvider()),
 ChangeNotifierProvider(create: (_) => KorisnikProvider()),
+ChangeNotifierProvider(create: (_) => SlikaProfilaProvider()),
 ChangeNotifierProvider(create: (_) => ZaposlenikRecenzijaProvider()),
 ],
 child:const MyApp(),)

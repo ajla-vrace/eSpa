@@ -7,8 +7,10 @@ namespace eSpa.Service.Database
     {
         public Korisnik()
         {
+            Favorits = new HashSet<Favorit>();
             Komentars = new HashSet<Komentar>();
             KorisnikUlogas = new HashSet<KorisnikUloga>();
+            NovostInterakcijas = new HashSet<NovostInterakcija>();
             NovostKomentars = new HashSet<NovostKomentar>();
             Novosts = new HashSet<Novost>();
             Ocjenas = new HashSet<Ocjena>();
@@ -30,9 +32,13 @@ namespace eSpa.Service.Database
         public bool? IsAdmin { get; set; }
         public bool? IsBlokiran { get; set; }
         public bool? IsZaposlenik { get; set; }
+        public int? SlikaId { get; set; }
 
+        public virtual SlikaProfila? Slika { get; set; }
+        public virtual ICollection<Favorit> Favorits { get; set; }
         public virtual ICollection<Komentar> Komentars { get; set; }
         public virtual ICollection<KorisnikUloga> KorisnikUlogas { get; set; }
+        public virtual ICollection<NovostInterakcija> NovostInterakcijas { get; set; }
         public virtual ICollection<NovostKomentar> NovostKomentars { get; set; }
         public virtual ICollection<Novost> Novosts { get; set; }
         public virtual ICollection<Ocjena> Ocjenas { get; set; }

@@ -7,6 +7,7 @@ namespace eSpa.Service.Database
     {
         public Novost()
         {
+            NovostInterakcijas = new HashSet<NovostInterakcija>();
             NovostKomentars = new HashSet<NovostKomentar>();
         }
 
@@ -19,6 +20,7 @@ namespace eSpa.Service.Database
         public byte[]? Slika { get; set; }
 
         public virtual Korisnik Autor { get; set; } = null!;
+        public virtual ICollection<NovostInterakcija> NovostInterakcijas { get; set; }
         public virtual ICollection<NovostKomentar> NovostKomentars { get; set; }
     }
 }

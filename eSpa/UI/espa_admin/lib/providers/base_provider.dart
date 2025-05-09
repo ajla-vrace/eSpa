@@ -28,7 +28,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createHeaders();
 
     var response = await http.get(uri, headers: headers);
-   // print("response body je ${response.body}");
+    // print("response body je ${response.body}");
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 
@@ -46,6 +46,67 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw new Exception("Unknown error");
     }
     //print("response: ${response.request} ${response.statusCode}, ${response.body}");
+  }
+Future<List<dynamic>> getUslugeProsjecneOcjene() async {
+ /* if (endpoint != 'Ocjena') {
+    throw Exception("Ova metoda se koristi samo za 'Ocjena' entitet.");
+  }*/
+
+  var url = "$_baseUrl$_endpoint/UslugeProsjecneOcjene";
+  print("URL: $url");
+  var uri = Uri.parse(url);
+  print("URI: $uri");
+
+  var headers = createHeaders(); // ako koristiš autorizaciju
+  var response = await http.get(uri, headers: headers);
+
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    return jsonDecode(response.body);
+  } else {
+    print("response.status code ${response.statusCode}");
+    throw Exception("Greška prilikom dohvaćanja prosječnih ocjena.");
+  }
+}
+Future<List<dynamic>> getRezervacijePoUslugama() async {
+ /* if (endpoint != 'Ocjena') {
+    throw Exception("Ova metoda se koristi samo za 'Ocjena' entitet.");
+  }*/
+
+  var url = "$_baseUrl$_endpoint/RezervacijePoUslugama";
+  print("URL: $url");
+  var uri = Uri.parse(url);
+  print("URI: $uri");
+
+  var headers = createHeaders(); // ako koristiš autorizaciju
+  var response = await http.get(uri, headers: headers);
+
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    return jsonDecode(response.body);
+  } else {
+    print("response.status code ${response.statusCode}");
+    throw Exception("Greška prilikom dohvaćanja prosječnih ocjena.");
+  }
+}
+
+  Future<List<T>> getListFromEndpoint(String endpoint) async {
+    var url = "$_baseUrl$_endpoint/$endpoint";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+
+      if (data is List) {
+        return data.map((item) => fromJson(item)).toList();
+      } else {
+        throw Exception("Nepodržan format odgovora: očekivana lista.");
+      }
+    } else {
+      throw Exception(
+          "Greška pri preuzimanju podataka: ${response.statusCode}");
+    }
   }
 
   Future getById(int id) async {

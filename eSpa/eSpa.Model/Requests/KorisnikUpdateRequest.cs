@@ -20,5 +20,6 @@ namespace eSpa.Model.Requests
         public bool? IsAdmin { get; set; }
         public string? Status { get; set; }
         public bool? IsBlokiran { get; set; }
+        public int? SlikaId { get; set; }
     }
 }

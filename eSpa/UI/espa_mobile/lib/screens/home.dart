@@ -221,8 +221,10 @@ class _HomeScreenState extends State<HomeScreen> {
         _isNovostLoading = true;
       });
 
-      final novosti =
-          await Provider.of<NovostProvider>(context, listen: false).get();
+      final novosti = await Provider.of<NovostProvider>(context, listen: false)
+          .get(filter: {
+        'Status': "Aktivna",
+      });
 
       setState(() {
         _novosti = novosti.result;
@@ -285,17 +287,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (slikaBytes != null)
-                            ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12)),
-                              child: Image.memory(
-                                slikaBytes,
-                                height: 150,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          // if (slikaBytes != null && slikaBytes.isNotEmpty)
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(12)),
+                            child:
+                                // ignore: unnecessary_null_comparison
+                                (slikaBytes != null &&
+                                        slikaBytes.isNotEmpty &&
+                                        slikaBytes.length > 0)
+                                    ? Image.memory(
+                                        slikaBytes,
+                                        height: 150,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(
+                                        height: 150,
+                                        width: double.infinity,
+                                        color: Colors.grey[200],
+                                        child: const Icon(
+                                          Icons.image_not_supported,
+                                          size: 60,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Column(
@@ -327,4 +344,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

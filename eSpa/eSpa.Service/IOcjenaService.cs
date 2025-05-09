@@ -10,5 +10,6 @@ namespace eSpa.Service
 {
     public interface IOcjenaService:ICRUDService<Model.Ocjena,OcjenaSearchObject,OcjenaInsertRequest,OcjenaUpdateRequest>
     {
+        Task<List<UslugaOcjenaRequest>> GetUslugeProsjecneOcjene();
     }
 }

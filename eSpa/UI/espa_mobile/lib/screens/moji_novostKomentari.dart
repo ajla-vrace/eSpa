@@ -89,7 +89,7 @@ class _MojiKomentariScreenState extends State<MojiKomentariScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: recenzije.length,
                 itemBuilder: (context, index) {
-                  final recenzija = recenzije[index];
+                  final recenzija = recenzije.reversed.toList()[index];
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

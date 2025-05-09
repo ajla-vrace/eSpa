@@ -16,7 +16,9 @@ namespace eSpa.Model
         public string? Napomena { get; set; }
         public string? Biografija { get; set; }
         public int? SlikaId { get; set; }
+        public int KategorijaId { get; set; }
 
+        public Kategorija Kategorija { get; set; }
         public Korisnik Korisnik { get; set; }
         public ZaposlenikSlike Slika { get; set; }
     }

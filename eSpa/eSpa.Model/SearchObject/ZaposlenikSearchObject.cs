@@ -12,5 +12,6 @@ namespace eSpa.Model.SearchObject
         public string? Prezime { get; set; }
         public string? KorisnickoIme { get; set; }
         public string? Uloga { get; set; }
+        public string? Kategorija { get; set; }
     }
 }

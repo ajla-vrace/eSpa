@@ -155,7 +155,7 @@ class _ZaposlenikInfoPageState extends State<ZaposlenikInfoPage> {
           const SizedBox(height: 10),
            _buildDisabledField("Biografija", "biografija", _initialValue['biografija']),
           const SizedBox(height: 10),
-          _buildProfileImage(widget.zaposlenik?.slika?.slika),
+          _buildProfileImage(widget.zaposlenik?.korisnik?.slika?.slika),
         ],
       ),
     );

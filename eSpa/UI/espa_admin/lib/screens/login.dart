@@ -28,8 +28,8 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
                 Image.network(
-                 "https://www.fit.ba/content/public/images/og-image.jpg",
-                 //"https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-souvenirpixels-417074.jpg&fm=jpg",
+                  "https://www.fit.ba/content/public/images/og-image.jpg",
+                  //"https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-souvenirpixels-417074.jpg&fm=jpg",
                   height: 100,
                   width: 100,
                 ),
@@ -65,6 +65,7 @@ class LoginPage extends StatelessWidget {
                       Authorization.username = username;
                       Authorization.password = password;
 
+                      await setUserName(username);
                       try {
                         await _uslugaProvider.get();
 

@@ -36,6 +36,10 @@ namespace eSpa.Service
             CreateMap<Model.Requests.NovostKomentarInsertRequest, Database.NovostKomentar>();
             CreateMap<Model.Requests.NovostKomentarUpdateRequest, Database.NovostKomentar>();
 
+            CreateMap<Database.NovostInterakcija, Model.NovostInterakcija>();
+            CreateMap<Model.Requests.NovostInterakcijaInsertRequest, Database.NovostInterakcija>();
+            CreateMap<Model.Requests.NovostInterakcijaUpdateRequest, Database.NovostInterakcija>();
+
             CreateMap<Database.Novost, Model.Novost>();
             CreateMap<Model.Requests.NovostInsertRequest, Database.Novost>();
             CreateMap<Model.Requests.NovostUpdateRequest, Database.Novost>();
@@ -73,6 +77,15 @@ namespace eSpa.Service
             CreateMap<Database.ZaposlenikSlike, Model.ZaposlenikSlike>();
             CreateMap<Model.Requests.ZaposlenikSlikeInsertRequest, Database.ZaposlenikSlike>();
             CreateMap<Model.Requests.ZaposlenikSlikeUpdateRequest, Database.ZaposlenikSlike>();
+
+            CreateMap<Database.SlikaProfila, Model.SlikaProfila>();
+            CreateMap<Model.Requests.SlikaProfilaInsertRequest, Database.SlikaProfila>();
+            CreateMap<Model.Requests.SlikaProfilaUpdateRequest, Database.SlikaProfila>();
+
+            CreateMap<Database.Favorit, Model.Favorit>();
+            CreateMap<Model.Requests.FavoritInsertRequest, Database.Favorit>();
+            CreateMap<Model.Requests.FavoritUpdateRequest, Database.Favorit>();
+
 
             CreateMap<Database.ZaposlenikRecenzija, Model.ZaposlenikRecenzija>();
             CreateMap<Model.Requests.ZaposlenikRecenzijaInsertRequest, Database.ZaposlenikRecenzija>();

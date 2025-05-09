@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/korisnik.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/uloga.dart';
+import 'package:espa_admin/providers/kategorija_provider.dart';
 import 'package:espa_admin/providers/korisnikUloga_provider.dart';
 import 'package:espa_admin/providers/korisnik_provider.dart';
+import 'package:espa_admin/providers/slikaProfila_provider.dart';
 import 'package:espa_admin/providers/uloga_provider.dart';
-import 'package:espa_admin/providers/zaposlenikSlike_provider.dart';
+//import 'package:espa_admin/providers/zaposlenikSlike_provider.dart';
 import 'package:espa_admin/providers/zaposlenik_provider.dart';
 import 'package:espa_admin/screens/zaposlenici.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
@@ -29,7 +32,9 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
   late UlogaProvider _ulogaProvider;
   late KorisnikUlogaProvider _korisnikUlogaProvider;
   late ZaposlenikProvider _zaposlenikProvider;
-  late ZaposlenikSlikeProvider _zaposlenikSlikeProvider;
+  late KategorijaProvider _kategorijaProvider;
+  //late ZaposlenikSlikeProvider _zaposlenikSlikeProvider;
+  late SlikaProfilaProvider _slikaProfilaProvider;
 
   int? korisnikId;
   bool korisnikKreiran = false;
@@ -44,6 +49,10 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
 
   var uloge;
   SearchResult<Uloga>? ulogaResult;
+
+  int? selectedKategorijaId;
+
+  List<Kategorija>? kategorije = [];
 //final ImagePicker _picker = ImagePicker();
 
   //bool _isFormValid = false;
@@ -59,9 +68,12 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
     _ulogaProvider = context.read<UlogaProvider>();
     _korisnikUlogaProvider = context.read<KorisnikUlogaProvider>();
     _zaposlenikProvider = context.read<ZaposlenikProvider>();
-    _zaposlenikSlikeProvider = context.read<ZaposlenikSlikeProvider>();
+    _kategorijaProvider = context.read<KategorijaProvider>();
+    //_zaposlenikSlikeProvider = context.read<ZaposlenikSlikeProvider>();
+    _slikaProfilaProvider = context.read<SlikaProfilaProvider>();
     loadUlogaData();
     loadUslugeData();
+    loadKategorije();
   }
 
 // Funkcija za odabir slike koristeći file_picker
@@ -90,6 +102,25 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
           .toList();
       // Ako korisnik ima ulogu, uzimamo ID njegove ul
       selectedUlogaId = selectedUlogaId = filteredRoles.first.id;
+      print("odabrana selcetdulogaid je $selectedUlogaId");
+      // Ako nema ulogu, uzimamo defaultnu ulogu (prva uloga iz liste koja nije 'administrator')
+    } catch (e) {
+      print("Greška pri učitavanju podataka o korisniku: $e");
+    }
+  }
+
+  Future<void> loadKategorije() async {
+    try {
+      final kategorijeResult = await _kategorijaProvider.get();
+      print("uloge: $kategorijeResult");
+      kategorije = kategorijeResult.result;
+      // Ispisivanje korisnika
+
+      // Ako korisnik ima ulogu, uzimamo ID njegove ul
+      if (kategorije != null && kategorije != []) {
+        selectedKategorijaId = /*selectedUlogaId =*/ kategorije!.first.id;
+      }
+      print("odabrana selectedkategorijaid $selectedKategorijaId");
       // Ako nema ulogu, uzimamo defaultnu ulogu (prva uloga iz liste koja nije 'administrator')
     } catch (e) {
       print("Greška pri učitavanju podataka o korisniku: $e");
@@ -190,6 +221,8 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
             _buildInputField("Potvrda lozinke", Icons.lock, "passwordPotvrda",
                 obscureText: true),
             SizedBox(height: 20),
+            _buildImagePicker(),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -213,6 +246,39 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
                       request['korisnikId'] = korisnikId;
 
                       try {
+                        int? slikaIdKorisnik;
+                        print(
+                            "slikaidkorisnik: $slikaIdKorisnik"); // Varijabla za sliku ID
+                        print("image: $_image");
+                        // Ako postoji slika, prvo je dodaj u ZaposlenikSlike tabelu
+                        if (_image != null) {
+                          print(" u ifu image!=null");
+                          // Konvertovanje slike u bajtove
+                          /*List<int> imageBytes = await _imageToBytes(_image!);
+                    String imageBase64 = base64Encode(imageBytes);*/
+                          String imageBase64 = base64Encode(_image!);
+                          print("imagebas64 : $imageBase64");
+                          // Kreiranje objekta za sliku
+                          var slikaRequest = {
+                            'naziv': _fileName,
+                            'slikaBase64': imageBase64,
+                            'tip': _fileType,
+                          };
+
+                          // Dodaj sliku u tabelu ZaposlenikSlike
+                          var slikaResponse =
+                              await _slikaProfilaProvider.insert(slikaRequest);
+                          print(slikaResponse.slika);
+                          // Ako je slika uspešno dodana, dobijamo SlikaId
+                          slikaIdKorisnik = slikaResponse.id;
+                          print("slikakorisnikaid: $slikaIdKorisnik");
+                        }
+
+                        if (slikaIdKorisnik != null) {
+                          print("u ifu je li idslike null");
+                          request['slikaId'] = slikaIdKorisnik;
+                        }
+
                         Korisnik kreiraniKorisnik =
                             await _korisnikProvider.insert(request);
                         setState(() {
@@ -221,8 +287,9 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
                         });
                       } catch (e) {
                         print("show error dialog OVDEJEE");
-                       // _showErrorDialog(e.toString());
-                         _showErrorDialog("Desila se greska prilikom kreiranja korisnika. Email ili korisnicko ime je vec u upotrebi.");
+                        // _showErrorDialog(e.toString());
+                        _showErrorDialog(
+                            "Desila se greska prilikom kreiranja korisnika. Email ili korisnicko ime je vec u upotrebi.");
                       }
                     }
                   },
@@ -240,45 +307,49 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
     return FormBuilder(
       key: _formKeyZaposlenik,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-     child: SingleChildScrollView(  // Dodaj ovo za omogućavanje scrolliranja
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /* Text(
+      child: SingleChildScrollView(
+        // Dodaj ovo za omogućavanje scrolliranja
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /* Text(
                         widget.novost?.naslov ?? "Novost details",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),*/
-              Spacer(), // Gura dugme skroz desno
-              IconButton(
-                icon: Icon(Icons.close, color: Colors.black54),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-          _buildDatePicker("Datum zaposlenja", "datumZaposlenja"),
-          SizedBox(height: 10),
-          _buildInputFieldStruka(),
-          SizedBox(height: 10),
-          _buildDropdownField("Status", Icons.check_circle, "status"),
-          SizedBox(height: 10),
-          _buildInputFieldNapomena("Napomena", Icons.notes, "napomena"),
-          SizedBox(height: 10),
-          _buildInputField1("Biografija", Icons.description, "biografija"),
-          SizedBox(height: 10),
-          _buildRoleDropdown(),
-          SizedBox(
-            height: 10,
-          ),
-          _buildImagePicker(),
-          SizedBox(height: 10),
+                Spacer(), // Gura dugme skroz desno
+                IconButton(
+                  icon: Icon(Icons.close, color: Colors.black54),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            _buildDatePicker("Datum zaposlenja", "datumZaposlenja"),
+            SizedBox(height: 10),
+            _buildInputFieldStruka(),
+            SizedBox(height: 10),
+            _buildDropdownField("Status", Icons.check_circle, "status"),
+            SizedBox(height: 10),
+            _buildInputFieldNapomena("Napomena", Icons.notes, "napomena"),
+            SizedBox(height: 10),
+            _buildInputField1("Biografija", Icons.description, "biografija"),
+            SizedBox(height: 10),
+            _buildRoleDropdown(),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(height: 10),
+            _buildKategorijaDropdown(),
 
-          // Dodavanje dugmeta za odabir slike
-          /* IconButton(
+            //_buildImagePicker(),
+            //SizedBox(height: 10),
+
+            // Dodavanje dugmeta za odabir slike
+            /* IconButton(
             icon: Icon(Icons.add_a_photo), // Ikona za dodavanje slike
             onPressed: _pickImage, // Funkcija za odabir slike
             tooltip: 'Dodaj sliku',
@@ -294,116 +365,123 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
             ),
 */
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  _korisnikProvider.delete(korisnikId!);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => ZaposlenikPage()),
-                  );
-                },
-                child: const Text("Nazad"),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKeyZaposlenik.currentState?.saveAndValidate() ??
-                      false) {
-                    var request = Map<String, dynamic>.from(
-                        _formKeyZaposlenik.currentState!.value);
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _korisnikProvider.delete(korisnikId!);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => ZaposlenikPage()),
+                    );
+                  },
+                  child: const Text("Nazad"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKeyZaposlenik.currentState?.saveAndValidate() ??
+                        false) {
+                      var request = Map<String, dynamic>.from(
+                          _formKeyZaposlenik.currentState!.value);
 
-                    // Provera i konverzija datuma u String format (YYYY-MM-DD)
-                    if (request.containsKey('datumZaposlenja') &&
-                        request['datumZaposlenja'] is DateTime) {
-                      request['datumZaposlenja'] =
-                          (request['datumZaposlenja'] as DateTime)
-                              .toIso8601String();
-                    }
+                      // Provera i konverzija datuma u String format (YYYY-MM-DD)
+                      if (request.containsKey('datumZaposlenja') &&
+                          request['datumZaposlenja'] is DateTime) {
+                        request['datumZaposlenja'] =
+                            (request['datumZaposlenja'] as DateTime)
+                                .toIso8601String();
+                      }
 
-                    // Kreiranje zaposlenika (bez slike)
-                    request['korisnikId'] = korisnikId;
+                      // Kreiranje zaposlenika (bez slike)
+                      request['korisnikId'] = korisnikId;
 
-                    try {
-                      int? slikaId; // Varijabla za sliku ID
-                      print("image: $_image");
-                      // Ako postoji slika, prvo je dodaj u ZaposlenikSlike tabelu
-                      if (_image != null) {
-                        // Konvertovanje slike u bajtove
-                        /*List<int> imageBytes = await _imageToBytes(_image!);
-                    String imageBase64 = base64Encode(imageBytes);*/
-                        String imageBase64 = base64Encode(_image!);
-                        // Kreiranje objekta za sliku
-                        var slikaRequest = {
-                          'naziv': _fileName,
-                          'slikaBase64': imageBase64,
-                          'tip': _fileType,
+                      try {
+                        /*int? slikaId;
+                        int? slikaIdKorisnik; // Varijabla za sliku ID
+                        print("image: $_image");
+                        // Ako postoji slika, prvo je dodaj u ZaposlenikSlike tabelu
+                        if (_image != null) {
+                        
+                          String imageBase64 = base64Encode(_image!);
+                          // Kreiranje objekta za sliku
+                          var slikaRequest = {
+                            'naziv': _fileName,
+                            'slikaBase64': imageBase64,
+                            'tip': _fileType,
+                          };
+
+                          // Dodaj sliku u tabelu ZaposlenikSlike
+                          var slikaResponse = await _zaposlenikSlikeProvider
+                              .insert(slikaRequest);
+                          print(slikaResponse.slika);
+                          // Ako je slika uspešno dodana, dobijamo SlikaId
+                          slikaId = slikaResponse.id;
+
+                          //DODAVANJE SLIKE NA KORISNIK
+                          var slikaResponseKorisnik =
+                              await _slikaProfilaProvider.insert(slikaRequest);
+                          print(slikaResponse.slika);
+                          // Ako je slika uspešno dodana, dobijamo SlikaId
+                          slikaIdKorisnik = slikaResponseKorisnik.id;
+                        }
+
+                        // Ako slika postoji, dodaj SlikaId zaposleniku
+                        if (slikaId != null) {
+                          request['slikaId'] = slikaId;
+                        }
+*/
+                        var korisnikUlogaRequest = {
+                          'korisnikId': korisnikId,
+                          'ulogaId': selectedUlogaId, // Odabrana uloga
                         };
-
-                        // Dodaj sliku u tabelu ZaposlenikSlike
-                        var slikaResponse =
-                            await _zaposlenikSlikeProvider.insert(slikaRequest);
-                        print(slikaResponse.slika);
-                        // Ako je slika uspešno dodana, dobijamo SlikaId
-                        slikaId = slikaResponse.id;
-                      }
-
-                      // Ako slika postoji, dodaj SlikaId zaposleniku
-                      if (slikaId != null) {
-                        request['slikaId'] = slikaId;
-                      }
-
-                      var korisnikUlogaRequest = {
-                        'korisnikId': korisnikId,
-                        'ulogaId': selectedUlogaId, // Odabrana uloga
-                      };
-                      print(("selectedulogaid $selectedUlogaId"));
-                      print("korisnikulogarequesr $korisnikUlogaRequest");
-                      /* await _korisnikUlogaProvider.insert(
+                        print(("selectedulogaid $selectedUlogaId"));
+                        print("korisnikulogarequesr $korisnikUlogaRequest");
+                        /* await _korisnikUlogaProvider.insert(
                                 widget.zaposlenik!.korisnikId!,
                                 selectedUlogaId);*/
-                      await _korisnikUlogaProvider.insert(korisnikUlogaRequest);
-                      print("✅ Uloga povezana sa korisnikom!");
+                        await _korisnikUlogaProvider
+                            .insert(korisnikUlogaRequest);
+                        print("✅ Uloga povezana sa korisnikom!");
 
-                      print(request);
-                      // Kreiraj zaposlenika sa ili bez SlikaId
-                      /* var zaposlenikResponse =*/
-                      await _zaposlenikProvider.insert(request);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Zaposlenik uspješno dodan.",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                        print(request);
+                        // Kreiraj zaposlenika sa ili bez SlikaId
+                        /* var zaposlenikResponse =*/
+                        await _zaposlenikProvider.insert(request);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Zaposlenik uspješno dodan.",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            backgroundColor:
+                                Colors.green, // Dodaj zelenu pozadinu
+                            behavior: SnackBarBehavior
+                                .floating, // Opcionalno za lepši prikaz
+                            duration: Duration(seconds: 3),
                           ),
-                          backgroundColor:
-                              Colors.green, // Dodaj zelenu pozadinu
-                          behavior: SnackBarBehavior
-                              .floating, // Opcionalno za lepši prikaz
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                      // Navigacija nakon uspešnog dodavanja zaposlenika
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ZaposlenikPage(),
-                        ),
-                      );
-                    } catch (e) {
-                      _showErrorDialog(e.toString());
+                        );
+                        // Navigacija nakon uspešnog dodavanja zaposlenika
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ZaposlenikPage(),
+                          ),
+                        );
+                      } catch (e) {
+                        _showErrorDialog(e.toString());
+                      }
                     }
-                  }
-                },
-                child: Text("Sačuvaj Zaposlenika"),
-              ),
-            ],
-          ),
-        ],
+                  },
+                  child: Text("Sačuvaj Zaposlenika"),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-     ),
     );
   }
 
@@ -449,6 +527,41 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
           selectedUlogaId = value;
           print("selected u setstate poslije $selectedUlogaId");
           print("value $value");
+        });
+      },
+    );
+  }
+
+  Widget _buildKategorijaDropdown() {
+    // Filtriraj kategorije, postavi defaultnu vrijednost
+    List<Kategorija> filteredCategories =
+        kategorije!; // Ovo pretpostavljamo da su kategorije učitane.
+
+    return FormBuilderDropdown<int>(
+      name: "kategorijaId",
+      initialValue: selectedKategorijaId ??
+          filteredCategories.first.id, // Prva kategorija kao default
+      decoration: const InputDecoration(
+        labelText: "Kategorija",
+        prefixIcon: Icon(Icons.category),
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+        if (value == null) {
+          return 'Odaberite kategoriju';
+        }
+        return null;
+      },
+      items: filteredCategories.map((kategorija) {
+        return DropdownMenuItem<int>(
+          value: kategorija.id,
+          child: Text(kategorija.naziv!),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedKategorijaId = value;
+          print("Nova selektovana kategorija: $selectedKategorijaId");
         });
       },
     );

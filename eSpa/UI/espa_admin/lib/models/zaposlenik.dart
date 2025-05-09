@@ -1,3 +1,4 @@
+import 'package:espa_admin/models/kategorija.dart';
 import 'package:espa_admin/models/korisnik.dart';
 import 'package:espa_admin/models/zaposlenikSlike.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -19,8 +20,10 @@ class Zaposlenik {
   Korisnik? korisnik;
   int? slikaId;
   ZaposlenikSlike? slika;
+   int? kategorijaId;
+  Kategorija? kategorija;
   Zaposlenik(this.id, this.korisnikId, this.datumZaposlenja, this.struka, this.status, this.napomena,this.biografija,this.korisnik,
-  this.slikaId,this.slika);
+  this.slikaId,this.slika,this.kategorijaId,this.kategorija);
 
     /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

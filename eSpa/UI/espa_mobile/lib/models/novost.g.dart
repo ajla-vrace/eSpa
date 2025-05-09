@@ -19,6 +19,9 @@ Novost _$NovostFromJson(Map<String, dynamic> json) => Novost(
       json['autor'] == null
           ? null
           : Korisnik.fromJson(json['autor'] as Map<String, dynamic>),
+      (json['novostInterakcijas'] as List<dynamic>?)
+          ?.map((e) => NovostInterakcija.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$NovostToJson(Novost instance) => <String, dynamic>{
@@ -30,4 +33,5 @@ Map<String, dynamic> _$NovostToJson(Novost instance) => <String, dynamic>{
       'status': instance.status,
       'slika': instance.slika,
       'autor': instance.autor,
+      'novostInterakcijas': instance.novostInterakcijas,
     };

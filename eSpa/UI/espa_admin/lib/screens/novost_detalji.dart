@@ -84,7 +84,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       // ignore: sort_child_properties_last
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(120.0), // Odmicanje od ivica ekrana
+          padding: const EdgeInsets.all(110.0), // Odmicanje od ivica ekrana
           child: Container(
             width: 500,
             padding: const EdgeInsets.all(30),
@@ -307,7 +307,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                   height: 100,
                   fit: BoxFit.cover,
                 )
-              : widget.novost?.slika != null
+              : widget.novost?.slika != null && widget.novost!.slika!.isNotEmpty
                   ? Image.memory(
                       base64Decode(widget.novost!.slika!),
                       width: 100,

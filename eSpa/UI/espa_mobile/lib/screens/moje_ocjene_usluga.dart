@@ -103,7 +103,7 @@ class _MojeOcjeneScreenState extends State<MojeOcjeneScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: ocjene.length,
                 itemBuilder: (context, index) {
-                  final ocjena = ocjene[index];
+                  final ocjena = ocjene.reversed.toList()[index];
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

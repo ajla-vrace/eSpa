@@ -28,8 +28,8 @@ namespace eSpa.Service
                 string korisnikSearch = search.Korisnik.ToLower();
                 string zaposlenikSearch = search.Zaposlenik.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Korisnik.KorisnickoIme.ToLower().Contains(korisnikSearch) &&
-                    x.Zaposlenik.Korisnik.KorisnickoIme.ToLower().Contains(zaposlenikSearch)
+                    x.Korisnik.KorisnickoIme.ToLower()==(korisnikSearch) &&
+                    x.Zaposlenik.Korisnik.KorisnickoIme.ToLower()==(zaposlenikSearch)
                 );
             }
             // Ako je unesen samo username
@@ -45,13 +45,14 @@ namespace eSpa.Service
             {
                 string uslugaSearch = search.Zaposlenik.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Zaposlenik.Korisnik.KorisnickoIme.ToLower().Contains(uslugaSearch)
+                    x.Zaposlenik.Korisnik.KorisnickoIme.ToLower()==(uslugaSearch)
                 );
             }
 
             // Uključi povezane entitete
             filteredQuery = filteredQuery.Include(x => x.Korisnik)
-                                         .Include(x => x.Zaposlenik).ThenInclude(x => x.Korisnik);
+                                         .Include(x => x.Zaposlenik).ThenInclude(x => x.Korisnik)
+                                         .Include(x => x.Zaposlenik).ThenInclude(x => x.Kategorija);
 
             return filteredQuery;
         }

@@ -16,5 +16,7 @@ namespace eSpa.Model
         public string? Status { get; set; }
         public Korisnik Autor { get; set; }
         public byte[]? Slika { get; set; }
+        public virtual ICollection<NovostInterakcija> NovostInterakcijas { get; set; } = new List<NovostInterakcija>();
+        //public virtual ICollection<NovostKomentar> NovostKomentars { get; set; }
     }
 }

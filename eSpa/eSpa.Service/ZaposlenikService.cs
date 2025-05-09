@@ -40,16 +40,24 @@ namespace eSpa.Service
                     x.Korisnik.KorisnikUlogas.Any(ku => ku.Uloga.Naziv.Contains(search.Uloga))
                 );
             }
+            if (!string.IsNullOrWhiteSpace(search?.Kategorija))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Kategorija.Naziv==(search.Kategorija));
+            }
 
             // filteredQuery = filteredQuery.Include(x => x.Korisnik); //dodano
             /*filteredQuery = filteredQuery
                     .Include(x => x.Korisnik)
                         .Include(x => x.Slika);*/
             filteredQuery = filteredQuery
-      .Include(x => x.Korisnik)
-          .ThenInclude(k => k.KorisnikUlogas)
-              .ThenInclude(ku => ku.Uloga)
-      .Include(x => x.Slika);
+     .Include(x => x.Korisnik)
+         .ThenInclude(k => k.KorisnikUlogas)
+             .ThenInclude(ku => ku.Uloga)
+     .Include(x => x.Korisnik)
+         .ThenInclude(k => k.Slika)
+     .Include(x => x.Kategorija); // ⬅️ Ovo dodaje Kategoriju
+
+
 
 
             return filteredQuery;

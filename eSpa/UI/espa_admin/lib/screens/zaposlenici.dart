@@ -198,7 +198,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                   ),*/
                   DataColumn(
                     label: Text(
-                      "Struka",
+                      "Kategorija",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -221,7 +221,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                     ),
                   ),
                 ],
-                rows: _zaposlenici.map((zaposlenik) {
+                rows: _zaposlenici.reversed.map((zaposlenik) {
                   return DataRow(
                     cells: [
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
@@ -237,7 +237,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                         SizedBox(
                           width: 100, // prilagodi po potrebi
                           child: Text(
-                            zaposlenik.struka ?? "N/A",
+                            zaposlenik.kategorija!.naziv ?? "N/A",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
@@ -269,7 +269,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                 size:
                                     50), // Ikona kao fallback ako slika nije dostupna
                       ),*/
-                      DataCell(
+                     /* DataCell(
                         zaposlenik.slika?.slika != null
                             ? Image.memory(
                                 base64Decode(zaposlenik.slika!
@@ -281,6 +281,16 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                             : const Icon(Icons.account_circle,
                                 size:
                                     50), // Ikona kao fallback ako slika nije dostupna
+                      ),*/
+                      DataCell(
+                        zaposlenik.korisnik!.slika != null && zaposlenik.korisnik!.slika!.slika != null
+                            ? Image.memory(
+                                base64Decode(zaposlenik.korisnik!.slika!.slika!),
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                              )
+                            : const Icon(Icons.account_circle, size: 50),
                       ),
 
                       DataCell(

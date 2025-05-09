@@ -51,7 +51,7 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title:"Rezervacije",
+      title: "Rezervacije",
       selectedIndex: 2,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -79,14 +79,13 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               )
-            //const Text("Nemate nijednu aktivnu rezervaciju.")
             else
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: rezervacije.length,
                 itemBuilder: (context, index) {
-                  final rezervacija = rezervacije[index];
+                  final rezervacija = rezervacije.reversed.toList()[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 4.0),
@@ -120,6 +119,12 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                           ),
                         ],
                       ),
+                      trailing: IconButton(
+                        tooltip: "Otkazi",
+                        icon: const Icon(Icons.cancel, color: Colors.red),
+                        onPressed: () =>
+                            _showCancelDialog(context, rezervacija),
+                      ),
                     ),
                   );
                 },
@@ -145,6 +150,76 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
         return Colors.red;
       default:
         return Colors.grey;
+    }
+  }
+
+  // Metoda za prikazivanje dijaloga
+  void _showCancelDialog(BuildContext context, Rezervacija rezervacija) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Potvrda otkazivanja'),
+          content: const Text(
+              'Jeste li sigurni da želite otkazati ovu rezervaciju?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Zatvori dijalog bez akcije
+              },
+              child: const Text('Otkaži'),
+              style: TextButton.styleFrom(foregroundColor: Colors.grey),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Zatvori dijalog
+                await _cancelReservation(
+                    rezervacija); // Otkazivanje rezervacije
+              },
+              child: const Text('Potvrdi'),
+              style: TextButton.styleFrom(foregroundColor: Colors.green),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Metoda za otkazivanje rezervacije
+  Future<void> _cancelReservation(Rezervacija rezervacija) async {
+    try {
+      final rezervacijaProvider = context.read<RezervacijaProvider>();
+      await rezervacijaProvider.update(rezervacija.id!, {'status': 'Otkazana'});
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Rezervacija uspješno otkazana.",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      await _loadRezervacije(); // Osvježi listu rezervacija
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Greška"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
     }
   }
 }
