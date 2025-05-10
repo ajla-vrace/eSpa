@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class NovostInterakcijaService : BaseCRUDService<Model.NovostInterakcija, Database.NovostInterakcija, NovostInterakcijaSearchObject, NovostInterakcijaInsertRequest, NovostInterakcijaUpdateRequest>, INovostInterakcijaService
     {
-        public NovostInterakcijaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public NovostInterakcijaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

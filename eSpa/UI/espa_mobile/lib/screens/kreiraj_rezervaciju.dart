@@ -2,6 +2,7 @@ import 'package:espa_mobile/models/rezervacija.dart';
 import 'package:espa_mobile/models/usluga.dart';
 import 'package:espa_mobile/providers/usluga_provider.dart';
 import 'package:espa_mobile/providers/zaposlenik_provider.dart';
+import 'package:espa_mobile/screens/paypal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/termin.dart';
@@ -38,6 +39,10 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
   Iterable<Rezervacija> rezervacijeZaTermin = [];
 
   int? kategorijaId;
+
+  Rezervacija? KreiranaRezervacija;
+  
+  double? iznos;
 
   @override
   void initState() {
@@ -276,14 +281,16 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
       }
 
       // Kreiraj novu rezervaciju
-      await context.read<RezervacijaProvider>().insert({
+      KreiranaRezervacija = await context.read<RezervacijaProvider>().insert({
         'korisnikId': widget.korisnikId,
         'uslugaId': widget.usluga.id,
         'datum': _odabraniDatum!.toIso8601String(),
         'terminId': _odabraniTermin!.id,
         'zaposlenikId': zaposleniId,
       });
-
+      iznos=widget.usluga.cijena;
+      print("kreirana rezervacija $KreiranaRezervacija");
+      print("iznos $iznos");
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -291,7 +298,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -493,6 +500,36 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
                     ? _kreirajRezervaciju
                     : null,
                 child: const Text('Rezerviši'),
+              ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  if (KreiranaRezervacija != null) {
+                    print("kreirana rezervacija  je ovdje ${KreiranaRezervacija}");
+                   
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PayPalScreen(
+                                lastRezervacija: KreiranaRezervacija,
+                                totalAmount:
+                                    iznos!
+                              )),
+                    );
+                    if (result == true) {
+                      // Ako je plaćanje uspješno, pozovi update
+                      //await azurirajRezervaciju(rezervacijaId);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Plaćanje uspješno!')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Plaćanje otkazano.')),
+                      );
+                    }
+                  }
+                },
+                child: const Text('Izvrši plaćanje'),
               ),
             ],
           ),

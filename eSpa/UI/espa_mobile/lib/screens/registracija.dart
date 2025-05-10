@@ -72,24 +72,7 @@ class _RegistracijaScreenState extends State<RegistracijaScreen> {
           "${(_image != null && _base64image != null) ? "postoji slika" : "ne postoji slika"}");
     }
 
-    /*if (result != null && result.files.single.path != null) {
-      imagePath = result.files.single.path!;
-      print("IMAGE PATH -------------------->$imagePath");
-
-      // Proveri da li fajl stvarno postoji
-      File imageFile = File(imagePath!);
-      bool fileExists = await imageFile.exists();
-      if (fileExists) {
-        print("Fajl postoji!");
-        setState(() {
-          //_imagePath = imagePath;
-          _fileName = result.files.single.name;
-          _fileType = result.files.single.extension ?? 'jpg';
-        });
-      } else {
-        print("Fajl ne postoji!");
-      }
-    }*/
+    
   }
 
   Widget _buildInputField(String label, IconData icon, String name,
@@ -182,13 +165,13 @@ class _RegistracijaScreenState extends State<RegistracijaScreen> {
   Widget _buildImagePicker() {
     return Column(
       children: [
-        Text("Image $imagePath"),
+        //Text("Image $imagePath"),
         /* _image != null
             ? Image.memory(_image!, height: 100)
             : const Text("Nema slike odabrane"),*/
         _image != null
             ? Image.file(_image!, height: 100)
-            : const Text("Nema slike odabrane"),
+            : const Text(""),
         TextButton.icon(
           onPressed: _pickImage,
           icon: const Icon(Icons.image),

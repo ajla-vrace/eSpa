@@ -18,10 +18,10 @@ namespace eSpa.Service.Database
         public string? Opis { get; set; }
         public decimal Cijena { get; set; }
         public string Trajanje { get; set; } = null!;
-        public int KategorijaId { get; set; }
+        public int? KategorijaId { get; set; }
         public byte[]? Slika { get; set; }
 
-        public virtual Kategorija Kategorija { get; set; } = null!;
+        public virtual Kategorija? Kategorija { get; set; }
         public virtual ICollection<Favorit> Favorits { get; set; }
         public virtual ICollection<Komentar> Komentars { get; set; }
         public virtual ICollection<Ocjena> Ocjenas { get; set; }

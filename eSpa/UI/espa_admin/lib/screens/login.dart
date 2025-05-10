@@ -58,7 +58,7 @@ class LoginPage extends StatelessWidget {
                     onPressed: () async {
                       var username = _usernameController.text;
                       var password = _passwordController.text;
-                      _passwordController.text = username;
+                     // _passwordController.text = username;
 
                       //print("login proceed na login stranici $username $password");
 

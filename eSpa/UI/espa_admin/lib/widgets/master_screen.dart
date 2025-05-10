@@ -18,13 +18,23 @@ class MasterScreenWidget extends StatefulWidget {
   String? title;
   Widget? title_widget;
 
-  MasterScreenWidget({this.child, this.title, this.title_widget, Key? key}) : super(key: key);
+  MasterScreenWidget({this.child, this.title, this.title_widget, Key? key})
+      : super(key: key);
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
 }
 
 class _MasterScreenWidgetState extends State<MasterScreenWidget> {
+  void _logout() async {
+    // npr. ako koristiš SharedPreferences
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.clear();
+
+    print("Korisnik je odjavljen");
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,112 +42,92 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         title: widget.title_widget ?? Text(widget.title ?? ""),
       ),
       drawer: Drawer(
-        child: ListView(
+        child: Column(
           children: [
-            /*ListTile(
-              title: Text('Back'),
-              onTap: () {
-               Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  LoginPage(),
-                        ),
-                      );
-              },
-            ),*/
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    title: Text('HomePage'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Korisnici'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => KorisnikPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Zaposlenici'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ZaposlenikPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Usluge'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => UslugaPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Kategorije'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => KategorijaPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Termini'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => TerminPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Recenzije'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RecenzijaPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Novosti'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => NovostPage(),
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Rezervacije'),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => RezervacijePage(),
+                      ));
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
             ListTile(
-              title: Text('HomePage'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  HomePage(),
-                        ),
-                      );
-              },
+              leading: Icon(Icons.logout),
+              title: Text('Odjava'),
+              onTap: _logout, // Dodaj funkciju ispod
             ),
-            ListTile(
-              title: Text('Korisnici'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  KorisnikPage(),
-                        ),
-                      );
-              },
-            ),ListTile(
-              title: Text('Zaposlenici'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  ZaposlenikPage(),
-                        ),
-                      );
-              },
-            ),
-            ListTile(
-              title: Text('Usluge'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  UslugaPage(),
-                        ),
-                      );
-              },
-            ),
-            ListTile(
-              title: Text('Kategorije'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  KategorijaPage(),
-                        ),
-                      );
-              },
-            ),
-            ListTile(
-              title: Text('Termini'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  TerminPage(),
-                        ),
-                      );
-              },
-            ),
-            ListTile(
-              title: Text('Recenzije'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  RecenzijaPage(),
-                        ),
-                      );
-              },
-            ),
-            
-             
-            
-            ListTile(
-              title: Text('Novosti'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  NovostPage(),
-                        ),
-                      );
-              },
-            ),
-             ListTile(
-              title: Text('Rezervacije'),
-              onTap: () {
-                Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>  RezervacijePage(),
-                        ),
-                      );
-              },
-            ),
-            
-           
           ],
         ),
       ),

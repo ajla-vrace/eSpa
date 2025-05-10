@@ -14,7 +14,7 @@ namespace eSpa.Service
         /* private readonly eSpaContext _context;
          public IMapper _mapper { get;set; }*/
 
-        public KategorijaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public KategorijaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

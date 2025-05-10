@@ -94,13 +94,13 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
     } else {
       print("Podaci nisu u formatu liste");
     }
-    showDialog(
+   /* showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Podaci'),
         content: Text(nesto.toString()), // Prikazuje sve podatke kao string
       ),
-    );
+    );*/
   }
 
   Future<void> _loadOcjene() async {

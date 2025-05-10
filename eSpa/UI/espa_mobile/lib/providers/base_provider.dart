@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:espa_mobile/models/search_result.dart';
+import 'package:espa_mobile/models/usluga.dart';
 import 'package:espa_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 //import 'package:http/http.dart' as http;
@@ -53,6 +54,28 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw new Exception("Unknown error");
     }
     //print("response: ${response.request} ${response.statusCode}, ${response.body}");
+  }
+
+  Future<List<Usluga>> getRecommended(int uslugaId, int korisnikId) async {
+    final url = Uri.parse('$_baseUrl'
+        'Usluga/recommend/$uslugaId/$korisnikId');
+
+    print("URL $url");
+
+     //var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http!.get(url, headers: headers);
+   // final response = await http!.get(url);
+
+
+    print("RESPONSE $response   i status ${response.statusCode}");
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Usluga.fromJson(json)).toList();
+    } else {
+      throw Exception('Greška pri dohvaćanju preporuka');
+    }
   }
 
   Future getById(int id) async {

@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class OcjenaService:BaseCRUDService<Model.Ocjena,Database.Ocjena,OcjenaSearchObject,OcjenaInsertRequest,OcjenaUpdateRequest>,IOcjenaService
     {
-        public OcjenaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public OcjenaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -113,7 +113,7 @@ namespace eSpa.Service
                 .GroupBy(o => o.UslugaId) // Grupiramo prema ID-u usluge
                 .Select(g => new Model.Requests.UslugaOcjenaRequest
                 {
-                    UslugaId = g.Key, // ID usluge
+                    UslugaId = (int)g.Key, // ID usluge
                     Naziv = g.FirstOrDefault().Usluga.Naziv, // Naziv usluge, uzimamo prvi element iz grupe
                     Sifra = "U" + g.Key.ToString(), // Dodajemo šifru sa prefiksom "U" + ID usluge
                     ProsjecnaOcjena = g.Average(o => (double?)o.Ocjena1) ?? 0 // Izračunavamo prosječnu ocjenu

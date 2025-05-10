@@ -14,7 +14,7 @@ namespace eSpa.Service
     public class UlogaService : BaseCRUDService<Model.Uloga, Database.Uloga, UlogaSearchObject, UlogaInsertRequest, UlogaUpdateRequest>, IUlogaService
     {
 
-        public UlogaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public UlogaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

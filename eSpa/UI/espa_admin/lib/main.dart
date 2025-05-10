@@ -20,26 +20,27 @@ import 'package:provider/provider.dart';
 /*void main() {
   runApp(const MyApp());
 }*/
-void main(){
-runApp(MultiProvider(providers: [
-ChangeNotifierProvider(create: (_) => UslugaProvider()),
-ChangeNotifierProvider(create: (_) => KategorijaProvider()),
-ChangeNotifierProvider(create: (_) => NovostProvider()),
-ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
-ChangeNotifierProvider(create: (_) => ZaposlenikProvider()),
-ChangeNotifierProvider(create: (_) => UlogaProvider()),
-ChangeNotifierProvider(create: (_) => NovostKomentarProvider()),
-ChangeNotifierProvider(create: (_) => KorisnikUlogaProvider()),
-ChangeNotifierProvider(create: (_) => ZaposlenikSlikeProvider()),
-ChangeNotifierProvider(create: (_) => TerminProvider()),
-ChangeNotifierProvider(create: (_) => KomentarProvider()),
-ChangeNotifierProvider(create: (_) => OcjenaProvider()),
-ChangeNotifierProvider(create: (_) => KorisnikProvider()),
-ChangeNotifierProvider(create: (_) => SlikaProfilaProvider()),
-ChangeNotifierProvider(create: (_) => ZaposlenikRecenzijaProvider()),
-],
-child:const MyApp(),)
-);
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UslugaProvider()),
+      ChangeNotifierProvider(create: (_) => KategorijaProvider()),
+      ChangeNotifierProvider(create: (_) => NovostProvider()),
+      ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
+      ChangeNotifierProvider(create: (_) => ZaposlenikProvider()),
+      ChangeNotifierProvider(create: (_) => UlogaProvider()),
+      ChangeNotifierProvider(create: (_) => NovostKomentarProvider()),
+      ChangeNotifierProvider(create: (_) => KorisnikUlogaProvider()),
+      ChangeNotifierProvider(create: (_) => ZaposlenikSlikeProvider()),
+      ChangeNotifierProvider(create: (_) => TerminProvider()),
+      ChangeNotifierProvider(create: (_) => KomentarProvider()),
+      ChangeNotifierProvider(create: (_) => OcjenaProvider()),
+      ChangeNotifierProvider(create: (_) => KorisnikProvider()),
+      ChangeNotifierProvider(create: (_) => SlikaProfilaProvider()),
+      ChangeNotifierProvider(create: (_) => ZaposlenikRecenzijaProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -51,10 +52,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 7, 79, 34)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 7, 79, 34)),
         useMaterial3: false,
       ),
-      home:  LoginPage(),
+      routes: {
+        '/login': (context) => LoginPage(),
+        // ostale rute...
+      },
+      home: LoginPage(),
     );
   }
 }
@@ -73,14 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-     
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

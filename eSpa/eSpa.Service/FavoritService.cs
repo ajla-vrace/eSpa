@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class FavoritService : BaseCRUDService<Model.Favorit, Database.Favorit, FavoritSearchObject, FavoritInsertRequest, FavoritUpdateRequest>, IFavoritService
     {
-        public FavoritService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public FavoritService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

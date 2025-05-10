@@ -17,7 +17,7 @@ namespace eSpa.Service
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public NovostService(eSpaContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(context, mapper)
+        public NovostService(IB200069Context context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(context, mapper)
         {
             _httpContextAccessor = httpContextAccessor;
         }

@@ -18,6 +18,7 @@ class Rezervacija {
   int? terminId;
   int? zaposlenikId;
   String? status;
+  bool? isPlaceno;
   Korisnik? korisnik;
   Usluga? usluga;
   Termin? termin;
@@ -30,6 +31,7 @@ class Rezervacija {
       this.terminId,
       this.zaposlenikId,
       this.status,
+      this.isPlaceno,
       this.korisnik,
       this.usluga,
       this.termin,

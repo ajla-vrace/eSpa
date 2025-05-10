@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<eSpaContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<IB200069Context>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(IKategorijaService));  //prije bilo startup
 
 //builder.Services.AddAuthentication("BasicAuthentication")
@@ -66,7 +66,7 @@ builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IOcjenaService, OcjenaService>();
 builder.Services.AddTransient<ITerminService, TerminService>();
 builder.Services.AddTransient<IRezervacijaService,RezervacijaService>();
-builder.Services.AddTransient<IZaposlenikSlikeService, ZaposlenikSlikeService>();
+//builder.Services.AddTransient<IZaposlenikSlikeService, ZaposlenikSlikeService>();
 builder.Services.AddTransient<IUlogaService, UlogaService>();
 builder.Services.AddTransient<INovostInterakcijaService, NovostInterakcijaService>();
 builder.Services.AddTransient<ISlikaProfilaService, SlikaProfilaService>();

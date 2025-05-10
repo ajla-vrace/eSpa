@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class ZaposlenikService : BaseCRUDService<Model.Zaposlenik, Database.Zaposlenik, ZaposlenikSearchObject, ZaposlenikInsertRequest, ZaposlenikUpdateRequest>, IZaposlenikService
     {
-        public ZaposlenikService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public ZaposlenikService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -69,7 +69,6 @@ namespace eSpa.Service
             var entity = _mapper.Map<Database.Zaposlenik>(insert);
 
             //entity.DatumZaposlenja = DateTime.Now;
-
             _context.Zaposleniks.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -154,7 +153,7 @@ namespace eSpa.Service
                 entity.Korisnik.Prezime = update.Prezime;
             }
             // Ako dolazi nova slika
-            if (update.SlikaId.HasValue && update.SlikaId != entity.SlikaId)
+           /* if (update.SlikaId.HasValue && update.SlikaId != entity.SlikaId)
             {
                 // Ako već postoji stara slika, brišemo je iz baze
                 if (entity.SlikaId.HasValue)
@@ -169,7 +168,7 @@ namespace eSpa.Service
                 // Dodaj novu vezu prema slici
                 entity.SlikaId = update.SlikaId;
                 
-            }
+            }*/
             _mapper.Map(update, entity);
             entity.Status=update.Status;
             // Spasi promjene
@@ -203,14 +202,14 @@ namespace eSpa.Service
             }
 
             //  Ako zaposlenik ima sliku, brišemo i sliku
-            if (entity.SlikaId != null)
+            /*if (entity.SlikaId != null)
             {
                 var slikaEntity = await _context.ZaposlenikSlikes.FindAsync(entity.SlikaId);
                 if (slikaEntity != null)
                 {
                     _context.ZaposlenikSlikes.Remove(slikaEntity);
                 }
-            }
+            }*/
 
             //  Brišemo povezanog korisnika
             var korisnikEntity = await _context.Korisniks.FindAsync(entity.KorisnikId);

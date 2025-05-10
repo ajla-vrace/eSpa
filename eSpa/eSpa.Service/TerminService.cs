@@ -14,7 +14,7 @@ namespace eSpa.Service
 {
     public class TerminService:BaseCRUDService<Model.Termin,Database.Termin,TerminSearchObject,TerminInsertRequest,TerminUpdateRequest>,ITerminService
     {
-        public TerminService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public TerminService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

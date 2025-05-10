@@ -9,6 +9,7 @@ import 'package:espa_mobile/providers/favorit_provider.dart';
 import 'package:espa_mobile/providers/komentar_provider.dart';
 import 'package:espa_mobile/providers/korisnik_provider.dart';
 import 'package:espa_mobile/providers/ocjena_provider.dart';
+import 'package:espa_mobile/providers/usluga_provider.dart';
 import 'package:espa_mobile/screens/kreiraj_rezervaciju.dart';
 import 'package:espa_mobile/utils/util.dart';
 import 'package:espa_mobile/widgets/master_screen.dart';
@@ -44,8 +45,13 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
   //bool _jeFavorit = false;
   List<Favorit>? data = [];
   var dataKorisnik;
+  List<Usluga> _recommended = [];
 
+  bool _prikaziPreporuke = false;
+  List<Usluga> _preporuceneUsluge = [];
   bool jeFavoritBool = false;
+
+  UslugaProvider? _uslugaProvider;
   double? getProsjecnaOcjena() {
     if (_ocjene == null || _ocjene!.isEmpty) return null;
     double suma = _ocjene!
@@ -59,10 +65,12 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
     super.initState();
     _korisnikProvider = context.read<KorisnikProvider>();
     _favoritProvider = context.read<FavoritProvider>();
+    _uslugaProvider = context.read<UslugaProvider>();
     _loadUserData();
     _loadSlika();
     _loadKomentari();
     _loadOcjene();
+    // _loadRecommended();
 
     // _provjeriFavorit();
   }
@@ -127,8 +135,9 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
         // Koristi provider za dohvatanje korisničkih podataka prema korisničkom imenu
 
         user = await _korisnikProvider
-            .get(filter: {'korisnickoIme': korisnickoIme});
+            .get(filter: {'KorisnickoIme': korisnickoIme});
         // Ako su podaci uspešno učitani, update-uj state
+        korisnikId = user!.result[0].id;
         setState(() {
           korisnikId = user!.result[0].id;
           print("korisnik id----------------> $korisnikId");
@@ -136,12 +145,33 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
           print("korisnik ------------------>$korisnik");
         });
         if (korisnikId != null) {
+          await _loadRecommended();
           await _provjeriFavorit();
         }
       } catch (e) {
         print("greska na load korisnik --------> ${e.toString()}");
         // Ako dođe do greške prilikom učitavanja, možeš staviti fallback ili prikazati error poruku
         print("Greška pri učitavanju korisničkih podataka: $e");
+      }
+    }
+  }
+
+  Future<void> _loadRecommended() async {
+    if (widget.usluga.id == null || korisnikId == null) {
+      print("usluga id ${widget.usluga.id}");
+      print("korisnik id $korisnikId");
+      //return;
+    }
+    if (widget.usluga.id != null && korisnikId != null) {
+      try {
+        var data = await _uslugaProvider!
+            .getRecommended(widget.usluga.id!, korisnikId!);
+        print("DATA ------------->$data");
+        setState(() {
+          _recommended = data;
+        });
+      } catch (e) {
+        print("Greška pri dohvaćanju preporuka: $e");
       }
     }
   }
@@ -443,23 +473,6 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                         ),
                         onPressed: () async {
                           _toggleFavorit();
-                          /*var uslugaId = widget.usluga.id;
-
-                          if (_jeFavorit) {
-                            
-                          } else {
-                            // dodaj u favorite
-                            await _favoritProvider.insert({
-                              'korisnikId': korisnikId,
-                              'uslugaId': uslugaId,
-                              'isFavorit': true,
-                              'datum': DateTime.now().toIso8601String(),
-                            });
-                          }
-
-                          setState(() {
-                            _jeFavorit = !_jeFavorit;
-                          });*/
                         },
                       ),
                     ),
@@ -597,6 +610,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                       const SizedBox(height: 16),
                       Divider(color: Colors.grey[300], thickness: 1),
                       const SizedBox(height: 16),
+
                       /* Text(
                         "Komentari",
                         style: TextStyle(
@@ -606,6 +620,93 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                         ),
                       ),
                       */
+
+// Dugme za prikaz preporuka
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _prikaziPreporuke = !_prikaziPreporuke;
+                          });
+                        },
+                        icon: Icon(Icons.recommend),
+                        label: Text(_prikaziPreporuke
+                            ? "Sakrij preporuke"
+                            : "Prikaži preporuke"),
+                      ),
+
+// Horizontalni prikaz preporuka
+                      Visibility(
+                        visible: _prikaziPreporuke,
+                        child: Container(
+                          height: 180,
+                          margin: const EdgeInsets.only(top: 12, bottom: 12),
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _recommended.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 12),
+                            itemBuilder: (context, index) {
+                              final usluga = _recommended[index];
+                              return Container(
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.teal),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 6,
+                                      offset: Offset(0, 4),
+                                    )
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    // Opcionalno: otvori detalje usluge
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                                top: Radius.circular(12)),
+                                        child: (usluga.slika != null && usluga.slika!="")
+                                            ? Image.memory(
+                                                base64Decode(usluga.slika!),
+                                                height: 100,
+                                                width: double.infinity,
+                                                fit: BoxFit.cover)
+                                            : Container(
+                                                height: 100,
+                                                color: Colors.grey[200],
+                                                 //width: double.infinity,
+                                                child: const Icon(
+                                                    Icons.image_not_supported),
+                                              ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          usluga.naziv ?? 'Bez naziva',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+
                       Text(
                         "Ukupno komentara: ${ukupnoKomentara ?? 0}",
                         style:

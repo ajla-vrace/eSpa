@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class KomentarService:BaseCRUDService<Model.Komentar,Database.Komentar,KomentarSearchObject,KomentarInsertRequest,KomentarUpdateRequest>, IKomentarService
     {
-        public KomentarService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public KomentarService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

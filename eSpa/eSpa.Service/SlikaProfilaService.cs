@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class SlikaProfilaService : BaseCRUDService<Model.SlikaProfila, Database.SlikaProfila, SlikaProfilaSearchObject, SlikaProfilaInsertRequest, SlikaProfilaUpdateRequest>, ISlikaProfilaService
     {
-        public SlikaProfilaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public SlikaProfilaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
         }
         public override async Task<Model.SlikaProfila> Insert(SlikaProfilaInsertRequest insert)

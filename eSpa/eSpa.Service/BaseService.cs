@@ -13,10 +13,10 @@ namespace eSpa.Service
 {
     public class BaseService<T, TDb, TSearch> : IService<T, TSearch> where T : class where TDb : class where TSearch : BaseSearchObject
     {
-        protected readonly eSpaContext _context;
+        protected readonly IB200069Context _context;
         protected IMapper _mapper { get; set; }
 
-        public BaseService(eSpaContext context, IMapper mapper)
+        public BaseService(IB200069Context context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

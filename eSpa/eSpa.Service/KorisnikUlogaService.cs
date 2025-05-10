@@ -15,7 +15,7 @@ namespace eSpa.Service
     public class KorisnikUlogaService : BaseCRUDService<Model.KorisnikUloga, Database.KorisnikUloga, KorisnikUlogaSearchObject, KorisnikUlogaInsertRequest, KorisnikUlogaUpdateRequest>, IKorisnikUlogaService
     {
 
-        public KorisnikUlogaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public KorisnikUlogaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
         
         }

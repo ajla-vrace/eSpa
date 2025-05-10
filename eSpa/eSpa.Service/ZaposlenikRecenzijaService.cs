@@ -13,7 +13,7 @@ namespace eSpa.Service
 {
     public class ZaposlenikRecenzijaService : BaseCRUDService<Model.ZaposlenikRecenzija, Database.ZaposlenikRecenzija, ZaposlenikRecenzijaSearchObject, ZaposlenikRecenzijaInsertRequest, ZaposlenikRecenzijaUpdateRequest>, IZaposlenikRecenzijaService
     {
-        public ZaposlenikRecenzijaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public ZaposlenikRecenzijaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }

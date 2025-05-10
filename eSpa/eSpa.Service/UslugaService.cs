@@ -18,7 +18,7 @@ namespace eSpa.Service
 {
     public class UslugaService : BaseCRUDService<Model.Usluga, Database.Usluga, Model.SearchObject.UslugaSearchObject, Model.Requests.UslugaInsertRequest, Model.Requests.UslugaUpdateRequest>, IUslugaService
     {
-        public UslugaService(eSpaContext context, IMapper mapper) : base(context, mapper)
+        public UslugaService(IB200069Context context, IMapper mapper) : base(context, mapper)
         {
 
         }
@@ -120,7 +120,7 @@ namespace eSpa.Service
                 .GroupBy(r => r.UslugaId)
                 .Select(g => new UslugaRezervacijaRequest
                 {
-                    UslugaId = g.Key,
+                    UslugaId = (int)g.Key,
                     Naziv = g.First().Usluga.Naziv,
                     Sifra = "U" + g.Key.ToString(),
                     BrojRezervacija = g.Count()
