@@ -185,8 +185,8 @@ class _RegistracijaScreenState extends State<RegistracijaScreen> {
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       var request = Map<String, dynamic>.from(_formKey.currentState!.value);
 
-      Authorization.username = "proba";
-      Authorization.password = "proba";
+      Authorization.username = "admin";
+      Authorization.password = "test";
 
       try {
         int? slikaId;
@@ -206,6 +206,9 @@ class _RegistracijaScreenState extends State<RegistracijaScreen> {
 
         if (slikaId != null) {
           request['slikaId'] = slikaId;
+        }
+        else{
+           request['slikaId'] = null;
         }
 
         var nesto = await _korisnikProvider.insert(request);

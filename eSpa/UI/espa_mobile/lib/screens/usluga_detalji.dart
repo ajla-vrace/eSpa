@@ -48,6 +48,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
   List<Usluga> _recommended = [];
 
   bool _prikaziPreporuke = false;
+  // ignore: unused_field
   List<Usluga> _preporuceneUsluge = [];
   bool jeFavoritBool = false;
 
@@ -622,7 +623,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                       */
 
 // Dugme za prikaz preporuka
-                      ElevatedButton.icon(
+                      /*   ElevatedButton.icon(
                         onPressed: () {
                           setState(() {
                             _prikaziPreporuke = !_prikaziPreporuke;
@@ -673,7 +674,8 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                                         borderRadius:
                                             const BorderRadius.vertical(
                                                 top: Radius.circular(12)),
-                                        child: (usluga.slika != null && usluga.slika!="")
+                                        child: (usluga.slika != null &&
+                                                usluga.slika != "")
                                             ? Image.memory(
                                                 base64Decode(usluga.slika!),
                                                 height: 100,
@@ -682,7 +684,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                                             : Container(
                                                 height: 100,
                                                 color: Colors.grey[200],
-                                                 //width: double.infinity,
+                                                //width: double.infinity,
                                                 child: const Icon(
                                                     Icons.image_not_supported),
                                               ),
@@ -705,7 +707,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                             },
                           ),
                         ),
-                      ),
+                      ),*/
 
                       Text(
                         "Ukupno komentara: ${ukupnoKomentara ?? 0}",
@@ -800,7 +802,137 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                                   ),
                                 );
                               }).toList(),
-                            )
+                            ),
+
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _prikaziPreporuke = !_prikaziPreporuke;
+                          });
+                        },
+                        icon: Icon(Icons.recommend),
+                        label: Text(_prikaziPreporuke
+                            ? "Sakrij preporuke"
+                            : "Prikaži preporuke"),
+                      ),
+// Preporuke
+                      if (_prikaziPreporuke)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 16),
+                            const Text(
+                              "Preporučene usluge:",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.teal),
+                            ),
+                            const SizedBox(height: 8),
+                            _recommended.isEmpty
+                                ? const Text("Trenutno nema preporuka za vas.")
+                                : Container(
+                                    height: 180,
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: _recommended.length,
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(width: 12),
+                                      itemBuilder: (context, index) {
+                                        final usluga = _recommended[index];
+                                        Widget imageWidget;
+
+                                        try {
+                                          if (usluga.slika != null &&
+                                              usluga.slika!.isNotEmpty) {
+                                            imageWidget = Image.memory(
+                                              base64Decode(usluga.slika!),
+                                              height: 100,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                            );
+                                          } else {
+                                            imageWidget = const Icon(
+                                                Icons.image_not_supported);
+                                          }
+                                        } catch (e) {
+                                          imageWidget =
+                                              const Icon(Icons.broken_image);
+                                        }
+
+                                        return Container(
+                                          width: 150,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border:
+                                                Border.all(color: Colors.teal),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.05),
+                                                blurRadius: 6,
+                                                offset: const Offset(0, 4),
+                                              )
+                                            ],
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              // Opcionalno: otvori detalje usluge
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      UslugaDetailScreen(
+                                                          usluga:
+                                                              widget.usluga),
+                                                ),
+                                              );
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius
+                                                          .vertical(
+                                                          top: Radius.circular(
+                                                              12)),
+                                                  child: Container(
+                                                    height: 100,
+                                                    width: double.infinity,
+                                                    color: Colors.grey[200],
+                                                    child: Center(
+                                                        child: imageWidget),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                    usluga.naziv ??
+                                                        'Bez naziva',
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
