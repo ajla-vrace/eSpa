@@ -19,3 +19,21 @@ Future<String?> getUserName() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('username');
 }
+class LoggedUser {
+  static int? id;
+  static String? ime;
+  static String? prezime;
+  static String? korisnickoIme;
+  static bool? isBlokiran;
+  static String? uloga;
+
+  static void clear() {
+    id = 0;
+    ime = "";
+    prezime = "";
+    korisnickoIme = "";
+    isBlokiran=false;
+    uloga = "";
+  }
+}
+

@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQ.Client;
+using System.Text;
+using System.Text.Json;
 
 namespace eSpa.Service
 {
@@ -72,6 +75,7 @@ namespace eSpa.Service
             _context.Zaposleniks.Add(entity);
             await _context.SaveChangesAsync();
 
+
             return _mapper.Map<Model.Zaposlenik>(entity);
         }
 
@@ -125,8 +129,7 @@ namespace eSpa.Service
             return _mapper.Map<Model.Zaposlenik>(entity);
         }
         */
-
-
+        
 
         public override async Task<Model.Zaposlenik> Update(int id, ZaposlenikUpdateRequest update)
         {
@@ -192,48 +195,59 @@ namespace eSpa.Service
             await _context.SaveChangesAsync();
             return _mapper.Map<Model.Zaposlenik>(entity);
         }*/
-        public override async Task<Model.Zaposlenik> Delete(int id)
+        public override async Task<bool> Delete(int id)
         {
             var entity = _context.Zaposleniks.Find(id);
 
             if (entity == null)
             {
-                throw new KeyNotFoundException("Zaposlenik nije pronađen.");
+                return false;
             }
 
-            //  Ako zaposlenik ima sliku, brišemo i sliku
-            /*if (entity.SlikaId != null)
-            {
-                var slikaEntity = await _context.ZaposlenikSlikes.FindAsync(entity.SlikaId);
-                if (slikaEntity != null)
-                {
-                    _context.ZaposlenikSlikes.Remove(slikaEntity);
-                }
-            }*/
+            // Brišemo povezane rezervacije i recenzije (pretpostavljeni nazivi)
+            var rezervacije = await _context.Rezervacijas
+                .Where(r => r.ZaposlenikId == entity.Id)
+                .ToListAsync();
 
-            //  Brišemo povezanog korisnika
-            var korisnikEntity = await _context.Korisniks.FindAsync(entity.KorisnikId);
+            var recenzije = await _context.ZaposlenikRecenzijas // ili Komentari ako ih tako zoveš
+                .Where(o => o.ZaposlenikId == entity.Id)
+                .ToListAsync();
+
+            if (rezervacije.Any())
+            {
+                _context.Rezervacijas.RemoveRange(rezervacije);
+            }
+
+            if (recenzije.Any())
+            {
+                _context.ZaposlenikRecenzijas.RemoveRange(recenzije);
+            }
+
+            // Brišemo korisničke uloge
             var korisnikUloge = await _context.KorisnikUlogas
-      .Where(ku => ku.KorisnikId == entity.KorisnikId)
-      .ToListAsync();
+                .Where(ku => ku.KorisnikId == entity.KorisnikId)
+                .ToListAsync();
 
             if (korisnikUloge.Any())
             {
-                _context.KorisnikUlogas.RemoveRange(korisnikUloge);  // Brišemo sve povezane uloge
+                _context.KorisnikUlogas.RemoveRange(korisnikUloge);
             }
+
+            // Brišemo korisnika
+            var korisnikEntity = await _context.Korisniks.FindAsync(entity.KorisnikId);
             if (korisnikEntity != null)
             {
                 _context.Korisniks.Remove(korisnikEntity);
             }
 
-            //  Brišemo zaposlenika
+            // Brišemo zaposlenika
             _context.Zaposleniks.Remove(entity);
 
-            //  Spremamo promjene
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<Model.Zaposlenik>(entity);
+            return true;
         }
+
 
     }
 }

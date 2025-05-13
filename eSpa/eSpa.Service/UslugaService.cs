@@ -114,6 +114,56 @@ namespace eSpa.Service
 
             return _mapper.Map<Model.Usluga>(entity);
         }
+
+        public override async Task<bool> Delete(int id)
+        {
+            var entity = await _context.Uslugas.FindAsync(id);
+
+            if (entity == null)
+                return false;
+
+            // 1. Brišemo komentare vezane za uslugu
+            var komentari = await _context.Komentars
+                .Where(k => k.UslugaId == id)
+                .ToListAsync();
+
+            if (komentari.Any())
+                _context.Komentars.RemoveRange(komentari);
+
+            // 2. Brišemo ocjene vezane za uslugu
+            var ocjene = await _context.Ocjenas
+                .Where(o => o.UslugaId == id)
+                .ToListAsync();
+
+            if (ocjene.Any())
+                _context.Ocjenas.RemoveRange(ocjene);
+
+            // 3. Brišemo rezervacije vezane za uslugu
+            var rezervacije = await _context.Rezervacijas
+                .Where(r => r.UslugaId == id)
+                .ToListAsync();
+
+            if (rezervacije.Any())
+                _context.Rezervacijas.RemoveRange(rezervacije);
+            // 0. Brišemo favorite vezane za uslugu
+            var favoriti = await _context.Favorits
+                .Where(f => f.UslugaId == id)
+                .ToListAsync();
+
+            if (favoriti.Any())
+                _context.Favorits.RemoveRange(favoriti);
+
+            // 4. Brišemo samu uslugu
+            _context.Uslugas.Remove(entity);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
+
+
         public async Task<List<UslugaRezervacijaRequest>> GetRezervacijePoUslugama()
         {
             var query = _context.Rezervacijas

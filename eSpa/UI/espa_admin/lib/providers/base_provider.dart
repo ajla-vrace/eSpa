@@ -12,8 +12,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
+    /* _baseUrl = const String.fromEnvironment("baseUrl",
+        defaultValue: "https://localhost:7031/");*/
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7031/");
+        defaultValue: "http://localhost:5031/");
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -47,46 +49,48 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
     //print("response: ${response.request} ${response.statusCode}, ${response.body}");
   }
-Future<List<dynamic>> getUslugeProsjecneOcjene() async {
- /* if (endpoint != 'Ocjena') {
+
+  Future<List<dynamic>> getUslugeProsjecneOcjene() async {
+    /* if (endpoint != 'Ocjena') {
     throw Exception("Ova metoda se koristi samo za 'Ocjena' entitet.");
   }*/
 
-  var url = "$_baseUrl$_endpoint/UslugeProsjecneOcjene";
-  print("URL: $url");
-  var uri = Uri.parse(url);
-  print("URI: $uri");
+    var url = "$_baseUrl$_endpoint/UslugeProsjecneOcjene";
+    print("URL: $url");
+    var uri = Uri.parse(url);
+    print("URI: $uri");
 
-  var headers = createHeaders(); // ako koristiš autorizaciju
-  var response = await http.get(uri, headers: headers);
+    var headers = createHeaders(); // ako koristiš autorizaciju
+    var response = await http.get(uri, headers: headers);
 
-  if (response.statusCode >= 200 && response.statusCode < 300) {
-    return jsonDecode(response.body);
-  } else {
-    print("response.status code ${response.statusCode}");
-    throw Exception("Greška prilikom dohvaćanja prosječnih ocjena.");
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(response.body);
+    } else {
+      print("response.status code ${response.statusCode}");
+      throw Exception("Greška prilikom dohvaćanja prosječnih ocjena.");
+    }
   }
-}
-Future<List<dynamic>> getRezervacijePoUslugama() async {
- /* if (endpoint != 'Ocjena') {
+
+  Future<List<dynamic>> getRezervacijePoUslugama() async {
+    /* if (endpoint != 'Ocjena') {
     throw Exception("Ova metoda se koristi samo za 'Ocjena' entitet.");
   }*/
 
-  var url = "$_baseUrl$_endpoint/RezervacijePoUslugama";
-  print("URL: $url");
-  var uri = Uri.parse(url);
-  print("URI: $uri");
+    var url = "$_baseUrl$_endpoint/RezervacijePoUslugama";
+    print("URL: $url");
+    var uri = Uri.parse(url);
+    print("URI: $uri");
 
-  var headers = createHeaders(); // ako koristiš autorizaciju
-  var response = await http.get(uri, headers: headers);
+    var headers = createHeaders(); // ako koristiš autorizaciju
+    var response = await http.get(uri, headers: headers);
 
-  if (response.statusCode >= 200 && response.statusCode < 300) {
-    return jsonDecode(response.body);
-  } else {
-    print("response.status code ${response.statusCode}");
-    throw Exception("Greška prilikom dohvaćanja prosječnih ocjena.");
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(response.body);
+    } else {
+      print("response.status code ${response.statusCode}");
+      throw Exception("Greška prilikom dohvaćanja prosječnih ocjena.");
+    }
   }
-}
 
   Future<List<T>> getListFromEndpoint(String endpoint) async {
     var url = "$_baseUrl$_endpoint/$endpoint";
@@ -184,7 +188,7 @@ Future<List<dynamic>> getRezervacijePoUslugama() async {
     }
   }
 
-  Future<T> delete(int id) async {
+  Future<bool> delete(int id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
@@ -193,10 +197,16 @@ Future<List<dynamic>> getRezervacijePoUslugama() async {
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
+
+      // Ako je odgovor false, znači nešto nije u redu
+      if (data == false) {
+        throw Exception("Ne postoji novost sa datim ID-om.");
+      }
+
       notifyListeners();
-      return fromJson(data);
+      return data; // Vraćamo true ako je uspešno obrisano
     } else {
-      throw Exception("Unknown error");
+      throw Exception("Nepoznata greška.");
     }
   }
 
@@ -262,5 +272,30 @@ Future<List<dynamic>> getRezervacijePoUslugama() async {
       }
     });
     return query;
+  }
+
+  Future<void> blokirajKorisnika(int korisnikId) async {
+    var url =
+        "${_baseUrl}Korisnici/Blokiraj/$korisnikId"; // ili 'blokiraj?id=$korisnikId' zavisno od backend rute
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    print("Pozivam: $url");
+
+    var response = await http.post(uri, headers: headers);
+
+    print("Response Status: ${response.statusCode}");
+    print("Response Body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      print("Korisnik je uspješno blokiran.");
+    } else {
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 400 && responseBody['message'] != null) {
+        throw Exception(responseBody['message']);
+      } else {
+        throw Exception("Greška pri blokiranju korisnika.");
+      }
+    }
   }
 }

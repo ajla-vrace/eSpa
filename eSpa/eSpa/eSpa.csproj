@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\eSpa.Model\eSpa.Model.csproj" />
+    <ProjectReference Include="..\eSpa.RabbitMQ\eSpa.RabbitMQ.csproj" />
     <ProjectReference Include="..\eSpa.Service\eSpa.Service.csproj" />
   </ItemGroup>
 

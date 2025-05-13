@@ -32,14 +32,35 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     // await prefs.clear();
 
     print("Korisnik je odjavljen");
-    Navigator.pushReplacementNamed(context, '/login');
+    //Navigator.pushReplacementNamed(context, '/login');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+    '/login',
+    (Route<dynamic> route) => false, // uklanja sve prethodne rute
+  );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.title_widget ?? Text(widget.title ?? ""),
+      // Uklanjamo `title_widget` i koristimo Row
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Lijevo: naslov
+          widget.title_widget ?? Text(widget.title ?? ""),
+          
+          // Desno: ikonica i naziv
+          Row(
+            children: [
+              Icon(Icons.spa, size: 20), // ili tvoja custom ikona
+              SizedBox(width: 5),
+              Text("eSpa", style: TextStyle(fontWeight: FontWeight.bold)), 
+              SizedBox(width: 10),
+            ],
+          )
+        ],
+      ),
       ),
       drawer: Drawer(
         child: Column(

@@ -5,7 +5,7 @@ namespace eSpa.Service.Database
 {
     public partial class Korisnik
     {
-        public Korisnik()
+       /* public Korisnik()
         {
             Favorits = new HashSet<Favorit>();
             Komentars = new HashSet<Komentar>();
@@ -17,7 +17,7 @@ namespace eSpa.Service.Database
             Rezervacijas = new HashSet<Rezervacija>();
             ZaposlenikRecenzijas = new HashSet<ZaposlenikRecenzija>();
             Zaposleniks = new HashSet<Zaposlenik>();
-        }
+        }*/
 
         public int Id { get; set; }
         public string Ime { get; set; } = null!;

@@ -5,10 +5,10 @@ namespace eSpa.Service.Database
 {
     public partial class StatusRezervacije
     {
-        public StatusRezervacije()
+       /* public StatusRezervacije()
         {
             Rezervacijas = new HashSet<Rezervacija>();
-        }
+        }*/
 
         public int Id { get; set; }
         public string Naziv { get; set; } = null!;

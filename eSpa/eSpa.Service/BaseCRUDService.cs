@@ -22,6 +22,10 @@ namespace eSpa.Service
         {
 
         }
+        public virtual async Task AfterInsert(TDb entity, TInsert insert)
+        {
+        }
+
 
         public virtual async Task<T> Insert(TInsert insert)
         {
@@ -49,17 +53,32 @@ namespace eSpa.Service
             return _mapper.Map<T>(entity);
         }
 
-        public virtual async Task<T> Delete(int id)
+        /* public virtual async Task<bool> Delete(int id)
+         {
+             var set = _context.Set<TDb>();
+
+             var entity = await set.FindAsync(id);
+
+             set.Remove(entity);
+
+             await _context.SaveChangesAsync();
+             return true;
+         }*/
+        public virtual async Task<bool> Delete(int id)
         {
             var set = _context.Set<TDb>();
 
             var entity = await set.FindAsync(id);
+            if (entity == null)
+            {
+                return false;
+            }
 
             set.Remove(entity);
-
             await _context.SaveChangesAsync();
-            return _mapper.Map<T>(entity);
+            return true;
         }
+
 
     }
 }

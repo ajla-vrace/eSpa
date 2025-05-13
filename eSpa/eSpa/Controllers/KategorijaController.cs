@@ -16,6 +16,24 @@ namespace eSpa.Controllers
         {
 
         }
+        [Authorize(Roles = "Administrator")]
+        public override Task<Kategorija> Insert([FromBody] KategorijaInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
+        // Update metoda
+        [Authorize(Roles = "Administrator")]
+        public override Task<Kategorija> Update(int id, [FromBody] KategorijaUpdateRequest update)
+        {
+            return base.Update(id, update);
+        }
+
+        // Delete metoda
+        [Authorize(Roles = "Administrator")]
+        public override Task<bool> Delete(int id)
+        {
+            return base.Delete(id);
+        }
     }
 
 }

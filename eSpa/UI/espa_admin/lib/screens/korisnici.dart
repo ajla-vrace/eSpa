@@ -275,15 +275,16 @@ class _KorisnikPageState extends State<KorisnikPage> {
 
                                       if (confirm == true) {
                                         try {
+                                          // ignore: unused_local_variable
                                           var _korisnik =
                                               await _korisnikProvider
-                                                  .getById(korisnik.id!);
-                                          print("korisnik: getbyid $_korisnik");
-                                          _korisnik.status = "Blokiran";
-                                          _korisnik.isBlokiran = true;
+                                                  .blokirajKorisnika(korisnik.id!);
+                                          //print("korisnik: getbyid $_korisnik");
+                                          //_korisnik.status = "Blokiran";
+                                          //_korisnik.isBlokiran = true;
 
-                                          await _korisnikProvider.update(
-                                              korisnik.id!, _korisnik);
+                                         // await _korisnikProvider.update(
+                                            //  korisnik.id!, _korisnik);
                                           setState(() {
                                             /*  var index = _korisnici
                                           .indexWhere((k) => k.id == korisnik.id);

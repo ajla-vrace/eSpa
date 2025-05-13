@@ -5,11 +5,11 @@ namespace eSpa.Service.Database
 {
     public partial class Zaposlenik
     {
-        public Zaposlenik()
+        /*public Zaposlenik()
         {
             Rezervacijas = new HashSet<Rezervacija>();
             ZaposlenikRecenzijas = new HashSet<ZaposlenikRecenzija>();
-        }
+        }*/
 
         public int Id { get; set; }
         public int? KorisnikId { get; set; }

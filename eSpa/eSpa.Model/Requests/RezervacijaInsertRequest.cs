@@ -22,20 +22,20 @@ namespace eSpa.Model.Requests
 {
     public class RezervacijaInsertRequest
     {
-        [Required(ErrorMessage = "Korisnik ID je obavezan.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Korisnik ID je obavezan.")]
         public int KorisnikId { get; set; }
 
-        [Required(ErrorMessage = "Usluga ID je obavezan.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Usluga ID je obavezan.")]
         public int UslugaId { get; set; }
 
-        [Required(ErrorMessage = "Datum je obavezan.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Datum je obavezan.")]
         [DataType(DataType.Date, ErrorMessage = "Datum mora biti validan datum.")]
         //[FutureDate(ErrorMessage = "Datum rezervacije ne može biti u prošlosti.")]
         public DateTime Datum { get; set; }
 
-        [Required(ErrorMessage = "Termin ID je obavezan.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Termin ID je obavezan.")]
         public int TerminId { get; set; }
-        [Required(ErrorMessage = "Zaposlenik ID je obavezan.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Zaposlenik ID je obavezan.")]
         public int ZaposlenikId { get; set; }
 
         // Pošto je status automatski postavljen na 'Aktivna' u bazi, nije potrebno unositi ga prilikom kreiranja rezervacije

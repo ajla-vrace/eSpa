@@ -16,7 +16,7 @@
           "Microsoft.EntityFrameworkCore.Tools": "6.0.0",
           "Microsoft.ML": "4.0.2",
           "Microsoft.ML.Recommender": "0.22.2",
-          "RabbitMQ.Client": "7.0.0",
+          "RabbitMQ.Client": "6.8.1",
           "eSpa.Model": "1.0.0"
         },
         "runtime": {
@@ -65,14 +65,6 @@
           }
         }
       },
-      "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
-        "runtime": {
-          "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        }
-      },
       "Microsoft.CSharp/4.5.0": {},
       "Microsoft.Data.SqlClient/2.1.4": {
         "dependencies": {
@@ -82,7 +74,7 @@
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.8.0",
           "Microsoft.Win32.Registry": "4.7.0",
           "System.Configuration.ConfigurationManager": "4.7.0",
-          "System.Diagnostics.DiagnosticSource": "8.0.1",
+          "System.Diagnostics.DiagnosticSource": "6.0.0",
           "System.Runtime.Caching": "4.7.0",
           "System.Security.Principal.Windows": "4.7.0",
           "System.Text.Encoding.CodePages": "4.7.0"
@@ -140,7 +132,7 @@
           "Microsoft.Extensions.DependencyInjection": "6.0.0",
           "Microsoft.Extensions.Logging": "6.0.0",
           "System.Collections.Immutable": "8.0.0",
-          "System.Diagnostics.DiagnosticSource": "8.0.1"
+          "System.Diagnostics.DiagnosticSource": "6.0.0"
         },
         "runtime": {
           "lib/net6.0/Microsoft.EntityFrameworkCore.dll": {
@@ -262,7 +254,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
           "Microsoft.Extensions.Options": "6.0.0",
-          "System.Diagnostics.DiagnosticSource": "8.0.1"
+          "System.Diagnostics.DiagnosticSource": "6.0.0"
         },
         "runtime": {
           "lib/netstandard2.1/Microsoft.Extensions.Logging.dll": {
@@ -606,19 +598,15 @@
           }
         }
       },
-      "RabbitMQ.Client/7.0.0": {
+      "RabbitMQ.Client/6.8.1": {
         "dependencies": {
-          "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
-          "System.Diagnostics.DiagnosticSource": "8.0.1",
-          "System.IO.Pipelines": "8.0.0",
           "System.Memory": "4.6.0",
-          "System.Threading.Channels": "8.0.0",
-          "System.Threading.RateLimiting": "8.0.0"
+          "System.Threading.Channels": "8.0.0"
         },
         "runtime": {
           "lib/netstandard2.0/RabbitMQ.Client.dll": {
-            "assemblyVersion": "7.0.0.0",
-            "fileVersion": "7.0.0.0"
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.8.1.0"
           }
         }
       },
@@ -653,15 +641,9 @@
           }
         }
       },
-      "System.Diagnostics.DiagnosticSource/8.0.1": {
+      "System.Diagnostics.DiagnosticSource/6.0.0": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        },
-        "runtime": {
-          "lib/net6.0/System.Diagnostics.DiagnosticSource.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.424.16909"
-          }
         }
       },
       "System.Drawing.Common/4.7.0": {
@@ -699,14 +681,6 @@
           "lib/netstandard2.0/System.IdentityModel.Tokens.Jwt.dll": {
             "assemblyVersion": "6.8.0.0",
             "fileVersion": "6.8.0.11012"
-          }
-        }
-      },
-      "System.IO.Pipelines/8.0.0": {
-        "runtime": {
-          "lib/net6.0/System.IO.Pipelines.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
           }
         }
       },
@@ -808,14 +782,6 @@
           }
         }
       },
-      "System.Threading.RateLimiting/8.0.0": {
-        "runtime": {
-          "lib/net6.0/System.Threading.RateLimiting.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        }
-      },
       "System.Windows.Extensions/4.7.0": {
         "dependencies": {
           "System.Drawing.Common": "4.7.0"
@@ -880,13 +846,6 @@
       "sha512": "sha512-f10WUgcsKqrkmnz6gt8HeZ7kyKjYN30PO7cSic1lPtH7paPtnQqXPOveul/SIPI43PhRD4trttg4ywnrEmmJpA==",
       "path": "microsoft.aspnetcore.http.features/2.3.0",
       "hashPath": "microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512"
-    },
-    "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw==",
-      "path": "microsoft.bcl.asyncinterfaces/8.0.0",
-      "hashPath": "microsoft.bcl.asyncinterfaces.8.0.0.nupkg.sha512"
     },
     "Microsoft.CSharp/4.5.0": {
       "type": "package",
@@ -1119,12 +1078,12 @@
       "path": "newtonsoft.json/13.0.3",
       "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
-    "RabbitMQ.Client/7.0.0": {
+    "RabbitMQ.Client/6.8.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-8YJz22mOSMtkbIVuVSz2HbJwbpKwRoXQ1uqbczDUt1w1Ds8dxFs6dkV/oZ8AlTmkErZjtQelHv+oBu52ud00WA==",
-      "path": "rabbitmq.client/7.0.0",
-      "hashPath": "rabbitmq.client.7.0.0.nupkg.sha512"
+      "sha512": "sha512-jNsmGgmCNw2S/NzskeN2ijtGywtH4Sk/G6jWUTD5sY9SrC27Xz6BsLIiB8hdsfjeyWCa4j4GvCIGkpE8wrjU1Q==",
+      "path": "rabbitmq.client/6.8.1",
+      "hashPath": "rabbitmq.client.6.8.1.nupkg.sha512"
     },
     "System.CodeDom/8.0.0": {
       "type": "package",
@@ -1147,12 +1106,12 @@
       "path": "system.configuration.configurationmanager/4.7.0",
       "hashPath": "system.configuration.configurationmanager.4.7.0.nupkg.sha512"
     },
-    "System.Diagnostics.DiagnosticSource/8.0.1": {
+    "System.Diagnostics.DiagnosticSource/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-vaoWjvkG1aenR2XdjaVivlCV9fADfgyhW5bZtXT23qaEea0lWiUljdQuze4E31vKM7ZWJaSUsbYIKE3rnzfZUg==",
-      "path": "system.diagnostics.diagnosticsource/8.0.1",
-      "hashPath": "system.diagnostics.diagnosticsource.8.0.1.nupkg.sha512"
+      "sha512": "sha512-frQDfv0rl209cKm1lnwTgFPzNigy2EKk1BS3uAvHvlBVKe5cymGyHO+Sj+NLv5VF/AhHsqPIUUwya5oV4CHMUw==",
+      "path": "system.diagnostics.diagnosticsource/6.0.0",
+      "hashPath": "system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512"
     },
     "System.Drawing.Common/4.7.0": {
       "type": "package",
@@ -1167,13 +1126,6 @@
       "sha512": "sha512-5tBCjAub2Bhd5qmcd0WhR5s354e4oLYa//kOWrkX+6/7ZbDDJjMTfwLSOiZ/MMpWdE4DWPLOfTLOq/juj9CKzA==",
       "path": "system.identitymodel.tokens.jwt/6.8.0",
       "hashPath": "system.identitymodel.tokens.jwt.6.8.0.nupkg.sha512"
-    },
-    "System.IO.Pipelines/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-FHNOatmUq0sqJOkTx+UF/9YK1f180cnW5FVqnQMvYUN0elp6wFzbtPSiqbo1/ru8ICp43JM1i7kKkk6GsNGHlA==",
-      "path": "system.io.pipelines/8.0.0",
-      "hashPath": "system.io.pipelines.8.0.0.nupkg.sha512"
     },
     "System.Memory/4.6.0": {
       "type": "package",
@@ -1265,13 +1217,6 @@
       "sha512": "sha512-CMaFr7v+57RW7uZfZkPExsPB6ljwzhjACWW1gfU35Y56rk72B/Wu+sTqxVmGSk4SFUlPc3cjeKND0zktziyjBA==",
       "path": "system.threading.channels/8.0.0",
       "hashPath": "system.threading.channels.8.0.0.nupkg.sha512"
-    },
-    "System.Threading.RateLimiting/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-7mu9v0QDv66ar3DpGSZHg9NuNcxDaaAcnMULuZlaTpP9+hwXhrxNGsF5GmLkSHxFdb5bBc1TzeujsRgTrPWi+Q==",
-      "path": "system.threading.ratelimiting/8.0.0",
-      "hashPath": "system.threading.ratelimiting.8.0.0.nupkg.sha512"
     },
     "System.Windows.Extensions/4.7.0": {
       "type": "package",

@@ -5,10 +5,10 @@ namespace eSpa.Service.Database
 {
     public partial class SlikaProfila
     {
-        public SlikaProfila()
+        /*public SlikaProfila()
         {
             Korisniks = new HashSet<Korisnik>();
-        }
+        }*/
 
         public int Id { get; set; }
         public string? Naziv { get; set; }

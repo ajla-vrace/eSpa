@@ -1,4 +1,5 @@
 import 'package:espa_admin/models/korisnik.dart';
+import 'package:espa_admin/models/novostInterakcija.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
@@ -16,6 +17,7 @@ class Novost {
   String? status;
   String? slika;
   Korisnik? autor;
+  List<NovostInterakcija>? novostInterakcijas;
   Novost(this.id, this.naslov, this.sadrzaj, this.datumKreiranja,this.autorId, this.status, this.slika, this.autor);
 
     /// A necessary factory constructor for creating a new User instance

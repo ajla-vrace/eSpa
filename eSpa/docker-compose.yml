@@ -1,0 +1,80 @@
+version: '3'
+services:
+  rabbitMQ:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq_container'
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+      - 5672
+    networks: 
+      - espa_network
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  espa_sql:
+    container_name: espa_db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=NovaSifra123!
+      - MSSQL_PID=Developer
+    ports:
+      - 1405:1433
+    expose:
+      - 1433
+    networks:
+      - espa_network
+
+  espa_api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:DefaultConnection=Server=espa_sql,1433;Database=IB200069;User=sa;Password=NovaSifra123!;ConnectRetryCount=0;TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RABBITMQ_HOST=rabbitMQ
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+    ports:
+      - "5031:5031"
+    networks:
+      - espa_network
+    links:
+      - espa_sql
+    depends_on:
+      - espa_sql
+      - rabbitMQ
+
+  rabbitmq-consumer:
+    restart: unless-stopped
+    build:
+      context: ./eSpa.RabbitMQ
+    environment:
+      - RABBITMQ_HOST=rabbitMQ
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - SMTP_SERVER=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=probaa.probaa1234@gmail.com
+      - SMTP_PASSWORD=xzzrhvjorzhvhkah
+    depends_on:
+      - espa_sql
+      - espa_api
+      - rabbitMQ
+    networks:
+      - espa_network
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  espa_network:
+    driver: bridge

@@ -142,7 +142,11 @@ class _NovostiPageState extends State<NovostPage> {
                 rows: _novosti.map((novost) {
                   return DataRow(
                     cells: [
-                      DataCell(Text(novost.naslov ?? "N/A")),
+                      //DataCell(Text(novost.naslov ?? "N/A")),
+                       DataCell(
+                        Text(_shortenText(
+                            novost.naslov ?? '', 30)), // Skraćeni sadržaj
+                      ),
                       DataCell(
                         Text(_shortenText(
                             novost.sadrzaj ?? '', 30)), // Skraćeni sadržaj
@@ -260,6 +264,7 @@ class _NovostiPageState extends State<NovostPage> {
                                       ),
                                     );
                                   } catch (e) {
+                                    print("greska prilikom brisanja novosti ${e.toString()}");
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(

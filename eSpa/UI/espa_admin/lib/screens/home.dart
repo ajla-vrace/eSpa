@@ -187,6 +187,84 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _exportChart1() async {
+    try {
+      // Render bar chart
+      RenderRepaintBoundary boundary1 =
+          _chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image1 = await boundary1.toImage(pixelRatio: 3.0);
+      ByteData? byteData1 =
+          await image1.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes1 = byteData1!.buffer.asUint8List();
+
+      // Kreiraj PDF dokument
+      final pdf = pw.Document();
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) => pw.Column(
+            children: [
+              pw.Text('Chart usluga s prosjecnim ocjenama',
+                  style: pw.TextStyle(
+                    fontSize: 18,
+                  )),
+              pw.SizedBox(height: 10),
+              pw.Image(pw.MemoryImage(pngBytes1)),
+              pw.SizedBox(height: 20),
+            ],
+          ),
+        ),
+      );
+
+      // Spremi PDF
+      final outputDir = await getDownloadsDirectory(); // Za desktop
+      final file = File("${outputDir!.path}/graf1.pdf");
+      await file.writeAsBytes(await pdf.save());
+
+      print("PDF spremljen: ${file.path}");
+    } catch (e) {
+      print("Greška pri eksportovanju: $e");
+    }
+  }
+
+  Future<void> _exportChart2() async {
+    try {
+      // Render bar chart
+      RenderRepaintBoundary boundary1 = _chartKey1.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      ui.Image image1 = await boundary1.toImage(pixelRatio: 3.0);
+      ByteData? byteData1 =
+          await image1.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes1 = byteData1!.buffer.asUint8List();
+
+      // Kreiraj PDF dokument
+      final pdf = pw.Document();
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) => pw.Column(
+            children: [
+              pw.Text('Chart broj rezervacija po usluzi',
+                  style: pw.TextStyle(
+                    fontSize: 18,
+                  )),
+              pw.SizedBox(height: 10),
+              pw.Image(pw.MemoryImage(pngBytes1)),
+              pw.SizedBox(height: 20),
+            ],
+          ),
+        ),
+      );
+
+      // Spremi PDF
+      final outputDir = await getDownloadsDirectory(); // Za desktop
+      final file = File("${outputDir!.path}/graf2.pdf");
+      await file.writeAsBytes(await pdf.save());
+
+      print("PDF spremljen: ${file.path}");
+    } catch (e) {
+      print("Greška pri eksportovanju: $e");
+    }
+  }
+
   // Funkcija za generisanje stapastog dijagrama
   Widget _buildBarChart() {
     if (_prosjecneOcjene.isEmpty) {
@@ -431,8 +509,8 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize:
                     MainAxisSize.min, // 🔁 Samo zauzmi prostor koji trebaš
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Wrap(
+                children: [
+                  const Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment
@@ -458,8 +536,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
-                  Wrap(
+                  const SizedBox(height: 8),
+                  const Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -473,7 +551,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Wrap(
+                  const Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -489,7 +567,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Wrap(
+                  const Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -504,7 +582,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Wrap(
+                  const Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -520,8 +598,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
-                  Wrap(
+                  const SizedBox(height: 8),
+                  const Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,6 +620,15 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 8),
+                  IconButton(
+                    onPressed: () {
+                      _exportChart1(); // 👉 funkcija koju ti implementiraš
+                    },
+                    icon: Icon(Icons.picture_as_pdf,),
+                    tooltip: "Export u pdf",
+                   // label: Text('Eksportuj grafikon'),
                   ),
                 ],
               ),
@@ -572,8 +659,8 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize:
                       MainAxisSize.min, // 🔁 Samo zauzmi prostor koji trebaš
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Wrap(
+                  children: [
+                    const Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment
@@ -599,8 +686,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
-                    Wrap(
+                    const SizedBox(height: 8),
+                    const Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -615,7 +702,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    Wrap(
+                    const Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -631,7 +718,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    Wrap(
+                    const Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -647,8 +734,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
-                    Wrap(
+                    const SizedBox(height: 8),
+                    const Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -663,6 +750,15 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 8),
+                    IconButton(
+                      onPressed: () {
+                        _exportChart2(); // 👉 funkcija koju ti implementiraš
+                      },
+                      icon: Icon(Icons.picture_as_pdf),
+                      tooltip: "Export u pdf",
+                      //label: Text('Eksportuj grafikon'),
                     ),
                   ],
                 ),
@@ -702,7 +798,7 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: korisnik.isNotEmpty && korisnik.first.ime != null
             ? Text(
-                'Dobrodosli, ${korisnik.first.ime}', // Ime korisnika
+                'Dobrodosli, ${LoggedUser.ime}', // Ime korisnika
                 style: TextStyle(
                   color: Colors.black, // Tamna boja za tekst za dobar kontrast
                   fontSize: 20,

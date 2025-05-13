@@ -20,11 +20,22 @@ class _NovostKomentarPageState extends State<NovostKomentarPage> {
   late NovostKomentarProvider _novostKomentarProvider;
   SearchResult<NovostKomentar>? novostKomentarResult;
   bool isLoading = true;
-
+  var brojLajkova = 0;
+  var brojDislajkova = 0;
   @override
   void initState() {
     super.initState();
     _novostKomentarProvider = context.read<NovostKomentarProvider>();
+    brojLajkova = widget.novost!.novostInterakcijas
+            ?.where((x) => x.isLiked == true)
+            .length ??
+        0;
+
+    brojDislajkova = widget.novost!.novostInterakcijas
+            ?.where((x) => x.isLiked == false)
+            .length ??
+        0;
+
     initForm();
   }
 
@@ -88,6 +99,19 @@ class _NovostKomentarPageState extends State<NovostKomentarPage> {
                           ),
                           const SizedBox(height: 10),
                           _buildNovostKomentariList(),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.thumb_up, color: Colors.blue),
+                              const SizedBox(width: 4),
+                              Text(brojLajkova.toString()),
+                              const SizedBox(width: 20),
+                              Icon(Icons.thumb_down, color: Colors.red),
+                              const SizedBox(width: 4),
+                              Text(brojDislajkova.toString()),
+                            ],
+                          ),
                           const SizedBox(height: 20),
                           _buildBackButton(), // Dugme za nazad
                           const SizedBox(height: 20),

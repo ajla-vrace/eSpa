@@ -235,26 +235,34 @@ namespace eSpa.Service
            await  _context.SaveChangesAsync();
             return _mapper.Map<Model.Novost>(entity);
         }*/
-        public override async Task<Model.Novost> Delete(int id)
+        public override async Task<bool> Delete(int id)
         {
-            var entity = _context.Novosts.Find(id);
-            if (entity == null)
-            {
-                throw new KeyNotFoundException("Novost nije pronađena.");
-            }
+            var novost = await _context.Novosts.FindAsync(id);
+            if (novost == null)
+                return false;
 
-            // Pronađi sve komentare povezane sa ovom novosti
-            var komentari = _context.NovostKomentars.Where(k => k.NovostId == id).ToList();
+            // 1. Brišemo komentare
+            var komentari = await _context.NovostKomentars
+                .Where(k => k.NovostId == id)
+                .ToListAsync();
+            if (komentari.Any())
+                _context.NovostKomentars.RemoveRange(komentari);
 
-            // Izbriši komentare
-            _context.NovostKomentars.RemoveRange(komentari);
+            // 2. Brišemo interakcije
+            var interakcije = await _context.NovostInterakcijas
+                .Where(i => i.NovostId == id)
+                .ToListAsync();
+            if (interakcije.Any())
+                _context.NovostInterakcijas.RemoveRange(interakcije);
 
-            // Izbriši novost
-            _context.Novosts.Remove(entity);
+            // 3. Brišemo novost
+            _context.Novosts.Remove(novost);
 
             await _context.SaveChangesAsync();
-            return _mapper.Map<Model.Novost>(entity);
+
+            return true;
         }
+
 
     }
 }

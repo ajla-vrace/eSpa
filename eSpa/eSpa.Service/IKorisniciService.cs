@@ -13,6 +13,8 @@ namespace eSpa.Service
         {
             public Task<Model.Korisnik> Login(string username, string password);
         Task ChangePasswordAsync(ChangePasswordRequest model);
+        Task BlokirajKorisnika(int korisnikId);
+
     }
-    
+
 }

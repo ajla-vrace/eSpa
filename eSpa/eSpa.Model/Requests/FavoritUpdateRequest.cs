@@ -9,7 +9,8 @@ namespace eSpa.Model.Requests
 {
     public class FavoritUpdateRequest
     {
-        [Required]
+
+        [Required(ErrorMessage = "Polje isFavorit je obavezno.")]
         public bool? isFavorit { get; set; }
     }
 }

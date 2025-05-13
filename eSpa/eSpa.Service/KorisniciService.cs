@@ -12,15 +12,23 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using RabbitMQ.Client;
+using System.Text;
+using System.Text.Json;
+using eSpa.Services;
 
 namespace eSpa.Service
 {
     public class KorisniciService : BaseCRUDService<Model.Korisnik, Database.Korisnik, Model.SearchObject.KorisnikSearchObject, Model.Requests.KorisnikInsertRequest, Model.Requests.KorisnikUpdateRequest>, IKorisniciService
     {
         //eSpaContext _context;
-        public KorisniciService(IB200069Context context, IMapper mapper) : base(context, mapper)
+        protected IRabbitMQProducer _rabbitMQProducer;
+        //protected IRabbitMQProducer _rabbitMQProducer;
+        public KorisniciService(IB200069Context context, IMapper mapper, IRabbitMQProducer rabbitMQProducer) : base(context, mapper)
         {
             // _context = context;
+            _rabbitMQProducer = rabbitMQProducer;
+
         }
         /*public KorisniciService(EProdajaContext context, IMapper mapper)
             : base(context, mapper)
@@ -387,11 +395,92 @@ namespace eSpa.Service
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Password);
             // Dodaj u bazu podataka
             _context.Korisniks.Add(entity);
+
             await _context.SaveChangesAsync();
+            // SendKorisnikPoruka(entity.Ime, entity.Email);
+
+
+            /*var klijentEmail = insert.Email;
+            var factory = new ConnectionFactory
+            {
+                HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "172.17.0.2",
+                Port = int.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672"),
+                UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
+                Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest",
+                RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
+                RequestedHeartbeat = TimeSpan.FromSeconds(60),
+                AutomaticRecoveryEnabled = true,
+                NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
+            };
+
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+
+            channel.QueueDeclare(queue: "reservation_created",
+                                 durable: factory.HostName == "rabbit-server" ? false : true,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+            string message = $"Rezervacija_je_kreirana!_email_{klijentEmail}_usluga__termin__datum_";
+            var body = Encoding.UTF8.GetBytes(message);
+
+            channel.BasicPublish(exchange: string.Empty,
+                                 routingKey: "reservation_created",
+                                 basicProperties: null,
+                                 body: body);
+
+
+            */
+
+
+
+
+
+
+
+
+
+
+            await AfterInsert(entity, insert);
 
             // Vrati mapirani model
             return _mapper.Map<Model.Korisnik>(entity);
         }
+
+        /*public override async Task AfterInsert(Database.Korisnik entity, KorisnikInsertRequest insert)
+        {
+            if (insert.Email != null && insert.Email != "")
+            {
+                Model.Email email = new()
+                {
+                    Subject = "Pozdravni mail",
+                    Content = "Welcome to eSpa! ",
+                    Recipient = insert.Email,
+                    Sender = "probaa.probaa1234@gmail.com",
+                };
+                _rabbitMQProducer.SendMessage(email);
+            }
+        }*/
+        public override async Task AfterInsert(Database.Korisnik entity, KorisnikInsertRequest insert)
+        {
+            if (!string.IsNullOrWhiteSpace(insert.Email))
+            {
+                string imeKorisnika = entity.Ime;
+
+                Model.Email email = new()
+                {
+                    Subject = "Pozdravni mail",
+                    Content = $"Dragi {imeKorisnika},\n\nDobrodošli u eSpa – vaše osobno utočište za opuštanje i njegu!\n\nDrago nam je što ste postali dio naše zajednice. Naša misija je pružiti vam vrhunsko iskustvo, bilo da rezervirate omiljene tretmane, otkrivate nove usluge ili jednostavno izdvajate vrijeme za sebe.\n\nVaše putovanje prema opuštanju i obnovi započinje upravo sada. Slobodno istražite našu ponudu i javite nam se ako vam je potrebna pomoć.\n\nHvala što ste odabrali eSpa – mjesto gdje je vaše zadovoljstvo na prvom mjestu.\n\nSrdačno,\nVaš eSpa tim",
+                    Recipient = insert.Email,
+                    Sender = "probaa.probaa1234@gmail.com",
+                };
+
+                _rabbitMQProducer.SendMessage(email);
+            }
+        }
+
+
 
         /* public override async Task<Model.Korisnik> Update(int id, KorisnikUpdateRequest update)
          {
@@ -409,6 +498,32 @@ namespace eSpa.Service
 
              return _mapper.Map<Model.Korisnik>(entity);
          }*/
+
+
+        /* private void PosaljitePorukuNaRabbitMQ(Korisnik korisnik)
+         {
+             var factory = new ConnectionFactory() { HostName = "localhost" };  // Povezivanje na lokalni RabbitMQ server
+             using (var connection = factory.CreateConnection())
+             using (var channel = connection.CreateModel())
+             {
+                 channel.QueueDeclare(queue: "korisniciQueue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+
+                 var korisnikEmailMessage = new KorisnikEmailMessage
+                 {
+                     Ime = korisnik.Ime,
+                     Email = korisnik.Email
+                 };
+
+                 var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(korisnikEmailMessage));
+
+                 channel.BasicPublish(exchange: "", routingKey: "korisniciQueue", basicProperties: null, body: body);
+                 Console.WriteLine($"[x] Poslata poruka za korisnika {korisnik.Email}");
+             }
+         }*/
+
+
+
+
         public override async Task<Model.Korisnik> Update(int id, KorisnikUpdateRequest update)
         {
             var entity = await _context.Korisniks
@@ -471,57 +586,34 @@ namespace eSpa.Service
 
             return _mapper.Map<Model.Korisnik>(entity);
         }
-        public async Task<Database.Korisnik> BlokirajKorisnika(int korisnikId)
+        public async Task BlokirajKorisnika(int korisnikId)
         {
             var korisnik = await _context.Korisniks.FindAsync(korisnikId);
 
             if (korisnik == null)
                 throw new Exception("Korisnik nije pronađen");
 
-            korisnik.Status = "Blokiran";  // Postavi status na blokiran
+            korisnik.Status = "Blokiran";
+            korisnik.IsBlokiran = true;
 
-            await _context.SaveChangesAsync();  // Sačuvaj promene
+            // Uklanjanje svih aktivnih i na čekanju rezervacija korisnika
+            var rezervacijeZaObrisati = await _context.Rezervacijas
+                .Where(r => r.KorisnikId == korisnikId &&
+                            (r.Status == "Aktivna" || r.Status == "Na čekanju"))
+                .ToListAsync();
 
-            return korisnik;  // Vrati ažuriranog korisnika
+            // Brisanje svih rezervacija korisnika
+            _context.Rezervacijas.RemoveRange(rezervacijeZaObrisati);
+
+            await _context.SaveChangesAsync();
         }
 
 
 
-        public override async Task<Model.Korisnik> Delete(int id)
-        {
 
-            var zaposlenik = await _context.Zaposleniks
-                .Where(z => z.KorisnikId == id)
-                .FirstOrDefaultAsync();
 
-            if (zaposlenik != null)
-            {
-                _context.Zaposleniks.Remove(zaposlenik);
-            }
 
-            var korisnik = await _context.Korisniks.FindAsync(id);
-            if (korisnik == null)
-            {
-                throw new KeyNotFoundException("Korisnik nije pronađena.");
-            }
-            var korisnikUloge = await _context.KorisnikUlogas
-       .Where(ku => ku.KorisnikId == id)
-       .ToListAsync();
 
-            if (korisnikUloge.Any())
-            {
-                _context.KorisnikUlogas.RemoveRange(korisnikUloge);  // Brišemo sve povezane uloge
-            }
-
-            if (korisnik != null)
-            {
-                _context.Korisniks.Remove(korisnik);
-                await _context.SaveChangesAsync();
-
-            }
-            
-            return _mapper.Map<Model.Korisnik>(korisnik);
-        }
 
         public async Task ChangePasswordAsync(ChangePasswordRequest model)
         {
@@ -550,6 +642,5 @@ namespace eSpa.Service
             _context.Update(user);
             await _context.SaveChangesAsync();
         }
-
     }
 }

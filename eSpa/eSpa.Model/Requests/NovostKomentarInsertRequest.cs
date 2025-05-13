@@ -9,10 +9,10 @@ namespace eSpa.Model.Requests
 {
     public class NovostKomentarInsertRequest
     {
-        [Required(ErrorMessage = "Korisnik Id je obavezan.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Korisnikid je obavezan.")]
         public int KorisnikId { get; set; }
 
-        [Required(ErrorMessage = "Novost Id je obavezna.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NovostId je obavezan.")]
         public int NovostId { get; set; }
 
         [Required(ErrorMessage = "Tekst komentara je obavezan.")]

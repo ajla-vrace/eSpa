@@ -16,8 +16,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
   IOClient? http;
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
+    /*_baseUrl = const String.fromEnvironment("baseUrl",
+        defaultValue: "https://10.0.2.2:7031/");*/
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7031/");
+        defaultValue: "http://10.0.2.2:5031/");
     // _baseUrl = const String.fromEnvironment("baseUrl",
     //defaultValue: "https://localhost:7031/");
     client.badCertificateCallback = (cert, host, port) => true;
@@ -62,12 +64,11 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     print("URL $url");
 
-     //var uri = Uri.parse(url);
+    //var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var response = await http!.get(url, headers: headers);
-   // final response = await http!.get(url);
-
+    // final response = await http!.get(url);
 
     print("RESPONSE $response   i status ${response.statusCode}");
     if (response.statusCode == 200) {
@@ -237,10 +238,12 @@ String password="proba";*/
   Future<void> changePassword(int userId, String currentPassword,
       String newPassword, String confirmPassword) async {
     //var url = "$_baseUrlKorisnici/ChangePassword"; // Ispravan URL
+    // ignore: unused_local_variable
     var baseUrlWithoutSlash = _baseUrl!.endsWith('/')
         ? _baseUrl!.substring(0, _baseUrl!.length - 1)
         : _baseUrl;
-    var url = "$baseUrlWithoutSlash/Korisnici/ChangePassword";
+    //var url = "$baseUrlWithoutSlash/Korisnici/ChangePassword";
+    var url = "${_baseUrl}Korisnici/ChangePassword";
 
     var uri = Uri.parse(url);
     var headers = createHeaders();
@@ -267,4 +270,6 @@ String password="proba";*/
       }
     }
   }
+
+  
 }

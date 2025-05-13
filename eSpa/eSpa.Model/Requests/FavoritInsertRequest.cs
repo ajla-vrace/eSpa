@@ -15,7 +15,7 @@ namespace eSpa.Model.Requests
         [Required(ErrorMessage = "Usluga Id je obavezna.")]
         public int UslugaId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Polje isFavorit je obavezno.")]
         public bool? isFavorit { get; set; }
     }
 }

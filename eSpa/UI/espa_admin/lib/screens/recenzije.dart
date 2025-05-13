@@ -144,7 +144,7 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
                 columnSpacing:
-                    constraints.maxWidth * 0.10, // Prostor između kolona
+                    constraints.maxWidth * 0.12, // Prostor između kolona
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -202,7 +202,7 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                       //DataCell(Text(komentar.usluga?.naziv ?? "N/A")),
                       DataCell(
                         SizedBox(
-                          width: 100, // ili neka druga širina u pikselima
+                          width: 150, // ili neka druga širina u pikselima
                           child: Text(
                             komentar.usluga?.naziv ?? "N/A",
                             overflow: TextOverflow.ellipsis,

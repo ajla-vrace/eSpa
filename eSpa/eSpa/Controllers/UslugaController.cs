@@ -2,6 +2,9 @@
 using eSpa.Model;
 using eSpa.Model.SearchObject;
 using eSpa.Service;
+using eSpa.Model.Requests;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace eSpa.Controllers
 {
@@ -19,6 +22,26 @@ namespace eSpa.Controllers
         {
             _uslugaService = service;
         }
+        [Authorize(Roles = "Administrator")]
+        public override Task<Usluga> Insert([FromBody] UslugaInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
+        // Update metoda
+        [Authorize(Roles = "Administrator")]
+        public override Task<Usluga> Update(int id, [FromBody] UslugaUpdateRequest update)
+        {
+            return base.Update(id, update);
+        }
+
+        // Delete metoda
+        [Authorize(Roles = "Administrator")]
+        public override Task<bool> Delete(int id)
+        {
+            return base.Delete(id);
+        }
+
+        [Authorize]
         [HttpGet("RezervacijePoUslugama")]
         public async Task<IActionResult> GetRezervacijePoUslugama()
         {

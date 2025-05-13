@@ -1,4 +1,5 @@
 //import 'package:espa_admin/screens/home.dart';
+import 'package:espa_admin/providers/korisnik_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
 import 'package:espa_admin/screens/home.dart';
 import 'package:espa_admin/utils/util.dart';
@@ -12,10 +13,11 @@ class LoginPage extends StatelessWidget {
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   late UslugaProvider _uslugaProvider;
+  late KorisnikProvider _korisnikProvider;
   @override
   Widget build(BuildContext context) {
     _uslugaProvider = context.read<UslugaProvider>();
-
+    _korisnikProvider = context.read<KorisnikProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
@@ -54,11 +56,11 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   height: 8,
                 ),
-                ElevatedButton(
+                /* ElevatedButton(
                     onPressed: () async {
                       var username = _usernameController.text;
                       var password = _passwordController.text;
-                     // _passwordController.text = username;
+                      // _passwordController.text = username;
 
                       //print("login proceed na login stranici $username $password");
 
@@ -67,6 +69,8 @@ class LoginPage extends StatelessWidget {
 
                       await setUserName(username);
                       try {
+                        await _korisnikProvider
+                            .get(filter: {'KorisnickoIme': password});
                         await _uslugaProvider.get();
 
                         Navigator.of(context).push(
@@ -88,12 +92,94 @@ class LoginPage extends StatelessWidget {
                                 ));
                       }
                     },
-                    child: Text("Login"))
+                    child: Text("Login"))*/
+
+                ElevatedButton(
+                  onPressed: () async {
+                    var username = _usernameController.text;
+                    var password = _passwordController.text;
+
+                    Authorization.username = username;
+                    Authorization.password = password;
+
+                    await setUserName(username);
+
+                    try {
+                      var korisnici = await _korisnikProvider
+                          .get(filter: {'KorisnickoIme': username});
+
+                      if (korisnici.result.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Text("Greška"),
+                            content: Text("Korisnik nije pronađen. Nedozvoljen pristup."),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("OK"))
+                            ],
+                          ),
+                        );
+                        return;
+                      }
+
+                      var korisnik = korisnici.result[0];
+
+                      // Ovo pretpostavlja da korisnik ima `uloge` kao listu
+                      if (korisnik.korisnikUlogas.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: Text("Nedozvoljen pristup"),
+                            content: Text("Samo admin i zaposlenici mogu pristupiti."),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("OK"))
+                            ],
+                          ),
+                        );
+                        return;
+                      }
+
+                      // Ako ima ulogu, nastavi dalje
+                      // Npr. zapamti podatke:
+                      LoggedUser.id = korisnik.id;
+                      LoggedUser.ime = korisnik.ime;
+                      LoggedUser.prezime = korisnik.prezime;
+                      LoggedUser.korisnickoIme=korisnik.korisnickoIme;
+                      LoggedUser.isBlokiran=korisnik.isBlokiran;
+                      LoggedUser.uloga = korisnik.korisnikUlogas[0].uloga!.naziv;
+
+                      await _uslugaProvider.get();
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    // ignore: unused_catch_clause
+                    } on Exception catch (e) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text("Greška"),
+                          content: /*Text(e.toString()),*/Text("Nedozvoljen pristup."),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK"))
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  child: Text("Login"),
+                ),
               ]),
             ),
           ),
         ),
       ),
     );
-  }
-}
+    }  }
+

@@ -9,9 +9,9 @@ namespace eSpa.Model.Requests
 {
     public class OcjenaInsertRequest
     {
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Korisnikid je obavezan.")]
         public int KorisnikId { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "UslugaId je obavezan.")]
         public int UslugaId { get; set; }
         [Required]
         [Range(1, 5, ErrorMessage = "Ocjena mora biti između 1 i 5.")]

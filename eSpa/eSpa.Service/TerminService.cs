@@ -117,5 +117,28 @@ namespace eSpa.Service
 
             return await base.Update(id, update);
         }
+        public override async Task<bool> Delete(int id)
+        {
+            var termin = await _context.Termins.FindAsync(id);
+
+            if (termin == null)
+                return false;
+
+            // 1. Nađi rezervacije koje imaju ovaj termin
+            var rezervacije = await _context.Rezervacijas
+                .Where(r => r.TerminId == id)
+                .ToListAsync();
+
+            if (rezervacije.Any())
+                _context.Rezervacijas.RemoveRange(rezervacije);
+
+            // 2. Obriši termin
+            _context.Termins.Remove(termin);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

@@ -223,7 +223,6 @@ C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.pdb
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Humanizer.dll
-C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -243,15 +242,12 @@ C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Swashbuckle.AspNetCore.S
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
-C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Drawing.Common.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.IO.Pipelines.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Runtime.Caching.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Security.Permissions.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Threading.Channels.dll
-C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Threading.RateLimiting.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\System.Windows.Extensions.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
@@ -327,3 +323,8 @@ C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\osx-x64\native\
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\win-arm64\native\MatrixFactorizationNative.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\win-x64\native\MatrixFactorizationNative.dll
 C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\runtimes\win-x86\native\MatrixFactorizationNative.dll
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.RabbitMQ.deps.json
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.RabbitMQ.runtimeconfig.json
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.RabbitMQ.exe
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.RabbitMQ.dll
+C:\Users\User\Documents\eSpa\eSpa\eSpa\bin\Debug\net6.0\eSpa.RabbitMQ.pdb

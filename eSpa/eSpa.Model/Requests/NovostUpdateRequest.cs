@@ -9,9 +9,9 @@ namespace eSpa.Model.Requests
 {
     public class NovostUpdateRequest
     {
-        [Required(AllowEmptyStrings =false)]
+        [Required(AllowEmptyStrings =false, ErrorMessage = "Naslov je obavezan.")]
         public string Naslov { get; set; } = null!;
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Sadrzaj je obavezan.")]
         //ovo se treba popraviti kasnije, na veci broj
         [MinLength(10, ErrorMessage = "Sadržaj mora imati minimalno 10 znakova.")]
 

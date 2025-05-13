@@ -9,16 +9,16 @@ namespace eSpa.Model.Requests
 {
     public class KorisnikInsertRequest
     {
-        [Required(AllowEmptyStrings =false)]
+        [Required(AllowEmptyStrings =false, ErrorMessage = "Ime je obavezan.")]
         public string Ime { get; set; } = null!;
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Prezime je obavezan.")]
         public string Prezime { get; set; } = null!;
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false,ErrorMessage = "Email je obavezan.")]
         public string? Email { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false,ErrorMessage = "Telefon je obavezan.")]
         public string? Telefon { get; set; }
-        [Required(AllowEmptyStrings = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "KorisnickoIme je obavezan.")]
         public string KorisnickoIme { get; set; } = null!;
 
         //public bool? Status { get; set; }
