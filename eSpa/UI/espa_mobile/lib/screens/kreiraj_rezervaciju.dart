@@ -257,9 +257,9 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
       final brojZaposlenikaUKategoriji = _zaposleniciUKategoriji.length;
 
       // Ako su svi zaposleni zauzeti za ovaj termin, ne može se napraviti rezervacija
-      if (brojZauzetihZaposlenika >= brojZaposlenikaUKategoriji) {
+      /*if (brojZauzetihZaposlenika >= brojZaposlenikaUKategoriji) {
         throw Exception('Nema više dostupnih zaposlenika za odabrani termin');
-      }
+      }*/////////////ovdjeeeeeeeeeeee
 
       // Izvuci već zauzete zaposlenike
       List<int> zauzetiZaposlenici =

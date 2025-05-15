@@ -135,7 +135,7 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                       'Ocjena je obavezna',
                       style: TextStyle(color: Colors.red),
                     ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   // Polje za komentar
                   TextFormField(
                     controller: _komentarController,

@@ -147,30 +147,34 @@ class _MojeOcjeneScreenState extends State<MojeOcjeneScreen> {
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                               /* buildStars(
+                                                /* buildStars(
                                                     currentRating),*/ // Prikaz trenutnih zvjezdica
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children:
-                                                      List.generate(5, (index) {
-                                                    return IconButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          currentRating =
-                                                              (index + 1)
-                                                                  .toDouble();
-                                                        });
-                                                      },
-                                                      icon: Icon(
-                                                        index < currentRating
-                                                            ? Icons.star
-                                                            : Icons.star_border,
-                                                        color: Colors.yellow,
-                                                        size: 32,
-                                                      ),
-                                                    );
-                                                  }),
+                                                Expanded(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: List.generate(5,
+                                                        (index) {
+                                                      return IconButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            currentRating =
+                                                                (index + 1)
+                                                                    .toDouble();
+                                                          });
+                                                        },
+                                                        icon: Icon(
+                                                          index < currentRating
+                                                              ? Icons.star
+                                                              : Icons
+                                                                  .star_border,
+                                                          color: Colors.yellow,
+                                                          size: 32,
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ),
                                                 ),
                                               ],
                                             ),

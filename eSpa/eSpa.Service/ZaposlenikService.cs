@@ -37,6 +37,10 @@ namespace eSpa.Service
             {
                 filteredQuery = filteredQuery.Where(x => x.Korisnik.KorisnickoIme.Contains(search.KorisnickoIme));
             }
+            if (!string.IsNullOrWhiteSpace(search?.Status))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Status.Contains(search.Status));
+            }
             if (!string.IsNullOrWhiteSpace(search?.Uloga))
             {
                 filteredQuery = filteredQuery.Where(x =>

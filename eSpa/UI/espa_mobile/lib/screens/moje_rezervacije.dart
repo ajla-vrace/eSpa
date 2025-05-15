@@ -22,7 +22,7 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
 
   List<StatusRezervacije> _statusi = [];
   List<String>? naziviStatusa = [];
-  String? selectedNazivStatusa;
+  String? selectedNazivStatusa="Sve";
   @override
   void initState() {
     super.initState();

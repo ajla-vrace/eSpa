@@ -382,7 +382,7 @@ class _PretragaScreenState extends State<PretragaScreen> {
                                                         .isNotEmpty)
                                                 ? Image.memory(
                                                     base64Decode(zaposlenik
-                                                        .slika!.slika!),
+                                                        .korisnik!.slika!.slika!),
                                                     height: 80.0,
                                                     width: 80.0,
                                                     fit: BoxFit.cover,
