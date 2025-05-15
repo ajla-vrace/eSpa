@@ -26,8 +26,8 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
   var _image;
   SearchResult<Novost>? novostResult;
   bool isLoading = true;
-  
-  
+
+  bool _isAktivna = true;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       'status': widget.novost?.status,
       'slika': widget.novost?.slika,
     };
-
+    _isAktivna = _initialValue['status'] == 'Aktivna';
     _novostProvider = context.read<NovostProvider>();
 
     initForm();
@@ -52,6 +52,20 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  Widget _buildStatusSwitch() {
+    return SwitchListTile(
+      title: Text("Status: ${_isAktivna ? 'Aktivna' : 'Neaktivna'}"),
+      value: _isAktivna,
+      onChanged: (bool value) {
+        setState(() {
+          _isAktivna = value;
+          _initialValue['status'] = value ? 'Aktivna' : 'Neaktivna';
+        });
+      },
+      secondary: Icon(Icons.check_circle),
+    );
   }
 
   Future<void> _pickImage() async {
@@ -84,7 +98,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       // ignore: sort_child_properties_last
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(110.0), // Odmicanje od ivica ekrana
+          padding: const EdgeInsets.all(100.0), // Odmicanje od ivica ekrana
           child: Container(
             width: 500,
             padding: const EdgeInsets.all(30),
@@ -147,6 +161,8 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                           var currentValues =
                               Map.from(_formKey.currentState!.value);
 
+                          request['status'] =
+                              _isAktivna ? 'Aktivna' : 'Neaktivna'; // ← dodano
                           if (_image != null) {
                             String imageBase64 = base64Encode(_image!);
                             request['slikaBase64'] = imageBase64;
@@ -252,8 +268,9 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
           SizedBox(height: 10),
           _buildInputField1("Sadrzaj", Icons.description, "sadrzaj"),
           SizedBox(height: 10),
-          _buildStatusDropdownField(
-              "Status", "status"), // Ovdje koristiš novi dropdown
+          /*_buildStatusDropdownField(
+              "Status", "status"),*/ // Ovdje koristiš novi dropdown
+          _buildStatusSwitch(),
           SizedBox(height: 10),
           _buildImagePicker(),
           SizedBox(height: 10),
@@ -261,6 +278,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       ),
     );
   }
+
 /*
   Widget _buildImagePicker() {
     return Column(
@@ -292,7 +310,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       ],
     );
   }*/
-   Widget _buildImagePicker() {
+  Widget _buildImagePicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -326,7 +344,6 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       ],
     );
   }
-
 
   Widget _buildInputField(String label, IconData icon, String name) {
     return FormBuilderTextField(

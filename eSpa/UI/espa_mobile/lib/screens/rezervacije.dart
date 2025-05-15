@@ -189,7 +189,7 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
   Future<void> _cancelReservation(Rezervacija rezervacija) async {
     try {
       final rezervacijaProvider = context.read<RezervacijaProvider>();
-      await rezervacijaProvider.update(rezervacija.id!, {'status': 'Otkazana'});
+      await rezervacijaProvider.update(rezervacija.id!, {'statusRezervacijeId': 2});
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

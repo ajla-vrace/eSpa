@@ -143,7 +143,7 @@ class _NovostiPageState extends State<NovostPage> {
                   return DataRow(
                     cells: [
                       //DataCell(Text(novost.naslov ?? "N/A")),
-                       DataCell(
+                      DataCell(
                         Text(_shortenText(
                             novost.naslov ?? '', 30)), // Skraćeni sadržaj
                       ),
@@ -164,7 +164,7 @@ class _NovostiPageState extends State<NovostPage> {
                                 height: 50, // Visina slike
                                 fit: BoxFit.cover, // Prilagodba slike
                               )
-                            : const Icon(Icons.account_circle,
+                            : const Icon(Icons.image_not_supported,
                                 size:
                                     50), // Ikona kao fallback ako slika nije dostupna
                       ),
@@ -264,7 +264,8 @@ class _NovostiPageState extends State<NovostPage> {
                                       ),
                                     );
                                   } catch (e) {
-                                    print("greska prilikom brisanja novosti ${e.toString()}");
+                                    print(
+                                        "greska prilikom brisanja novosti ${e.toString()}");
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(

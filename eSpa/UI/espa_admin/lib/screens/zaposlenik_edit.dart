@@ -51,7 +51,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
   var zaposlenik1;
   List<Kategorija> _kategorije = [];
   int? _selectedKategorijaId;
-
+  bool _isAktivan = true; // default
   //var _defaultUlogaId;
 
   Future<void> _loadUloga() async {
@@ -90,11 +90,12 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
       'napomena': widget.zaposlenik?.napomena,
       'biografija': widget.zaposlenik?.biografija,
       'slikaId': widget.zaposlenik?.slikaId,
-      'kategorijaId':widget.zaposlenik!.kategorija!.id,
+      'kategorijaId': widget.zaposlenik!.kategorija!.id,
       //'slika': widget.zaposlenik!.korisnik?.slika!,
       //'korisnikUlogas': widget.zaposlenik?.korisnik?.korisnikUlogas,
     };
     print("initial value u init state: $_initialValue");
+    _isAktivan = _initialValue['status'] == 'Aktivan';
 
     _zaposlenikProvider = context.read<ZaposlenikProvider>();
     _korisnikProvider = context.read<KorisnikProvider>();
@@ -117,6 +118,20 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
 
     print("✅ Postavljena podrazumjevana uloga: $selectedUlogaId");
     //setState(() {});
+  }
+
+  Widget _buildStatusSwitch() {
+    return SwitchListTile(
+      title: Text("Status: ${_isAktivan ? 'Aktivan' : 'Neaktivan'}"),
+      value: _isAktivan,
+      onChanged: (bool value) {
+        setState(() {
+          _isAktivan = value;
+          _initialValue['status'] = value ? 'Aktivan' : 'Neaktivan';
+        });
+      },
+      secondary: Icon(Icons.check_circle),
+    );
   }
 
   Future<void> loadUslugeData() async {
@@ -255,7 +270,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
         child: Padding(
           padding: const EdgeInsets.all(20.0), // Odmicanje od ivica ekrana
           child: Container(
-            width: 500,
+            width: 520,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -327,6 +342,8 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
                                     .toIso8601String();
                           }
                           request['kategorijaId'] = _selectedKategorijaId;
+                          request['status'] =
+                              _isAktivan ? 'Aktivan' : 'Neaktivan';
 
                           try {
                             // Ako je korisnik odabrao novu sliku, prvo je uploaduj
@@ -523,11 +540,12 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
                   ],
                 ),
               ),
-              SizedBox(width: 10),
+              SizedBox(width: 5),
               Expanded(
                 child: Column(
                   children: [
-                    _buildDropdownField("Status", Icons.date_range, "status"),
+                    //_buildDropdownField("Status", Icons.date_range, "status"),
+                    _buildStatusSwitch(),
                   ],
                 ),
               ),

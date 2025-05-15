@@ -38,7 +38,26 @@ class LoginPage extends StatelessWidget {
                 const Icon(
                   Icons.spa, // Koristite odgovarajuću ikonu za spa
                   size: 100, // Velicina ikone
-                  color: Color.fromARGB(255, 36, 62, 37), // Boja ikone
+                 // color: Color.fromARGB(21, 109, 51, 37),
+                 color: Color.fromARGB(255, 21, 109, 51), // Boja ikone
+                ),
+                //Text("eSpa"),
+                /*Text(
+                  "eSpa",
+                  style: TextStyle(
+                    fontFamily: 'cursive',
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),*/
+                Text(
+                  "eSpa",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w300,
+                    letterSpacing: 2.0,
+                    color: Color.fromARGB(255, 36, 62, 37),
+                  ),
                 ),
 
                 /*Image.asset(

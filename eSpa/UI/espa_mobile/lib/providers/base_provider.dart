@@ -18,9 +18,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     _endpoint = endpoint;
     /*_baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://10.0.2.2:7031/");*/
-   /*_baseUrl = const String.fromEnvironment("baseUrl",
+    /*_baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "http://10.0.2.2:5031/");*/
-        _baseUrl = const String.fromEnvironment("baseUrl",
+    _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "http://192.168.1.6:5031/");
     // _baseUrl = const String.fromEnvironment("baseUrl",
     //defaultValue: "https://localhost:7031/");
@@ -156,7 +156,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<T> delete(int id) async {
+  /*Future<T> delete(int id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
@@ -169,6 +169,27 @@ abstract class BaseProvider<T> with ChangeNotifier {
       return fromJson(data);
     } else {
       throw Exception("Unknown error");
+    }
+  }*/
+  Future<bool> delete(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    Response response = await http!.delete(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+
+      // Ako je odgovor false, znači nešto nije u redu
+      if (data == false) {
+        throw Exception("Ne postoji sa datim ID-om.");
+      }
+
+      notifyListeners();
+      return data; // Vraćamo true ako je uspešno obrisano
+    } else {
+      throw Exception("Nepoznata greška.");
     }
   }
 
@@ -272,6 +293,4 @@ String password="proba";*/
       }
     }
   }
-
-  
 }

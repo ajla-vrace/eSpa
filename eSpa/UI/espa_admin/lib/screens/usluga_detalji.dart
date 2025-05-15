@@ -471,7 +471,7 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
         }
 
         if (name == "naziv" || name == "opis") {
-          if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+          if (!RegExp(r'^[A-ZČĆŠĐŽ]').hasMatch(value)) {
             return 'Prvo slovo mora biti veliko';
           }
         }

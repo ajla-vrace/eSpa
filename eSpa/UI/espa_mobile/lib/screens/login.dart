@@ -60,15 +60,25 @@ class _LoginPageState extends State<LoginPage> {
                     const Icon(
                       Icons.spa, // Koristite odgovarajuću ikonu za spa
                       size: 100, // Velicina ikone
-                      color: Color.fromARGB(255, 36, 62, 37), // Boja ikone
+                      color: Color.fromARGB(255, 21, 109, 51), // Boja ikone
+                      //color: Color.fromARGB(255, 36, 62, 37), // Boja ikone
                     ),
                     //Text("eSpa"),
-                    Text(
+                    /*Text(
                       "eSpa",
                       style: TextStyle(
                         fontFamily: 'cursive',
                         fontSize: 28,
                         fontWeight: FontWeight.w500,
+                      ),
+                    ),*/
+                    Text(
+                      "eSpa",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w300,
+                        letterSpacing: 2.0,
+                        color: Color.fromARGB(255, 36, 62, 37),
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -182,16 +192,18 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
+      print("u try smo");
       Authorization.username = username;
       Authorization.password = password;
       await setUserName(username);
-
+      print("set username $username");
       // POZIV ZA DOBIJANJE KORISNIKA
       var korisnici =
           await _korisnikProvider.get(filter: {'KorisnickoIme': username});
+      print("korisnici ${korisnici.result}");
 
       if (korisnici.result.isEmpty) {
-        _showErrorDialog("Korisnik nije pronađen. Nedozvoljen pristup.");
+        _showErrorDialog("Nedozvoljen pristup.");
         return;
       }
 
@@ -199,8 +211,9 @@ class _LoginPageState extends State<LoginPage> {
 
       // Provjera uloge za mobilnu verziju - ako korisnik IMA ulogu, odbij login
       if (korisnik.korisnikUlogas.isNotEmpty) {
-        _showErrorDialog(
-            "Korisnik sa ulogom nema pristup mobilnoj aplikaciji.");
+        /* _showErrorDialog(
+            "Korisnik sa ulogom nema pristup mobilnoj aplikaciji.");*/
+        _showErrorDialog("Nedozvoljen pristup.");
         return;
       }
 
@@ -225,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     } catch (e) {
       _showErrorDialog("Nedozvoljen pristup.");
+      print("error ${e.toString()}");
     } finally {
       if (mounted) {
         setState(() {

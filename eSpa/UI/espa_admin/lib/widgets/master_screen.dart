@@ -54,9 +54,27 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             // Desno: ikonica i naziv
             Row(
               children: [
-                Icon(Icons.spa, size: 20), // ili tvoja custom ikona
+                Icon(Icons.spa, size: 24), // ili tvoja custom ikona
                 SizedBox(width: 5),
-                Text("eSpa", style: TextStyle(fontWeight: FontWeight.bold)),
+                //Text("eSpa", style: TextStyle(fontWeight: FontWeight.bold)),
+
+                /*Text(
+                  "eSpa",
+                  style: TextStyle(
+                    fontFamily: 'cursive',
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),*/
+                Text(
+                  "eSpa",
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w300,
+                    letterSpacing: 2.0,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
                 SizedBox(width: 10),
               ],
             )

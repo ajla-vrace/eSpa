@@ -294,7 +294,7 @@ using (var scope = app.Services.CreateScope())
             DatumZaposlenja = new DateTime(2023, 6, 15),
             Struka = "Terapeut",
             Status = "Aktivan",
-            Biografija = "5 godina iskustva, sve rijeci hvale",
+            Biografija = "Ima 5 godina iskustva, sve rijeci hvale",
             KategorijaId = 2 // Pretpostavljamo da je administracija kategorija sa ID-jem 2
         },
 
