@@ -8,42 +8,47 @@ import 'package:espa_mobile/providers/novostKomentar_provider.dart';
 import 'package:espa_mobile/providers/novost_provider.dart';
 import 'package:espa_mobile/providers/ocjena_provider.dart';
 import 'package:espa_mobile/providers/rezervacija_provider.dart';
+import 'package:espa_mobile/providers/statusRezervacije_provider.dart';
 import 'package:espa_mobile/providers/termin_provider.dart';
 import 'package:espa_mobile/providers/uloga_provider.dart';
 import 'package:espa_mobile/providers/usluga_provider.dart';
 import 'package:espa_mobile/providers/zaposlenikRecenzija_provider.dart';
 import 'package:espa_mobile/providers/zaposlenikSlika_provider.dart';
 import 'package:espa_mobile/providers/zaposlenik_provider.dart';
+import 'package:espa_mobile/screens/home.dart';
 import 'package:espa_mobile/screens/login.dart';
+import 'package:espa_mobile/screens/pretraga.dart';
+import 'package:espa_mobile/screens/profil.dart';
+import 'package:espa_mobile/screens/rezervacije.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /*void main() {
   runApp(const MyApp());
 }*/
-void main(){
-runApp(MultiProvider(providers: [
-ChangeNotifierProvider(create: (_) => KategorijaProvider()),
-ChangeNotifierProvider(create: (_) => NovostProvider()),
-ChangeNotifierProvider(create: (_) => KomentarProvider()),
-ChangeNotifierProvider(create: (_) => OcjenaProvider()),
-ChangeNotifierProvider(create: (_) => NovostKomentarProvider()),
-ChangeNotifierProvider(create: (_) => ZaposlenikRecenzijaProvider()),
-ChangeNotifierProvider(create: (_) => KorisnikProvider()),
-ChangeNotifierProvider(create: (_) => KorisnikUlogaProvider()),
-ChangeNotifierProvider(create: (_) => UlogaProvider()),
-ChangeNotifierProvider(create: (_) => UslugaProvider()),
-ChangeNotifierProvider(create: (_) => FavoritProvider()),
-ChangeNotifierProvider(create: (_) => TerminProvider()),
-ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
-ChangeNotifierProvider(create: (_) => NovostInterakcijaProvider()),
-ChangeNotifierProvider(create: (_) => ZaposlenikProvider()),
-ChangeNotifierProvider(create: (_) => ZaposlenikSlikeProvider()),
-
-
-],
-child:const MyApp(),)
-);
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => KategorijaProvider()),
+      ChangeNotifierProvider(create: (_) => NovostProvider()),
+      ChangeNotifierProvider(create: (_) => KomentarProvider()),
+      ChangeNotifierProvider(create: (_) => OcjenaProvider()),
+      ChangeNotifierProvider(create: (_) => StatusRezervacijeProvider()),
+      ChangeNotifierProvider(create: (_) => NovostKomentarProvider()),
+      ChangeNotifierProvider(create: (_) => ZaposlenikRecenzijaProvider()),
+      ChangeNotifierProvider(create: (_) => KorisnikProvider()),
+      ChangeNotifierProvider(create: (_) => KorisnikUlogaProvider()),
+      ChangeNotifierProvider(create: (_) => UlogaProvider()),
+      ChangeNotifierProvider(create: (_) => UslugaProvider()),
+      ChangeNotifierProvider(create: (_) => FavoritProvider()),
+      ChangeNotifierProvider(create: (_) => TerminProvider()),
+      ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
+      ChangeNotifierProvider(create: (_) => NovostInterakcijaProvider()),
+      ChangeNotifierProvider(create: (_) => ZaposlenikProvider()),
+      ChangeNotifierProvider(create: (_) => ZaposlenikSlikeProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -70,15 +75,22 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-       colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 7, 79, 34)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 7, 79, 34)),
         useMaterial3: false,
       ),
-      routes: {        // Početna stranica (npr. HomePage)
-        '/login': (context) => LoginPage(),   // Ovdje definiraš login rutu
+      routes: {
+        // Početna stranica (npr. HomePage)
+        '/login': (context) => LoginPage(),
+        '/rezervacije': (context) =>
+            RezervacijeScreen(), // Ovdje definiraš login rutu
+        '/pretraga': (context) => PretragaScreen(),
+        '/home': (context) => HomeScreen(),
+        '/profil': (context) => KorisnickiProfilScreen(),
         // Dodaj sve druge rute ovde
       },
-     // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-     home:  LoginPage(),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),
     );
   }
 }
@@ -153,16 +165,16 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-          onPressed: () {
-            // Navigacija na ekran sa kategorijama
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) =>  LoginPage()),
-            );
-          },
-          child: const Text('Prikazivanje Kategorija'),
-        ),
-             const Text(
+              onPressed: () {
+                // Navigacija na ekran sa kategorijama
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: const Text('Prikazivanje Kategorija'),
+            ),
+            const Text(
               'Ovo je moja prva flutter mobilna.',
             ),
             const Text(

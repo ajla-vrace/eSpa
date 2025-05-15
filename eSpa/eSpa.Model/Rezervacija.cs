@@ -17,6 +17,8 @@ namespace eSpa.Model
         public string? Napomena { get; set; }
         public int ZaposlenikId { get; set; }
         public bool? IsPlaceno { get; set; }
+        public int? StatusRezervacijeId { get; set; }
+        public StatusRezervacije StatusRezervacije { get; set; }
         public Korisnik Korisnik { get; set; }
         public Usluga Usluga { get; set; }
         public Zaposlenik Zaposlenik { get; set; }

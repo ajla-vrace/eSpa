@@ -13,6 +13,6 @@ namespace eSpa.Model.Requests
         //public DateTime Datum { get; set; }
         // public int TerminId { get; set; }
         [Required]
-        public string Status { get; set; } = null!;
+        public int StatusRezervacijeId { get; set; }
     }
 }

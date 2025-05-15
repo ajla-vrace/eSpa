@@ -7,13 +7,13 @@ part of 'novost.dart';
 // **************************************************************************
 
 Novost _$NovostFromJson(Map<String, dynamic> json) => Novost(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['naslov'] as String?,
       json['sadrzaj'] as String?,
       json['datumKreiranja'] == null
           ? null
           : DateTime.parse(json['datumKreiranja'] as String),
-      (json['autorId'] as num?)?.toInt(),
+      json['autorId'] as int?,
       json['status'] as String?,
       json['slika'] as String?,
       json['autor'] == null

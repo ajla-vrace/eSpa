@@ -7,7 +7,7 @@ part of 'termin.dart';
 // **************************************************************************
 
 Termin _$TerminFromJson(Map<String, dynamic> json) => Termin(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['pocetak'] as String?,
       json['kraj'] as String?,
     );

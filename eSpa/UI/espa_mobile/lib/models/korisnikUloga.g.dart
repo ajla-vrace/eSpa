@@ -8,9 +8,9 @@ part of 'korisnikUloga.dart';
 
 KorisnikUloga _$KorisnikUlogaFromJson(Map<String, dynamic> json) =>
     KorisnikUloga(
-      (json['id'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
-      (json['ulogaId'] as num?)?.toInt(),
+      json['id'] as int?,
+      json['korisnikId'] as int?,
+      json['ulogaId'] as int?,
       json['uloga'] == null
           ? null
           : Uloga.fromJson(json['uloga'] as Map<String, dynamic>),

@@ -8,9 +8,9 @@ part of 'novostInterakcija.dart';
 
 NovostInterakcija _$NovostInterakcijaFromJson(Map<String, dynamic> json) =>
     NovostInterakcija(
-      (json['id'] as num?)?.toInt(),
-      (json['novostId'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
+      json['id'] as int?,
+      json['novostId'] as int?,
+      json['korisnikId'] as int?,
       json['isLiked'] as bool?,
       json['datum'] == null ? null : DateTime.parse(json['datum'] as String),
     );

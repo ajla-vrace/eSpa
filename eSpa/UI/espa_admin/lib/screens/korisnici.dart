@@ -25,7 +25,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
   TextEditingController _korisnickoImeController = TextEditingController();
   //TextEditingController _statusController = TextEditingController();
   late KorisnikProvider _korisnikProvider;
-// Lista mogućih statusa
+// Lista mogućih statusa //jer je bool isBlokiran
   final List<String> statusOptions = ['Sve', 'Aktivan', 'Blokiran'];
 
   String? _selectedStatus = 'Sve'; // Podrazumevana vrednost
@@ -50,9 +50,13 @@ class _KorisnikPageState extends State<KorisnikPage> {
   }
 
   Future<void> _loadKorisnici() async {
+     print("POZIV _loadKorisnici"); // prvi log
     try {
-      final korisnici =
-          await Provider.of<KorisnikProvider>(context, listen: false).get();
+       final korisnici =
+          await Provider.of<KorisnikProvider>(context, listen: false).get(filter: {'isZaposlenik':false,'isAdmin':false });
+      /*final korisnici =
+          await _korisnikProvider.get(filter: {'isZaposlenik': true,});
+      print("korisniic $korisnici");*/
       setState(() {
         _korisnici = korisnici.result;
         _isKorisnikLoading = false;
@@ -164,7 +168,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
                       DataCell(Text(korisnik.ime ?? "N/A")),
                       DataCell(Text(korisnik.prezime ?? "N/A")),
                       // DataCell(Text(korisnik.email ?? "N/A")),
-                     /* DataCell(
+                      /* DataCell(
                         SizedBox(
                           width: 100, // prilagodi po potrebi
                           child: Text(
@@ -278,13 +282,13 @@ class _KorisnikPageState extends State<KorisnikPage> {
                                           // ignore: unused_local_variable
                                           var _korisnik =
                                               await _korisnikProvider
-                                                  .blokirajKorisnika(korisnik.id!);
-                                          //print("korisnik: getbyid $_korisnik");
+                                                  .blokirajKorisnika(
+                                                      korisnik.id!);
                                           //_korisnik.status = "Blokiran";
                                           //_korisnik.isBlokiran = true;
 
-                                         // await _korisnikProvider.update(
-                                            //  korisnik.id!, _korisnik);
+                                          // await _korisnikProvider.update(
+                                          //  korisnik.id!, _korisnik);
                                           setState(() {
                                             /*  var index = _korisnici
                                           .indexWhere((k) => k.id == korisnik.id);
@@ -473,6 +477,8 @@ class _KorisnikPageState extends State<KorisnikPage> {
                                 'Ime': _imeController.text,
                                 'Prezime': _prezimeController.text,
                                 'KorisnickoIme': _korisnickoImeController.text,
+                                'isZaposlenik':false,
+                                'isAdmin':false,
                                 /*'Status':
                                     _selectedStatus, */ // Dodajemo status u filter
                               };

@@ -13,5 +13,7 @@ namespace eSpa.Model.SearchObject
         public string? Prezime { get; set; }
         public string? KorisnickoIme { get; set; }
         public string? Status { get; set; }
+        public bool? isZaposlenik { get; set; }
+        public bool? isAdmin { get; set; }
     }
 }

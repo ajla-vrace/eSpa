@@ -8,13 +8,13 @@ part of 'novostKomentar.dart';
 
 NovostKomentar _$NovostKomentarFromJson(Map<String, dynamic> json) =>
     NovostKomentar(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['sadrzaj'] as String?,
       json['datumKreiranja'] == null
           ? null
           : DateTime.parse(json['datumKreiranja'] as String),
-      (json['novostId'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
+      json['novostId'] as int?,
+      json['korisnikId'] as int?,
       json['korisnik'] == null
           ? null
           : Korisnik.fromJson(json['korisnik'] as Map<String, dynamic>),

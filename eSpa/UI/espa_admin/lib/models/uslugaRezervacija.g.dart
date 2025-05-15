@@ -8,10 +8,10 @@ part of 'uslugaRezervacija.dart';
 
 UslugaRezervacija _$UslugaRezervacijaFromJson(Map<String, dynamic> json) =>
     UslugaRezervacija(
-      (json['uslugaId'] as num?)?.toInt(),
+      json['uslugaId'] as int?,
       json['naziv'] as String?,
       json['sifra'] as String?,
-      (json['brojRezervacija'] as num?)?.toInt(),
+      json['brojRezervacija'] as int?,
     );
 
 Map<String, dynamic> _$UslugaRezervacijaToJson(UslugaRezervacija instance) =>

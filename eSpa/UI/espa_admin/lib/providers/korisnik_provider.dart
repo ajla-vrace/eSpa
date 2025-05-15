@@ -4,7 +4,7 @@ import 'package:espa_admin/providers/base_provider.dart';
 class KorisnikProvider extends BaseProvider<Korisnik> {
   KorisnikProvider() : super("Korisnici");
 
-  Future<Korisnik> blokirajKorisnika(int korisnikId) async {
+  /*Future<Korisnik> blokirajKorisnika(int korisnikId) async {
     // Prvo preuzimamo sve podatke o korisniku koristeći njegov ID
     // Ovdje pretpostavljam da postoji metoda za dohvat korisnika po ID-u
     var korisnik = await get(filter: {'id': korisnikId});
@@ -25,7 +25,7 @@ class KorisnikProvider extends BaseProvider<Korisnik> {
 
     // Pozivamo metodu za ažuriranje korisnika
     return await update(korisnikId, request);
-  }
+  }*/
 
   @override
   Korisnik fromJson(data) {

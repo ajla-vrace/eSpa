@@ -82,10 +82,10 @@ class _KorisnikDetaljiPageState extends State<KorisnikDetaljiPage> {
           SizedBox(height: 10),
           _buildDisplayField(label: "Status", value: widget.korisnik?.status),
           SizedBox(height: 10),
-          _buildDisplayField(
+         /* _buildDisplayField(
             label: "Admin",
             value: widget.korisnik?.isAdmin == true ? "Da" : "Ne",
-          ),
+          ),*/
           //_buildDisplayField(label: "Admin", value: widget.korisnik?.isAdmin.toString()),
         ],
       ),

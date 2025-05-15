@@ -7,12 +7,12 @@ part of 'usluga.dart';
 // **************************************************************************
 
 Usluga _$UslugaFromJson(Map<String, dynamic> json) => Usluga(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['naziv'] as String?,
       json['opis'] as String?,
       (json['cijena'] as num?)?.toDouble(),
       json['trajanje'] as String?,
-      (json['kategorijaId'] as num?)?.toInt(),
+      json['kategorijaId'] as int?,
       json['slika'] as String?,
       Kategorija.fromJson(json['kategorija'] as Map<String, dynamic>),
       (json['favorits'] as List<dynamic>?)

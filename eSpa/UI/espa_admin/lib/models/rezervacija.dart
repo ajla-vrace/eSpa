@@ -1,4 +1,5 @@
 import 'package:espa_admin/models/korisnik.dart';
+import 'package:espa_admin/models/statusRezervacije.dart';
 import 'package:espa_admin/models/termin.dart';
 import 'package:espa_admin/models/usluga.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -18,15 +19,31 @@ class Rezervacija {
   String? status;
   String? napomena;
   bool? isPlaceno;
+  int? statusRezervacijeId;
+  StatusRezervacije? statusRezervacije;
   Korisnik? korisnik;
   Usluga? usluga;
   Termin? termin;
-  Rezervacija(this.id, this.korisnikId, this.uslugaId, this.datum,this.terminId, this.status,this.napomena,this.isPlaceno,this.korisnik,this.usluga,this.termin);
+  Rezervacija(
+      this.id,
+      this.korisnikId,
+      this.uslugaId,
+      this.datum,
+      this.terminId,
+      this.status,
+      this.napomena,
+      this.isPlaceno,
+      this.statusRezervacijeId,
+      this.statusRezervacije,
+      this.korisnik,
+      this.usluga,
+      this.termin);
 
-    /// A necessary factory constructor for creating a new User instance
+  /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
   /// The constructor is named after the source class, in this case, User.
-  factory Rezervacija.fromJson(Map<String, dynamic> json) => _$RezervacijaFromJson(json);
+  factory Rezervacija.fromJson(Map<String, dynamic> json) =>
+      _$RezervacijaFromJson(json);
 
   /// `toJson` is the convention for a class to declare support for serialization
   /// to JSON. The implementation simply calls the private, generated

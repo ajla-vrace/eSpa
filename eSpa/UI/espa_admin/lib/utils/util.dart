@@ -1,9 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Authorization{
+class Authorization {
   static String? username;
   static String? password;
 }
+
 // ignore: unused_element
 String _shortenText(String text, int maxLength) {
   if (text.length > maxLength) {
@@ -11,19 +12,24 @@ String _shortenText(String text, int maxLength) {
   }
   return text;
 }
+
 Future<void> setUserName(String username) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('username', username);
 }
+
 Future<String?> getUserName() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString('username');
 }
+
 class LoggedUser {
   static int? id;
   static String? ime;
   static String? prezime;
   static String? korisnickoIme;
+  static bool? isAdmin;
+  static bool? isZaposlenik;
   static bool? isBlokiran;
   static String? uloga;
 
@@ -32,8 +38,9 @@ class LoggedUser {
     ime = "";
     prezime = "";
     korisnickoIme = "";
-    isBlokiran=false;
+    isAdmin = false;
+    isZaposlenik = false;
+    isBlokiran = false;
     uloga = "";
   }
 }
-

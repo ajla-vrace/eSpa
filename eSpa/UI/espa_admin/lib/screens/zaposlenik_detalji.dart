@@ -173,7 +173,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
       title: korisnikKreiran ? "Dodaj Zaposlenika" : "Dodaj Korisnika",
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(10.0),
           child: Container(
             width: 400,
             padding: EdgeInsets.all(20),
@@ -204,6 +204,23 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /* Text(
+                        widget.novost?.naslov ?? "Novost details",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),*/
+                Spacer(), // Gura dugme skroz desno
+                IconButton(
+                  icon: Icon(Icons.close, color: Colors.black54),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
             _buildInputField("Ime", Icons.person, "ime"),
             SizedBox(height: 10),
             _buildInputField("Prezime", Icons.person, "prezime"),
@@ -332,18 +349,19 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
             SizedBox(height: 10),
             _buildInputFieldStruka(),
             SizedBox(height: 10),
-            _buildDropdownField("Status", Icons.check_circle, "status"),
-            SizedBox(height: 10),
+            /* _buildDropdownField("Status", Icons.check_circle, "status"),
+            SizedBox(height: 10),*/
             _buildInputFieldNapomena("Napomena", Icons.notes, "napomena"),
             SizedBox(height: 10),
             _buildInputField1("Biografija", Icons.description, "biografija"),
             SizedBox(height: 10),
-            _buildRoleDropdown(),
+            /* _buildRoleDropdown(),
             SizedBox(
               height: 10,
-            ),
+            ),*/
             SizedBox(height: 10),
             _buildKategorijaDropdown(),
+             SizedBox(height: 20),
 
             //_buildImagePicker(),
             //SizedBox(height: 10),
@@ -432,18 +450,18 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
                           request['slikaId'] = slikaId;
                         }
 */
-                        var korisnikUlogaRequest = {
+                        /* var korisnikUlogaRequest = {
                           'korisnikId': korisnikId,
                           'ulogaId': selectedUlogaId, // Odabrana uloga
-                        };
-                        print(("selectedulogaid $selectedUlogaId"));
-                        print("korisnikulogarequesr $korisnikUlogaRequest");
+                        };*/
+                        // print(("selectedulogaid $selectedUlogaId"));
+                        // print("korisnikulogarequesr $korisnikUlogaRequest");
                         /* await _korisnikUlogaProvider.insert(
                                 widget.zaposlenik!.korisnikId!,
                                 selectedUlogaId);*/
-                        await _korisnikUlogaProvider
+                        /* await _korisnikUlogaProvider
                             .insert(korisnikUlogaRequest);
-                        print("✅ Uloga povezana sa korisnikom!");
+                        print("✅ Uloga povezana sa korisnikom!");*/
 
                         print(request);
                         // Kreiraj zaposlenika sa ili bez SlikaId
@@ -704,8 +722,9 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
               return 'Struka mora imati najmanje 3 slova';
             }
             // Provera da li sadrži samo slova
-            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-              return 'Struka može sadržavati samo slova';
+            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž][A-ZČĆĐŠŽa-zčćđšž. ]*$')
+                .hasMatch(value)) {
+              return 'Struka može sadržavati samo slova.';
             }
           }
         } else if (name == "biografija") {
@@ -782,9 +801,11 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
         if (value.length < 3) {
           return 'Struka mora imati najmanje 3 slova';
         }
-        if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-          return 'Struka može sadržavati samo slova';
+        if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž][A-ZČĆĐŠŽa-zčćđšž. ]*$')
+            .hasMatch(value)) {
+          return 'Struka može sadržavati samo slova.';
         }
+
         return null;
       },
     );
@@ -817,7 +838,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
     );
   }
 
-  Widget _buildDropdownField(String label, IconData icon, String name) {
+  /*Widget _buildDropdownField(String label, IconData icon, String name) {
     return FormBuilderDropdown(
       name: name,
       initialValue: 'Aktivan',
@@ -837,7 +858,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
           .toList(),
     );
   }
-
+*/
   void _showErrorDialog(String message) {
     showDialog(
       context: context,

@@ -282,7 +282,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     print("Pozivam: $url");
 
-    var response = await http.post(uri, headers: headers);
+    var response = await http.put(uri, headers: headers);
 
     print("Response Status: ${response.statusCode}");
     print("Response Body: ${response.body}");

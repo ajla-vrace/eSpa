@@ -7,14 +7,19 @@ part of 'rezervacija.dart';
 // **************************************************************************
 
 Rezervacija _$RezervacijaFromJson(Map<String, dynamic> json) => Rezervacija(
-      (json['id'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
-      (json['uslugaId'] as num?)?.toInt(),
+      json['id'] as int?,
+      json['korisnikId'] as int?,
+      json['uslugaId'] as int?,
       json['datum'] == null ? null : DateTime.parse(json['datum'] as String),
-      (json['terminId'] as num?)?.toInt(),
-      (json['zaposlenikId'] as num?)?.toInt(),
+      json['terminId'] as int?,
+      json['zaposlenikId'] as int?,
       json['status'] as String?,
       json['isPlaceno'] as bool?,
+      json['statusRezervacijeId'] as int?,
+      json['statusRezervacije'] == null
+          ? null
+          : StatusRezervacije.fromJson(
+              json['statusRezervacije'] as Map<String, dynamic>),
       json['korisnik'] == null
           ? null
           : Korisnik.fromJson(json['korisnik'] as Map<String, dynamic>),
@@ -39,6 +44,8 @@ Map<String, dynamic> _$RezervacijaToJson(Rezervacija instance) =>
       'zaposlenikId': instance.zaposlenikId,
       'status': instance.status,
       'isPlaceno': instance.isPlaceno,
+      'statusRezervacijeId': instance.statusRezervacijeId,
+      'statusRezervacije': instance.statusRezervacije,
       'korisnik': instance.korisnik,
       'usluga': instance.usluga,
       'termin': instance.termin,

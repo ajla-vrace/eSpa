@@ -24,7 +24,6 @@ class _SuccessPageState extends State<SuccessPage> {
     super.initState();
     _rezervacijeProvider = context.read<RezervacijaProvider>();
     _lastRezervacija = widget.lastRezervacija;
-    
   }
 
   Future<void> _updateRezervacija() async {
@@ -45,12 +44,18 @@ class _SuccessPageState extends State<SuccessPage> {
 
     try {
       // ignore: unused_local_variable
-     /* var update =
+      /* var update =
           await _rezervacijeProvider.update(_lastRezervacija!.id!, request);*/
-      Navigator.of(context).push(
+      /*Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => RezervacijeScreen(),
         ),
+      );*/
+      // Navigator.pushReplacementNamed(context, '/rezervacije');
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/rezervacije',
+        (Route<dynamic> route) => false,
       );
     } catch (err) {
       setState(() {

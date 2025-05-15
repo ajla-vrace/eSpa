@@ -7,7 +7,7 @@ part of 'uloga.dart';
 // **************************************************************************
 
 Uloga _$UlogaFromJson(Map<String, dynamic> json) => Uloga(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['naziv'] as String?,
     );
 

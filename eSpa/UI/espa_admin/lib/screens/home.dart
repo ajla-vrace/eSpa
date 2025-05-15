@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _chartKey1 = GlobalKey();
 
   List<Korisnik> korisnik = [];
-
+ 
   @override
   void initState() {
     super.initState();
@@ -284,10 +284,7 @@ class _HomePageState extends State<HomePage> {
               barTouchData: BarTouchData(
                 enabled: true,
                 touchTooltipData: BarTouchTooltipData(
-                  getTooltipColor: (BarChartGroupData group) {
-                    return const Color.fromARGB(
-                        255, 174, 185, 160); // Tooltip boja
-                  },
+                  tooltipBgColor: const Color.fromARGB(255, 174, 185, 160),
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     final usluga = _prosjecneOcjene.firstWhere(
                       (x) => x['uslugaId'] == group.x,
@@ -396,10 +393,7 @@ class _HomePageState extends State<HomePage> {
               barTouchData: BarTouchData(
                 enabled: true,
                 touchTooltipData: BarTouchTooltipData(
-                  getTooltipColor: (BarChartGroupData group) {
-                    return const Color.fromARGB(
-                        255, 174, 185, 160); // Tooltip boja
-                  },
+                  tooltipBgColor: const Color.fromARGB(255, 174, 185, 160),
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     final usluga = _brojRezervacija.firstWhere(
                       (x) => x['uslugaId'] == group.x,
@@ -510,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                     MainAxisSize.min, // 🔁 Samo zauzmi prostor koji trebaš
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Wrap(
+                  Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment
@@ -537,7 +531,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  const Wrap(
+                  Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -551,7 +545,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  const Wrap(
+                  Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -567,7 +561,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  const Wrap(
+                  Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -582,7 +576,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  const Wrap(
+                  Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -599,7 +593,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  const Wrap(
+                  Wrap(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -622,14 +616,28 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  IconButton(
+                  if (!LoggedUser.isZaposlenik!)
+                    Center(
+                      child: TextButton.icon(
+                        onPressed: () {
+                          _exportChart1(); // Funkcija za eksport
+                        },
+                        icon: Icon(Icons.picture_as_pdf,
+                            size: 30), // Povećaj ikonu
+                        label: Text("Export u PDF"),
+                      ),
+                    ),
+
+                  /*IconButton(
                     onPressed: () {
                       _exportChart1(); // 👉 funkcija koju ti implementiraš
                     },
-                    icon: Icon(Icons.picture_as_pdf,),
+                    icon: Icon(
+                      Icons.picture_as_pdf,
+                    ),
                     tooltip: "Export u pdf",
-                   // label: Text('Eksportuj grafikon'),
-                  ),
+                    // label: Text('Eksportuj grafikon'),
+                  ),*/
                 ],
               ),
             ),
@@ -660,7 +668,7 @@ class _HomePageState extends State<HomePage> {
                       MainAxisSize.min, // 🔁 Samo zauzmi prostor koji trebaš
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Wrap(
+                    Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment
@@ -687,7 +695,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Wrap(
+                    Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -702,7 +710,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const Wrap(
+                    Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -718,7 +726,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const Wrap(
+                    Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -735,7 +743,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Wrap(
+                    Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -752,14 +760,35 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    IconButton(
+                    /* if (!LoggedUser.isZaposlenik!)
+                      IconButton(
+                        onPressed: () {
+                          _exportChart2(); // 👉 funkcija koju ti implementiraš
+                        },
+                        iconSize: 30, // Povećaj veličinu ikone
+                        icon: Icon(Icons.picture_as_pdf),
+                        tooltip: "Export u pdf",
+                      ),*/
+                    if (!LoggedUser.isZaposlenik!)
+                      Center(
+                        child: TextButton.icon(
+                          onPressed: () {
+                            _exportChart2(); // Funkcija za eksport
+                          },
+                          icon: Icon(Icons.picture_as_pdf,
+                              size: 30), // Povećaj ikonu
+                          label: Text("Export u PDF"),
+                        ),
+                      ),
+
+                    /*IconButton(
                       onPressed: () {
                         _exportChart2(); // 👉 funkcija koju ti implementiraš
                       },
                       icon: Icon(Icons.picture_as_pdf),
                       tooltip: "Export u pdf",
                       //label: Text('Eksportuj grafikon'),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
@@ -842,7 +871,8 @@ class _HomePageState extends State<HomePage> {
           // Krug sa ikonom
           CircleAvatar(
             radius: 35, // Veličina kruga
-            backgroundColor: Colors.blue, // Boja pozadine kruga
+            backgroundColor:
+                Color.fromRGBO(52, 105, 63, 1), // 1 znači potpuno neprozirno
             child: Center(
               child: IconButton(
                 icon: Icon(
@@ -899,7 +929,7 @@ class _HomePageState extends State<HomePage> {
                         horizontal: 16.0), // Padding za ostale elemente
                     child: Column(
                       children: [
-                        buildActionButtons(),
+                        if (!LoggedUser.isZaposlenik!) buildActionButtons(),
                         const SizedBox(height: 20),
                         const Text(
                           "Prosjecne ocjene po uslugama",
@@ -924,7 +954,7 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // 🔘 Dugme u donjem desnom uglu
-          Positioned(
+          /*Positioned(
             bottom: 16,
             right: 16,
             child: FloatingActionButton(
@@ -932,7 +962,17 @@ class _HomePageState extends State<HomePage> {
               tooltip: "Export u PDF",
               child: Icon(Icons.picture_as_pdf),
             ),
-          ),
+          ),*/
+          if (!LoggedUser.isZaposlenik!)
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: FloatingActionButton(
+                onPressed: () => exportChartsToPdf(),
+                tooltip: "Export u PDF",
+                child: Icon(Icons.picture_as_pdf),
+              ),
+            ),
         ],
       ),
     );

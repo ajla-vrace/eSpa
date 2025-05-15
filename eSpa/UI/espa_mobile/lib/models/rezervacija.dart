@@ -1,4 +1,5 @@
 import 'package:espa_mobile/models/korisnik.dart';
+import 'package:espa_mobile/models/statusRezervacije.dart';
 import 'package:espa_mobile/models/termin.dart';
 import 'package:espa_mobile/models/usluga.dart';
 import 'package:espa_mobile/models/zaposlenik.dart';
@@ -19,6 +20,8 @@ class Rezervacija {
   int? zaposlenikId;
   String? status;
   bool? isPlaceno;
+  int? statusRezervacijeId;
+  StatusRezervacije? statusRezervacije;
   Korisnik? korisnik;
   Usluga? usluga;
   Termin? termin;
@@ -32,6 +35,8 @@ class Rezervacija {
       this.zaposlenikId,
       this.status,
       this.isPlaceno,
+      this.statusRezervacijeId,
+      this.statusRezervacije,
       this.korisnik,
       this.usluga,
       this.termin,

@@ -7,9 +7,9 @@ part of 'komentar.dart';
 // **************************************************************************
 
 Komentar _$KomentarFromJson(Map<String, dynamic> json) => Komentar(
-      (json['id'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
-      (json['uslugaId'] as num?)?.toInt(),
+      json['id'] as int?,
+      json['korisnikId'] as int?,
+      json['uslugaId'] as int?,
       json['tekst'] as String?,
       json['datum'] == null ? null : DateTime.parse(json['datum'] as String),
       json['korisnik'] == null

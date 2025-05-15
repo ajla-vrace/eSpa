@@ -263,49 +263,90 @@ namespace eSpa.Service
             }
         return base.AddInclude(query, search);
     }
-    public override IQueryable<Database.Korisnik> AddFilter(IQueryable<Database.Korisnik> query, KorisnikSearchObject? search = null)
+        public override IQueryable<Database.Korisnik> AddFilter(IQueryable<Database.Korisnik> query, KorisnikSearchObject? search = null)
         {
             var filteredQuery = base.AddFilter(query, search);
 
-            // Ako su svi parametri prisutni (ime, prezime, korisničko ime, status)
-            if (!string.IsNullOrWhiteSpace(search?.Ime) &&
-                !string.IsNullOrWhiteSpace(search?.Prezime) &&
-                !string.IsNullOrWhiteSpace(search?.KorisnickoIme) &&
-                !string.IsNullOrWhiteSpace(search?.Status))
+            if (!string.IsNullOrWhiteSpace(search?.Ime))
             {
-                filteredQuery = filteredQuery.Where(x =>
-                    x.Ime.Contains(search.Ime) &&
-                    x.Prezime.Contains(search.Prezime) &&
-                    x.KorisnickoIme==(search.KorisnickoIme) &&
-                    x.Status == search.Status);
+                filteredQuery = filteredQuery.Where(x => x.Ime.Contains(search.Ime));
             }
-            else
+
+            if (!string.IsNullOrWhiteSpace(search?.Prezime))
             {
-                // Ako su uneti samo pojedinačni parametri, filtriraj samo po njima
-                if (!string.IsNullOrWhiteSpace(search?.Ime))
-                {
-                    filteredQuery = filteredQuery.Where(x => x.Ime.Contains(search.Ime));
-                }
-
-                if (!string.IsNullOrWhiteSpace(search?.Prezime))
-                {
-                    filteredQuery = filteredQuery.Where(x => x.Prezime.Contains(search.Prezime));
-                }
-
-                if (!string.IsNullOrWhiteSpace(search?.KorisnickoIme))
-                {
-                    filteredQuery = filteredQuery.Where(x => x.KorisnickoIme==(search.KorisnickoIme));
-                }
-
-                if (!string.IsNullOrWhiteSpace(search?.Status))
-                {
-                    filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
-                }
+                filteredQuery = filteredQuery.Where(x => x.Prezime.Contains(search.Prezime));
             }
-            filteredQuery = filteredQuery
-                                .Include(x => x.Slika);
-            return filteredQuery;
+
+            if (!string.IsNullOrWhiteSpace(search?.KorisnickoIme))
+            {
+                filteredQuery = filteredQuery.Where(x => x.KorisnickoIme == search.KorisnickoIme);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.Status))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
+            }
+
+            if (search?.isZaposlenik.HasValue == true)
+            {
+                filteredQuery = filteredQuery.Where(x => x.IsZaposlenik == search.isZaposlenik);
+            }
+            if (search?.isAdmin.HasValue == true)
+            {
+                filteredQuery = filteredQuery.Where(x => x.IsAdmin == search.isAdmin);
+            }
+
+            return filteredQuery.Include(x => x.Slika);
         }
+
+        /* public override IQueryable<Database.Korisnik> AddFilter(IQueryable<Database.Korisnik> query, KorisnikSearchObject? search = null)
+             {
+                 var filteredQuery = base.AddFilter(query, search);
+
+                 // Ako su svi parametri prisutni (ime, prezime, korisničko ime, status)
+                 if (!string.IsNullOrWhiteSpace(search?.Ime) &&
+                     !string.IsNullOrWhiteSpace(search?.Prezime) &&
+                     !string.IsNullOrWhiteSpace(search?.KorisnickoIme) &&
+                     !string.IsNullOrWhiteSpace(search?.Status))
+                 {
+                     filteredQuery = filteredQuery.Where(x =>
+                         x.Ime.Contains(search.Ime) &&
+                         x.Prezime.Contains(search.Prezime) &&
+                         x.KorisnickoIme==(search.KorisnickoIme) &&
+                         x.Status == search.Status);
+                 }
+                 else
+                 {
+                     // Ako su uneti samo pojedinačni parametri, filtriraj samo po njima
+                     if (!string.IsNullOrWhiteSpace(search?.Ime))
+                     {
+                         filteredQuery = filteredQuery.Where(x => x.Ime.Contains(search.Ime));
+                     }
+
+                     if (!string.IsNullOrWhiteSpace(search?.Prezime))
+                     {
+                         filteredQuery = filteredQuery.Where(x => x.Prezime.Contains(search.Prezime));
+                     }
+
+                     if (!string.IsNullOrWhiteSpace(search?.KorisnickoIme))
+                     {
+                         filteredQuery = filteredQuery.Where(x => x.KorisnickoIme==(search.KorisnickoIme));
+                     }
+
+                     if (!string.IsNullOrWhiteSpace(search?.Status))
+                     {
+                         filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
+                     }
+                     if (search?.isZaposlenik.HasValue == true)
+                     {
+                         filteredQuery = filteredQuery.Where(x => x.IsZaposlenik == search.isZaposlenik);
+                     }
+
+                 }
+                 filteredQuery = filteredQuery
+                                     .Include(x => x.Slika);
+                 return filteredQuery;
+             }*/
 
 
 

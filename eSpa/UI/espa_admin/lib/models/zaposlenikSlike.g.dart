@@ -8,7 +8,7 @@ part of 'zaposlenikSlike.dart';
 
 ZaposlenikSlike _$ZaposlenikSlikeFromJson(Map<String, dynamic> json) =>
     ZaposlenikSlike(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['naziv'] as String?,
       json['slika'] as String?,
       json['tip'] as String?,

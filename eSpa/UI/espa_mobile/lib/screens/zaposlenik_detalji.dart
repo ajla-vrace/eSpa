@@ -96,7 +96,7 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Zvjezdice za ocjenu
-                  Row(
+                  /*Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
                       return IconButton(
@@ -111,6 +111,24 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                         },
                       );
                     }),
+                  ),*/
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return Expanded(
+                        child: IconButton(
+                          icon: Icon(
+                            index < _ocjena ? Icons.star : Icons.star_border,
+                            color: Colors.amber,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _ocjena = index + 1;
+                            });
+                          },
+                        ),
+                      );
+                    }),
                   ),
                   if (_ocjena == 0)
                     const Text(
@@ -121,8 +139,8 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                   // Polje za komentar
                   TextFormField(
                     controller: _komentarController,
-                    maxLines: 3,
-                    autovalidateMode: AutovalidateMode.onUserInteraction, 
+                    maxLines: 2,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       hintText: 'Unesite vaš komentar (opcionalno)',
                       border: OutlineInputBorder(),
@@ -172,7 +190,7 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Recenzija uspješno dodana.'),
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.teal,
                         ),
                       );
                     } catch (e) {

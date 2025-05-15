@@ -1,11 +1,14 @@
 import 'package:espa_admin/models/rezervacija.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/providers/rezervacija_provider.dart';
+import 'package:espa_admin/providers/statusRezervacije_provider.dart';
 import 'package:espa_admin/screens/rezervacija_detalji.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../models/statusRezervacije.dart';
 
 class RezervacijePage extends StatefulWidget {
   const RezervacijePage({super.key});
@@ -23,6 +26,10 @@ class _RezervacijePageState extends State<RezervacijePage> {
   String? _selectedStatus = "Sve";
 
   late RezervacijaProvider _rezervacijaProvider;
+  late StatusRezervacijeProvider _statusRezervacijeProvider;
+
+  List<StatusRezervacije> _statusi = [];
+//String? _selectedStatus = "Sve";
 
   /*String _shortenText(String text, int maxLength) {
     if (text.length > maxLength) {
@@ -42,6 +49,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
   void initState() {
     super.initState();
     _loadRezervacije();
+    _loadStatusi();
   }
 
   Future<void> _loadRezervacije() async {
@@ -57,6 +65,15 @@ class _RezervacijePageState extends State<RezervacijePage> {
         _isReezrvacijaLoading = false;
       });
     }
+  }
+
+  void _loadStatusi() async {
+    var statusi =
+        await Provider.of<StatusRezervacijeProvider>(context, listen: false)
+            .get();
+    setState(() {
+      _statusi = statusi.result;
+    });
   }
 
   Widget _buildRezervacijeTable() {
@@ -150,6 +167,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                         ),
                       ),
                       DataCell(Text(rezervacija.status ?? "N/A")),
+                      // DataCell(Text(rezervacija.statusRezervacije!.naziv ?? "N/A")),
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
@@ -158,11 +176,13 @@ class _RezervacijePageState extends State<RezervacijePage> {
                             IconButton(
                               icon: Icon(
                                 Icons.edit,
-                                color: (rezervacija.status == "Zavrsena" || rezervacija.status == "Otkazana") 
+                                color: (rezervacija.status == "Zavrsena" ||
+                                        rezervacija.status == "Otkazana")
                                     ? Colors.grey
                                     : Colors.black, // Promena boje
                               ),
-                              onPressed: (rezervacija.status == "Zavrsena" || rezervacija.status == "Otkazana") 
+                              onPressed: (rezervacija.status == "Zavrsena" ||
+                                      rezervacija.status == "Otkazana")
                                   ? null
                                   : () {
                                       // Onemogućavanje klika
@@ -323,7 +343,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Expanded(
+                        /* Expanded(
                           child: DropdownButtonFormField<String>(
                             value: _selectedStatus,
                             decoration: const InputDecoration(
@@ -343,7 +363,35 @@ class _RezervacijePageState extends State<RezervacijePage> {
                               });
                             },
                           ),
+                        ),*/
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            value: _selectedStatus,
+                            decoration: const InputDecoration(
+                              labelText: "Pretraži po statusu",
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                            items: [
+                              DropdownMenuItem<String>(
+                                value: "Sve",
+                                child: Text("Sve"),
+                              ),
+                              ..._statusi
+                                  .map((status) => DropdownMenuItem<String>(
+                                        value: status
+                                            .naziv, // ili status.id.toString() ako filtriraš po ID-u
+                                        child: Text(status.naziv ?? ''),
+                                      )),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedStatus = value;
+                              });
+                            },
+                          ),
                         ),
+
                         const SizedBox(width: 10),
                         IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),

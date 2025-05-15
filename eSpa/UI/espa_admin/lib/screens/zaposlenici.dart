@@ -204,7 +204,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                   ),
                   DataColumn(
                     label: Text(
-                      "Uloga",
+                      "Status",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -245,7 +245,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                       ),
 
                       // DataCell(Text(zaposlenik.korisnik?.korisnikUlogas.first.uloga!.naziv ?? "N/A")),
-                      DataCell(
+                       /*DataCell(
                         Text(
                           zaposlenik.korisnik?.korisnikUlogas.isNotEmpty == true
                               ? zaposlenik.korisnik!.korisnikUlogas.first.uloga
@@ -253,8 +253,8 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                   "N/A"
                               : "Nema ulogu",
                         ),
-                      ),
-
+                      ),*/
+                      DataCell(Text(zaposlenik.status ?? "N/A")),
                       //DataCell(Text(zaposlenik.status ?? "N/A")),
                       /* DataCell(
                         zaposlenik.slika?.slika != null /*&& zaposlenik.slika.slika.isNotEmpty*/
@@ -269,7 +269,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                 size:
                                     50), // Ikona kao fallback ako slika nije dostupna
                       ),*/
-                     /* DataCell(
+                      /* DataCell(
                         zaposlenik.slika?.slika != null
                             ? Image.memory(
                                 base64Decode(zaposlenik.slika!
@@ -283,9 +283,11 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                     50), // Ikona kao fallback ako slika nije dostupna
                       ),*/
                       DataCell(
-                        zaposlenik.korisnik!.slika != null && zaposlenik.korisnik!.slika!.slika != null
+                        zaposlenik.korisnik!.slika != null &&
+                                zaposlenik.korisnik!.slika!.slika != null
                             ? Image.memory(
-                                base64Decode(zaposlenik.korisnik!.slika!.slika!),
+                                base64Decode(
+                                    zaposlenik.korisnik!.slika!.slika!),
                                 width: 50,
                                 height: 50,
                                 fit: BoxFit.cover,
@@ -305,8 +307,9 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ZaposlenikRecenzijePage(
-                                         zaposlenik: zaposlenik),
+                                      builder: (context) =>
+                                          ZaposlenikRecenzijePage(
+                                              zaposlenik: zaposlenik),
                                     ),
                                   );
                                 }),

@@ -39,32 +39,52 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
 
     // Navigacija prema ekranu na osnovu selektovanog indeksa
     if (currentIndex == 0) {
-      Navigator.pushReplacement(
+      /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(),
         ),
+      );*/
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/home', // ili ime rute ako koristiš named routes
+        (Route<dynamic> route) => false,
       );
     } else if (currentIndex == 1) {
-      Navigator.pushReplacement(
+      /* Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => PretragaScreen(),
         ),
+      );*/
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/pretraga', // ili ime rute ako koristiš named routes
+        (Route<dynamic> route) => false,
       );
     } else if (currentIndex == 2) {
-      Navigator.pushReplacement(
+      /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => RezervacijeScreen(),
         ),
+      );*/
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/rezervacije', // ili ime rute ako koristiš named routes
+        (Route<dynamic> route) => false,
       );
     } else if (currentIndex == 3) {
-      Navigator.pushReplacement(
+      /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => KorisnickiProfilScreen(),
         ),
+      );*/
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/profil', // ili ime rute ako koristiš named routes
+        (Route<dynamic> route) => false,
       );
     }
   }

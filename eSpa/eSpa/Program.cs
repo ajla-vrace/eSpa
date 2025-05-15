@@ -69,6 +69,7 @@ builder.Services.AddTransient<IKomentarService, KomentarService>();
 builder.Services.AddTransient<INovostKomentarService, NovostKomentarService>();
 builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IOcjenaService, OcjenaService>();
+builder.Services.AddTransient<IStatusRezervacijeService, StatusRezervacijeService>();
 builder.Services.AddTransient<ITerminService, TerminService>();
 builder.Services.AddTransient<IRezervacijaService, RezervacijaService>();
 //builder.Services.AddTransient<IZaposlenikSlikeService, ZaposlenikSlikeService>();
@@ -379,7 +380,7 @@ using (var scope = app.Services.CreateScope())
     // Seed status rezervacije
 
     db.StatusRezervacijes.AddRange(
-        new StatusRezervacije { Naziv = "Na cekanju" },
+       // new StatusRezervacije { Naziv = "Na cekanju" },
         new StatusRezervacije { Naziv = "Aktivna" },
         new StatusRezervacije { Naziv = "Otkazana" },
         new StatusRezervacije { Naziv = "Zavrsena" }
@@ -805,7 +806,7 @@ using (var scope = app.Services.CreateScope())
         UslugaId = 8,  // Povezivanje sa uslugom (ID 1 - Svedska masaža)
         Datum = DateTime.Now.AddDays(1), // Datum rezervacije (na primer, sutra)
         TerminId = 1,  // Termin 10:00 do 11:00
-        Status = "Na čekanju", // Status rezervacije
+        Status = "Aktivna", // Status rezervacije
         Napomena = "",
         ZaposlenikId = 2,  // Zaposlenik sa ID 2 (terapeut)
         IsPlaceno = false, // Nije plaćeno
@@ -817,7 +818,7 @@ using (var scope = app.Services.CreateScope())
         UslugaId = 2,  // Povezivanje sa uslugom (ID 2 - Masaža svetlom)
         Datum = DateTime.Now.AddDays(2), // Datum rezervacije (na primer, za dva dana)
         TerminId = 2,  // Termin 11:00 do 12:00
-        Status = "Na čekanju", // Status rezervacije
+        Status = "Aktivna", // Status rezervacije
         Napomena = "",
         ZaposlenikId = 3,  // Zaposlenik sa ID 3 (terapeut)
         IsPlaceno = false, // Nije plaćeno
@@ -829,7 +830,7 @@ using (var scope = app.Services.CreateScope())
         UslugaId = 4,  // Povezivanje sa uslugom (ID 4 - Mediteranska masaža)
         Datum = DateTime.Now.AddDays(3), // Datum rezervacije (na primer, za tri dana)
         TerminId = 3,  // Termin 12:00 do 13:00
-        Status = "Na čekanju", // Status rezervacije
+        Status = "Aktivna", // Status rezervacije
         Napomena = "Molim vas za opuštanje sa laganom muzikom.",
         ZaposlenikId = 1,  // Zaposlenik sa ID 6 (terapeut)
         IsPlaceno = false, // Nije plaćeno
@@ -841,7 +842,7 @@ using (var scope = app.Services.CreateScope())
         UslugaId = 9,  // Povezivanje sa uslugom (ID 3 - Sportska masaža)
         Datum = DateTime.Now.AddDays(4), // Datum rezervacije (na primer, za četiri dana)
         TerminId = 4,  // Termin 13:00 do 14:00
-        Status = "Na čekanju", // Status rezervacije
+        Status = "Aktivna", // Status rezervacije
         Napomena = "",
         ZaposlenikId = 2,  // Zaposlenik sa ID 2 (terapeut)
         IsPlaceno = false, // Nije plaćeno
@@ -853,7 +854,6 @@ using (var scope = app.Services.CreateScope())
    
 
 }
-
 
 
 

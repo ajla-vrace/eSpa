@@ -7,7 +7,7 @@ part of 'uslugaOcjena.dart';
 // **************************************************************************
 
 UslugaOcjena _$UslugaOcjenaFromJson(Map<String, dynamic> json) => UslugaOcjena(
-      (json['uslugaId'] as num?)?.toInt(),
+      json['uslugaId'] as int?,
       json['naziv'] as String?,
       json['sifra'] as String?,
       (json['prosjecnaOcjena'] as num?)?.toDouble(),

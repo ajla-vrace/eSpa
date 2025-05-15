@@ -7,7 +7,7 @@ part of 'kategorija.dart';
 // **************************************************************************
 
 Kategorija _$KategorijaFromJson(Map<String, dynamic> json) => Kategorija(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['naziv'] as String?,
     );
 

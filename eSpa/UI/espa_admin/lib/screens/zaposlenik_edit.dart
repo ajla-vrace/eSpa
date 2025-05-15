@@ -90,6 +90,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
       'napomena': widget.zaposlenik?.napomena,
       'biografija': widget.zaposlenik?.biografija,
       'slikaId': widget.zaposlenik?.slikaId,
+      'kategorijaId':widget.zaposlenik!.kategorija!.id,
       //'slika': widget.zaposlenik!.korisnik?.slika!,
       //'korisnikUlogas': widget.zaposlenik?.korisnik?.korisnikUlogas,
     };
@@ -547,8 +548,8 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
           SizedBox(height: 10),
           _buildInputField1("Biografija", Icons.description, "biografija"),
           SizedBox(height: 10),
-          _buildRoleDropdown(),
-          SizedBox(height: 10),
+          /* _buildRoleDropdown(),
+          SizedBox(height: 10),*/
           _buildKategorijaDropdown(),
           SizedBox(height: 10),
           _buildImagePicker(),
@@ -557,7 +558,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
     );
   }
 
-  Widget _buildRoleDropdown() {
+  /*Widget _buildRoleDropdown() {
     // Filtriraj uloge koje nisu 'admin'
     List<Uloga> filteredRoles = uloge
         .where((role) => role.naziv.toLowerCase() != 'administrator')
@@ -601,7 +602,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
         });
       },
     );
-  }
+  }*/
   /*
 Widget _buildRoleDropdown2() {
   // Filtriraj uloge koje nisu 'administrator'
@@ -696,8 +697,9 @@ Widget _buildRoleDropdown1() {
             if (value.length < 3) {
               return 'Struka mora imati najmanje 3 slova';
             }
-            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-              return 'Struka može sadržavati samo slova';
+            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž][A-ZČĆĐŠŽa-zčćđšž. ]*$')
+                .hasMatch(value)) {
+              return 'Struka može sadržavati samo slova.';
             }
           }
         }

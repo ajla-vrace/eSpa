@@ -7,10 +7,10 @@ part of 'ocjena.dart';
 // **************************************************************************
 
 Ocjena _$OcjenaFromJson(Map<String, dynamic> json) => Ocjena(
-      (json['id'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
-      (json['uslugaId'] as num?)?.toInt(),
-      (json['ocjena1'] as num?)?.toInt(),
+      json['id'] as int?,
+      json['korisnikId'] as int?,
+      json['uslugaId'] as int?,
+      json['ocjena1'] as int?,
       json['datum'] == null ? null : DateTime.parse(json['datum'] as String),
       json['korisnik'] == null
           ? null

@@ -241,26 +241,28 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return IconButton(
-                        icon: Icon(
-                          index < selectedOcjena
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: index < selectedOcjena
-                              ? Colors.yellow
-                              : Colors.grey,
-                          size: 32,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            selectedOcjena = index + 1;
-                          });
-                        },
-                      );
-                    }),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(5, (index) {
+                        return IconButton(
+                          icon: Icon(
+                            index < selectedOcjena
+                                ? Icons.star
+                                : Icons.star_border,
+                            color: index < selectedOcjena
+                                ? Colors.yellow
+                                : Colors.grey,
+                            size: 32,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              selectedOcjena = index + 1;
+                            });
+                          },
+                        );
+                      }),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text('Tvoja ocjena: $selectedOcjena'),
@@ -898,7 +900,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                                                 ClipRRect(
                                                   borderRadius:
                                                       const BorderRadius
-                                                          .vertical(
+                                                              .vertical(
                                                           top: Radius.circular(
                                                               12)),
                                                   child: Container(

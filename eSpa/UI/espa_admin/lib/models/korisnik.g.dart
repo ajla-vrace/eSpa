@@ -7,7 +7,7 @@ part of 'korisnik.dart';
 // **************************************************************************
 
 Korisnik _$KorisnikFromJson(Map<String, dynamic> json) => Korisnik(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['ime'] as String?,
       json['prezime'] as String?,
       json['email'] as String?,
@@ -15,11 +15,12 @@ Korisnik _$KorisnikFromJson(Map<String, dynamic> json) => Korisnik(
       json['korisnickoIme'] as String?,
       json['status'] as String?,
       json['isAdmin'] as bool?,
+      json['isZaposlenik'] as bool?,
       json['isBlokiran'] as bool?,
       json['datumRegistracije'] == null
           ? null
           : DateTime.parse(json['datumRegistracije'] as String),
-      (json['slikaId'] as num?)?.toInt(),
+      json['slikaId'] as int?,
       json['slika'] == null
           ? null
           : SlikaProfila.fromJson(json['slika'] as Map<String, dynamic>),
@@ -37,6 +38,7 @@ Map<String, dynamic> _$KorisnikToJson(Korisnik instance) => <String, dynamic>{
       'korisnickoIme': instance.korisnickoIme,
       'status': instance.status,
       'isAdmin': instance.isAdmin,
+      'isZaposlenik': instance.isZaposlenik,
       'isBlokiran': instance.isBlokiran,
       'datumRegistracije': instance.datumRegistracije?.toIso8601String(),
       'slikaId': instance.slikaId,

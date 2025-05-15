@@ -18,8 +18,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
     _endpoint = endpoint;
     /*_baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://10.0.2.2:7031/");*/
-    _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://10.0.2.2:5031/");
+   /*_baseUrl = const String.fromEnvironment("baseUrl",
+        defaultValue: "http://10.0.2.2:5031/");*/
+        _baseUrl = const String.fromEnvironment("baseUrl",
+        defaultValue: "http://192.168.1.6:5031/");
     // _baseUrl = const String.fromEnvironment("baseUrl",
     //defaultValue: "https://localhost:7031/");
     client.badCertificateCallback = (cert, host, port) => true;

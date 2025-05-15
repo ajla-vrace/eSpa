@@ -41,7 +41,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
   int? kategorijaId;
 
   Rezervacija? KreiranaRezervacija;
-  
+
   double? iznos;
 
   @override
@@ -84,6 +84,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
       final sviZaposlenici =
           await context.read<ZaposlenikProvider>().get(filter: {
         'Kategorija': widget.usluga.kategorija.naziv,
+        'Status': "Aktivan",
       });
       print("svi zaposlenici ${sviZaposlenici.count}");
       _zaposleniciUKategoriji = sviZaposlenici.result;
@@ -119,6 +120,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
       final sviZaposlenici =
           await context.read<ZaposlenikProvider>().get(filter: {
         'Kategorija': widget.usluga.kategorija.naziv,
+        'Status': "Aktivan",
       });
 
       // 4. Filtriraj da ostanu samo oni koji nisu zauzeti
@@ -162,6 +164,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
       final sviZaposlenici =
           await context.read<ZaposlenikProvider>().get(filter: {
         'Kategorija': widget.usluga.kategorija.naziv,
+        'Status': "Aktivan",
       });
 
       // Dohvati sve rezervacije za taj datum
@@ -288,7 +291,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
         'terminId': _odabraniTermin!.id,
         'zaposlenikId': zaposleniId,
       });
-      iznos=widget.usluga.cijena;
+      iznos = widget.usluga.cijena;
       print("kreirana rezervacija $KreiranaRezervacija");
       print("iznos $iznos");
       if (mounted) {
@@ -495,7 +498,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
                       value == null ? 'Molimo odaberite termin' : null,
                 ),*/
               const SizedBox(height: 30),
-              ElevatedButton(
+              /*ElevatedButton(
                 onPressed: (_odabraniDatum != null && _odabraniTermin != null)
                     ? _kreirajRezervaciju
                     : null,
@@ -530,6 +533,70 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
                   }
                 },
                 child: const Text('Izvrši plaćanje'),
+              ),*/
+
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: (_odabraniDatum != null && _odabraniTermin != null)
+                    ? () async {
+                        final bool? potvrda = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Potvrda rezervacije'),
+                              content: const Text(
+                                  'Jeste li sigurni da želite rezervisati?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Ne'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Da'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (potvrda == true) {
+                          // ✅ Sačekaj da se rezervacija kreira
+                          await _kreirajRezervaciju();
+
+                          // ✅ Provjeri je li uspješno kreirana
+                          if (KreiranaRezervacija != null) {
+                            print(
+                                "Kreirana rezervacija je: $KreiranaRezervacija");
+
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PayPalScreen(
+                                  lastRezervacija: KreiranaRezervacija,
+                                  totalAmount: iznos!,
+                                ),
+                              ),
+                            );
+
+                            if (result == true) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Plaćanje uspješno!')),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Plaćanje otkazano.')),
+                              );
+                            }
+                          }
+                        }
+                      }
+                    : null,
+                child: const Text('Rezerviši'),
               ),
             ],
           ),

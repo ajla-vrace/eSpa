@@ -74,9 +74,10 @@ namespace eSpa.Service
             CreateMap<Model.Requests.ZaposlenikInsertRequest, Database.Zaposlenik>();
             CreateMap<Model.Requests.ZaposlenikUpdateRequest, Database.Zaposlenik>();
 
-           /* CreateMap<Database.ZaposlenikSlike, Model.ZaposlenikSlike>();
-            CreateMap<Model.Requests.ZaposlenikSlikeInsertRequest, Database.ZaposlenikSlike>();
-            CreateMap<Model.Requests.ZaposlenikSlikeUpdateRequest, Database.ZaposlenikSlike>();*/
+            /* CreateMap<Database.ZaposlenikSlike, Model.ZaposlenikSlike>();
+             CreateMap<Model.Requests.ZaposlenikSlikeInsertRequest, Database.ZaposlenikSlike>();
+             CreateMap<Model.Requests.ZaposlenikSlikeUpdateRequest, Database.ZaposlenikSlike>();*/
+            CreateMap<Database.StatusRezervacije, Model.StatusRezervacije>();
 
             CreateMap<Database.SlikaProfila, Model.SlikaProfila>();
             CreateMap<Model.Requests.SlikaProfilaInsertRequest, Database.SlikaProfila>();

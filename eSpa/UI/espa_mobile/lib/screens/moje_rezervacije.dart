@@ -1,3 +1,5 @@
+import 'package:espa_mobile/models/statusRezervacije.dart';
+import 'package:espa_mobile/providers/statusRezervacije_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:espa_mobile/models/rezervacija.dart';
@@ -15,12 +17,17 @@ class MojeRezervacijeScreen extends StatefulWidget {
 class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
   List<Rezervacija> rezervacije = [];
   bool isLoading = true;
-  String? selectedStatus;
+  StatusRezervacije? selectedStatus;
+  late StatusRezervacijeProvider _statusRezervacijeProvider;
 
+  List<StatusRezervacije> _statusi = [];
+  List<String>? naziviStatusa = [];
+  String? selectedNazivStatusa;
   @override
   void initState() {
     super.initState();
     _loadRezervacije();
+    _loadStatusi();
   }
 
   Future<void> _loadRezervacije() async {
@@ -42,6 +49,20 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
     }
   }
 
+  void _loadStatusi() async {
+    var statusi =
+        await Provider.of<StatusRezervacijeProvider>(context, listen: false)
+            .get();
+    print("statusi ${statusi.result}");
+    setState(() {
+      _statusi = statusi.result;
+    });
+    if (_statusi.isNotEmpty) {
+      naziviStatusa = _statusi.map((status) => status.naziv ?? '').toList();
+      print("Statusi naziv samo ${naziviStatusa}");
+    }
+  }
+
   String formatDate(DateTime? date) {
     if (date == null) return "Nepoznato";
     return "${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}.";
@@ -56,7 +77,7 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
     switch (status?.toLowerCase()) {
       case 'aktivna':
         return Colors.green;
-      case 'završena':
+      case 'zavrsena':
         return Colors.blue;
       case 'otkazana':
         return Colors.red;
@@ -68,11 +89,18 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
   @override
   Widget build(BuildContext context) {
     // Filtriraj po statusu ako je odabran
-    final filtriraneRezervacije = selectedStatus == null
+    /* final filtriraneRezervacije = selectedNazivStatusa == null
         ? rezervacije
         : rezervacije
-            .where(
-                (r) => r.status?.toLowerCase() == selectedStatus!.toLowerCase())
+            .where((r) =>
+                r.status?.toLowerCase() == selectedNazivStatusa!.toLowerCase())
+            .toList();*/
+    final filtriraneRezervacije = (selectedNazivStatusa == null ||
+            selectedNazivStatusa == 'Sve')
+        ? rezervacije
+        : rezervacije
+            .where((r) =>
+                r.status?.toLowerCase() == selectedNazivStatusa!.toLowerCase())
             .toList();
 
     return MasterScreenWidget(
@@ -98,33 +126,39 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical:5.0),
-                child: DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: "Status",
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 5.0),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: "Status",
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
-                  value: selectedStatus,
-                  items: <String?>[null, 'Aktivna', 'Zavrsena', 'Otkazana']
-                      .map<DropdownMenuItem<String>>((String? value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value ?? 'Sve'),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedStatus = newValue;
-                    });
-                  },
-                ),
-              ),
+                    value:
+                        selectedNazivStatusa, // npr. String ili null za "Sve"
+                    items: [
+                      const DropdownMenuItem<String>(
+                        value: 'Sve',
+                        child: Text('Sve'),
+                      ),
+                      ...naziviStatusa!.map((naziv) {
+                        return DropdownMenuItem<String>(
+                          value: naziv,
+                          child: Text(naziv),
+                        );
+                      }).toList(),
+                    ],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedNazivStatusa = newValue;
+                      });
+                    },
+                  )),
             ),
             const SizedBox(height: 10),
             if (isLoading)
@@ -142,7 +176,8 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: filtriraneRezervacije.length,
                 itemBuilder: (context, index) {
-                  final rezervacija = filtriraneRezervacije.reversed.toList()[index];
+                  final rezervacija =
+                      filtriraneRezervacije.reversed.toList()[index];
                   return Card(
                     margin: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 4.0),

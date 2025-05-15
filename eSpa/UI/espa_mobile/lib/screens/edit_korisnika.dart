@@ -67,9 +67,10 @@ class _EditKorisnikScreenState extends State<EditKorisnikScreen> {
                         }
 
                         // Provera da li je ime/prezime minimalno 3 karaktera, samo slova, i prvo slovo veliko
-                        if (!RegExp(r'^[A-Za-z]+$').hasMatch(value)) {
+                        if (!RegExp(r'^[A-Za-zĆćČčŠšŽžĐđ]+$').hasMatch(value)) {
                           return 'Polje može sadržati samo slova';
                         }
+
                         if (value.length < 3) {
                           return 'Unesite najmanje 3 karaktera';
                         }
@@ -89,9 +90,10 @@ class _EditKorisnikScreenState extends State<EditKorisnikScreen> {
                           return "Prezime je obavezno";
 
                         // Provera da li je ime/prezime minimalno 3 karaktera, samo slova, i prvo slovo veliko
-                        if (!RegExp(r'^[A-Za-z]+$').hasMatch(value)) {
+                        if (!RegExp(r'^[A-Za-zĆćČčŠšŽžĐđ]+$').hasMatch(value)) {
                           return 'Polje može sadržati samo slova';
                         }
+
                         if (value.length < 3) {
                           return 'Unesite najmanje 3 karaktera';
                         }
@@ -159,7 +161,8 @@ class _EditKorisnikScreenState extends State<EditKorisnikScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content:
-                                    Text("Lozinka je uspješno promijenjena")),
+                                    Text("Lozinka je uspješno promijenjena"),
+                                    backgroundColor: Colors.green,),
                           );
                         }
                       },
@@ -183,7 +186,8 @@ class _EditKorisnikScreenState extends State<EditKorisnikScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content:
-                                      Text("Podaci su uspješno ažurirani")),
+                                      Text("Podaci su uspješno ažurirani"),
+                                      backgroundColor: Colors.green,),
                             );
                             /* Navigator.push(
                               context,

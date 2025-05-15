@@ -7,7 +7,7 @@ part of 'slikaProfila.dart';
 // **************************************************************************
 
 SlikaProfila _$SlikaProfilaFromJson(Map<String, dynamic> json) => SlikaProfila(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['naziv'] as String?,
       json['slika'] as String?,
       json['tip'] as String?,

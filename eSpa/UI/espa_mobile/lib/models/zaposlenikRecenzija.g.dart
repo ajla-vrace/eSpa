@@ -8,14 +8,14 @@ part of 'zaposlenikRecenzija.dart';
 
 ZaposlenikRecenzija _$ZaposlenikRecenzijaFromJson(Map<String, dynamic> json) =>
     ZaposlenikRecenzija(
-      (json['id'] as num?)?.toInt(),
+      json['id'] as int?,
       json['komentar'] as String?,
-      (json['ocjena'] as num?)?.toInt(),
+      json['ocjena'] as int?,
       json['datumKreiranja'] == null
           ? null
           : DateTime.parse(json['datumKreiranja'] as String),
-      (json['zaposlenikId'] as num?)?.toInt(),
-      (json['korisnikId'] as num?)?.toInt(),
+      json['zaposlenikId'] as int?,
+      json['korisnikId'] as int?,
       json['zaposlenik'] == null
           ? null
           : Zaposlenik.fromJson(json['zaposlenik'] as Map<String, dynamic>),

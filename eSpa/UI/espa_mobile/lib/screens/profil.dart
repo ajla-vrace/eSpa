@@ -122,12 +122,8 @@ class _KorisnickiProfilScreenState extends State<KorisnickiProfilScreen> {
 
                   await _korisnikProvider.update(korisnik!.id!, updateRequest);
                   print("Profilna slika ažurirana");
-                  korisnik!.slika = SlikaProfila(
-                    slikaId,
-                   _fileName!,
-                     _base64image!,
-                     _fileType!,DateTime.now()
-                  );
+                  korisnik!.slika = SlikaProfila(slikaId, _fileName!,
+                      _base64image!, _fileType!, DateTime.now());
                   setState(() {
                     _imaNovuSliku = false;
                   });
@@ -137,14 +133,17 @@ class _KorisnickiProfilScreenState extends State<KorisnickiProfilScreen> {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Slika uspješno sačuvana. ID: $slikaId')),
+                      content: const Text('Slika uspješno sačuvana.'),
+                      backgroundColor: Colors.green, // ✅ Zelena boja za uspjeh
+                    ),
                   );
                 }
               } catch (e) {
                 print("Greška: $e");
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Greška pri spremanju slike.')),
+                    SnackBar(content: Text('Greška pri spremanju slike.'),
+                    backgroundColor: Colors.red,),
                   );
                 }
               }

@@ -29,12 +29,18 @@ class LoginPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
-                Image.network(
+                /* Image.network(
                   "https://www.fit.ba/content/public/images/og-image.jpg",
                   //"https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-souvenirpixels-417074.jpg&fm=jpg",
                   height: 100,
                   width: 100,
+                ),*/
+                const Icon(
+                  Icons.spa, // Koristite odgovarajuću ikonu za spa
+                  size: 100, // Velicina ikone
+                  color: Color.fromARGB(255, 36, 62, 37), // Boja ikone
                 ),
+
                 /*Image.asset(
                   "assets/images/logo.jpg",
                   height: 100,
@@ -113,7 +119,8 @@ class LoginPage extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
                             title: Text("Greška"),
-                            content: Text("Korisnik nije pronađen. Nedozvoljen pristup."),
+                            content: Text(
+                                "Korisnik nije pronađen. Nedozvoljen pristup."),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -132,7 +139,8 @@ class LoginPage extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
                             title: Text("Nedozvoljen pristup"),
-                            content: Text("Samo admin i zaposlenici mogu pristupiti."),
+                            content: Text(
+                                "Samo admin i zaposlenici mogu pristupiti."),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -148,22 +156,26 @@ class LoginPage extends StatelessWidget {
                       LoggedUser.id = korisnik.id;
                       LoggedUser.ime = korisnik.ime;
                       LoggedUser.prezime = korisnik.prezime;
-                      LoggedUser.korisnickoIme=korisnik.korisnickoIme;
-                      LoggedUser.isBlokiran=korisnik.isBlokiran;
-                      LoggedUser.uloga = korisnik.korisnikUlogas[0].uloga!.naziv;
+                      LoggedUser.korisnickoIme = korisnik.korisnickoIme;
+                      LoggedUser.isAdmin = korisnik.isAdmin;
+                      LoggedUser.isZaposlenik = korisnik.isZaposlenik;
+                      LoggedUser.isBlokiran = korisnik.isBlokiran;
+                      LoggedUser.uloga =
+                          korisnik.korisnikUlogas[0].uloga!.naziv;
 
                       await _uslugaProvider.get();
 
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => HomePage()),
                       );
-                    // ignore: unused_catch_clause
+                      // ignore: unused_catch_clause
                     } on Exception catch (e) {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           title: Text("Greška"),
-                          content: /*Text(e.toString()),*/Text("Nedozvoljen pristup."),
+                          content: /*Text(e.toString()),*/
+                              Text("Nedozvoljen pristup."),
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(context),
@@ -181,5 +193,5 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
-    }  }
-
+  }
+}

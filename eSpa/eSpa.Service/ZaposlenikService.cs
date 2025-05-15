@@ -66,7 +66,7 @@ namespace eSpa.Service
             return filteredQuery;
         }
 
-        public async override Task<Model.Zaposlenik> Insert(ZaposlenikInsertRequest insert)
+        /*public async override Task<Model.Zaposlenik> Insert(ZaposlenikInsertRequest insert)
         {
 
             var entity = _mapper.Map<Database.Zaposlenik>(insert);
@@ -77,7 +77,38 @@ namespace eSpa.Service
 
 
             return _mapper.Map<Model.Zaposlenik>(entity);
+        }*/
+        public async override Task<Model.Zaposlenik> Insert(ZaposlenikInsertRequest insert)
+        {
+            // Mapiraj ZaposlenikInsertRequest u entitet Zaposlenik
+            var entity = _mapper.Map<Database.Zaposlenik>(insert);
+
+            // Pronađi ulogu terapeut (pretpostavljamo da ID za terapeut je 2)
+            var uloga = await _context.Ulogas.FindAsync(2);  // Ovdje možete koristiti ID 2 za ulogu terapeut
+            if (uloga == null)
+            {
+                throw new KeyNotFoundException("Uloga 'Terapeut' nije pronađena.");
+            }
+
+            // Dodaj zaposlenika
+            _context.Zaposleniks.Add(entity);
+            await _context.SaveChangesAsync();
+
+            // Dodaj ulogu terapeut zaposleniku
+            var zaposlenikUloga = new Database.KorisnikUloga
+            {
+                KorisnikId = entity.KorisnikId,  // ID zaposlenika
+                UlogaId = uloga.Id       // ID uloge terapeut
+            };
+
+            // Dodaj ulogu u odgovarajuću tabelu (pretpostavljamo da postoji KorisnikUloga tabela)
+            _context.KorisnikUlogas.Add(zaposlenikUloga);
+            await _context.SaveChangesAsync();
+
+            // Mapiraj i vrati model
+            return _mapper.Map<Model.Zaposlenik>(entity);
         }
+
 
         /* public override async Task<Model.Zaposlenik> Update(int id, ZaposlenikUpdateRequest update)
          {
@@ -129,7 +160,7 @@ namespace eSpa.Service
             return _mapper.Map<Model.Zaposlenik>(entity);
         }
         */
-        
+
 
         public override async Task<Model.Zaposlenik> Update(int id, ZaposlenikUpdateRequest update)
         {
