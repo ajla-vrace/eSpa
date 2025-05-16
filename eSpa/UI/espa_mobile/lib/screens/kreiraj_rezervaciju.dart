@@ -3,6 +3,7 @@ import 'package:espa_mobile/models/usluga.dart';
 import 'package:espa_mobile/providers/usluga_provider.dart';
 import 'package:espa_mobile/providers/zaposlenik_provider.dart';
 import 'package:espa_mobile/screens/paypal_screen.dart';
+import 'package:espa_mobile/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/termin.dart';
@@ -300,9 +301,10 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Kreiraj rezervaciju')),
-      body: Padding(
+     return MasterScreenWidget(
+      title: "Kreiranje rezervacije",
+      selectedIndex: 1,
+      child: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
