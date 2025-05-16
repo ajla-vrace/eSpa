@@ -890,7 +890,7 @@ class _UslugaDetailScreenState extends State<UslugaDetailScreen> {
                                                   builder: (_) =>
                                                       UslugaDetailScreen(
                                                           usluga:
-                                                              widget.usluga),
+                                                              usluga),
                                                 ),
                                               );
                                             },
