@@ -83,16 +83,7 @@ class _TerminPageState extends State<TerminPage> {
               child: DataTable(
                 columnSpacing:
                     constraints.maxWidth * 0.2, // Prostor između kolona
-                /*headingRowColor: MaterialStateProperty.all(
-                    Colors.lightBlue.shade100), // Boja zaglavlja
-                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Colors.lightBlue.shade200; // Selektovani red
-                    }
-                    return Colors.white; // Podrazumevana boja reda
-                  },
-                ),*/
+
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -177,7 +168,7 @@ class _TerminPageState extends State<TerminPage> {
                                             Navigator.of(context).pop(
                                                 false); // Korisnik je odustao
                                           },
-                                           style: TextButton.styleFrom(
+                                          style: TextButton.styleFrom(
                                             foregroundColor: Colors
                                                 .grey, // Boja teksta na dugmetu (siva)
                                           ),
@@ -188,7 +179,7 @@ class _TerminPageState extends State<TerminPage> {
                                             Navigator.of(context).pop(
                                                 true); // Korisnik je potvrdio
                                           },
-                                           style: TextButton.styleFrom(
+                                          style: TextButton.styleFrom(
                                             foregroundColor: Colors
                                                 .red, // Boja teksta na dugmetu (siva)
                                           ),
@@ -261,11 +252,7 @@ class _TerminPageState extends State<TerminPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                /*const Text(
-                  "Tabela Kategorije",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),*/
-                //const SizedBox(height: 20), //const SizedBox(height: 20),
+
                 // Novi red za input i dugme
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -286,79 +273,16 @@ class _TerminPageState extends State<TerminPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        IconButton(
-                          icon: Icon(Icons.backspace, color: Colors.red),
-                          onPressed: () {
-                            _ftsController.clear();
-                          },
-                          tooltip: 'Obriši unos',
-                        ),
-                         const SizedBox(width: 10),
-                        /*ElevatedButton(
-                      onPressed: () {
-                        final searchTerm = _ftsController.text;
-                        print("Pretraženi termin: $searchTerm");
-                        // Možete pozvati funkciju za pretragu ovde
-                      },
-                      child: const Text("Pretraži"),
-                    ),*/
-                        /*   ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 16.0), // Isti padding za oba dugmeta
-                            minimumSize: const Size(
-                                120, 50), // Ista minimalna širina i visina
-                            textStyle: const TextStyle(fontSize: 16),
-                          ), // Ista veličina fonta
-
-                          onPressed: () async {
-                            final searchTerm = _ftsController.text;
-                            RegExp regex = RegExp(r'^[0-9]{2}:[0-9]{2}$');
-                            if (!regex.hasMatch(searchTerm)) {
-                              // Ako nije u ispravnom formatu, prikažite poruku o grešci
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Format mora biti HH:mm (npr. 09:00)."),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return; // Ne pokrećite pretragu dok unos nije ispravan
-                            }
-                            try {
-                              var data = await _terminProvider.get(
-                                  filter: {'pocetak': _ftsController.text});
-                              //print("oov je pretraga za :"_ftsController.text);
-                              print(
-                                  "Ovo je pretraga za: ${_ftsController.text}");
-
-                              setState(() {
-                                _termini =
-                                    data.result; // Ažurirajte listu komentara
-                              });
-                              print(data
-                                  .result); // Proveri šta tačno vraća server
-                            } catch (e) {
-                              print("Došlo je do greške prilikom pretrage: $e");
-                              setState(() {
-                                _termini =
-                                    []; // Prazna lista ako nema rezultata ili dođe do greške
-                              });
-                            }
-                          },
-                          child: const Text("Pretraži"),
-                        ),
-                        const SizedBox(width: 30),
-                        /*ElevatedButton(
-                          onPressed: () async {
-                            
-                            
-                          },
-                          child: const Text("Dodaj novu kategoriju"),
-                        ),*/
-*/
-
+                        /*(_ftsController.text.isNotEmpty)
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _ftsController.clear();
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),*/
+                        const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -416,15 +340,7 @@ class _TerminPageState extends State<TerminPage> {
                                   _termini = data.result;
                                 });
 
-                                if (_termini.isEmpty) {
-                                  // Ako nema rezultata, prikaži "Nema podataka"
-                                 /* ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Nema podataka"),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );*/
-                                }
+                                if (_termini.isEmpty) {}
                               } catch (e) {
                                 print(
                                     "Došlo je do greške prilikom pretrage: $e");

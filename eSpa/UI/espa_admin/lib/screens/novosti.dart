@@ -92,7 +92,7 @@ class _NovostiPageState extends State<NovostPage> {
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
                     return const Color.fromARGB(
-                        255, 181, 226, 182); // Svetlozelena boja za redove
+                        255, 181, 226, 182); 
                   },
                 ),
                 columns: const [
@@ -159,7 +159,7 @@ class _NovostiPageState extends State<NovostPage> {
                         novost.slika != null && novost.slika!.isNotEmpty
                             ? Image.memory(
                                 base64Decode(novost
-                                    .slika!), // Pristupamo slici putem 'slika' unutar 'zaposlenik.slika'
+                                    .slika!), 
                                 width: 50, // Širina slike
                                 height: 50, // Visina slike
                                 fit: BoxFit.cover, // Prilagodba slike
@@ -219,7 +219,7 @@ class _NovostiPageState extends State<NovostPage> {
                                           },
                                           style: TextButton.styleFrom(
                                             foregroundColor: Colors
-                                                .grey, // Boja teksta na dugmetu (siva)
+                                                .grey, 
                                           ),
                                         ),
                                         TextButton(
@@ -230,7 +230,7 @@ class _NovostiPageState extends State<NovostPage> {
                                           },
                                           style: TextButton.styleFrom(
                                             foregroundColor: Colors
-                                                .red, // Boja teksta na dugmetu (siva)
+                                                .red, 
                                           ),
                                         ),
                                       ],
@@ -243,7 +243,7 @@ class _NovostiPageState extends State<NovostPage> {
                                     await _novostProvider.delete(novost.id!);
                                     setState(() {
                                       _novosti.remove(
-                                          novost); // Uklonite obrisanu novost iz liste
+                                          novost); // Ukloni obrisanu novost iz liste
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -353,7 +353,7 @@ class _NovostiPageState extends State<NovostPage> {
                         ),
                         const SizedBox(width: 10),
                         //const SizedBox(width: 10),
-                        IconButton(
+                        /*IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _naslovController.clear();
@@ -363,20 +363,26 @@ class _NovostiPageState extends State<NovostPage> {
                             });
                           },
                           tooltip: 'Obriši unos',
-                        ),
-                        const SizedBox(width: 10),
-                        /* IconButton(
-                          icon: Icon(Icons.backspace, color: Colors.red),
-                          onPressed: () {
-                            _naslovController.clear();
-                            _autorController.clear();
-                            
-                            setState(() {
-                              _selectedStatus= "Sve"; 
-                            });// Briše unos iz polja
-                          },
-                          tooltip: 'Obriši unos',
                         ),*/
+                         (_naslovController.text.isNotEmpty ||
+                                _autorController.text.isNotEmpty
+                               )
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _naslovController.clear();
+                                  _autorController.clear();
+                                  //_prezimeController.clear();
+
+                                  setState(() {
+                                    _selectedStatus = "Sve";
+                                  });
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
+                        const SizedBox(width: 10),
+                       
                         const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(

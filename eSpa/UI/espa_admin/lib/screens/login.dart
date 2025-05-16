@@ -2,6 +2,7 @@
 import 'package:espa_admin/providers/korisnik_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
 import 'package:espa_admin/screens/home.dart';
+import 'package:espa_admin/screens/rezervacije.dart';
 import 'package:espa_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,27 +30,11 @@ class LoginPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
-                /* Image.network(
-                  "https://www.fit.ba/content/public/images/og-image.jpg",
-                  //"https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-souvenirpixels-417074.jpg&fm=jpg",
-                  height: 100,
-                  width: 100,
-                ),*/
                 const Icon(
-                  Icons.spa, // Koristite odgovarajuću ikonu za spa
-                  size: 100, // Velicina ikone
-                 // color: Color.fromARGB(21, 109, 51, 37),
-                 color: Color.fromARGB(255, 21, 109, 51), // Boja ikone
+                  Icons.spa,
+                  size: 100,
+                  color: Color.fromARGB(255, 21, 109, 51), // Boja ikone
                 ),
-                //Text("eSpa"),
-                /*Text(
-                  "eSpa",
-                  style: TextStyle(
-                    fontFamily: 'cursive',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),*/
                 Text(
                   "eSpa",
                   style: TextStyle(
@@ -59,12 +44,6 @@ class LoginPage extends StatelessWidget {
                     color: Color.fromARGB(255, 36, 62, 37),
                   ),
                 ),
-
-                /*Image.asset(
-                  "assets/images/logo.jpg",
-                  height: 100,
-                  width: 100,
-                ),*/
                 TextField(
                   decoration: InputDecoration(
                       labelText: "Username", prefixIcon: Icon(Icons.email)),
@@ -76,49 +55,12 @@ class LoginPage extends StatelessWidget {
                 TextField(
                   decoration: InputDecoration(
                       labelText: "Password", prefixIcon: Icon(Icons.password)),
+                  obscureText: true,
                   controller: _passwordController,
                 ),
                 SizedBox(
                   height: 8,
                 ),
-                /* ElevatedButton(
-                    onPressed: () async {
-                      var username = _usernameController.text;
-                      var password = _passwordController.text;
-                      // _passwordController.text = username;
-
-                      //print("login proceed na login stranici $username $password");
-
-                      Authorization.username = username;
-                      Authorization.password = password;
-
-                      await setUserName(username);
-                      try {
-                        await _korisnikProvider
-                            .get(filter: {'KorisnickoIme': password});
-                        await _uslugaProvider.get();
-
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => /*const*/ HomePage(),
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title: Text("Error"),
-                                  content: Text(e.toString()),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text("OK"))
-                                  ],
-                                ));
-                      }
-                    },
-                    child: Text("Login"))*/
-
                 ElevatedButton(
                   onPressed: () async {
                     var username = _usernameController.text;
@@ -184,9 +126,20 @@ class LoginPage extends StatelessWidget {
 
                       await _uslugaProvider.get();
 
-                      Navigator.of(context).push(
+                      if (LoggedUser.isAdmin!) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      } else if (LoggedUser.isZaposlenik!) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => RezervacijePage()),
+                        );
+                      }
+
+                      /* Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => HomePage()),
-                      );
+                      );*/
                       // ignore: unused_catch_clause
                     } on Exception catch (e) {
                       showDialog(

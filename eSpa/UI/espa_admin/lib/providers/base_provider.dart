@@ -274,6 +274,44 @@ abstract class BaseProvider<T> with ChangeNotifier {
     return query;
   }
 
+
+  Future<void> changePassword(int userId, String currentPassword,
+      String newPassword, String confirmPassword) async {
+    //var url = "$_baseUrlKorisnici/ChangePassword"; // Ispravan URL
+    // ignore: unused_local_variable
+    var baseUrlWithoutSlash = _baseUrl!.endsWith('/')
+        ? _baseUrl!.substring(0, _baseUrl!.length - 1)
+        : _baseUrl;
+    //var url = "$baseUrlWithoutSlash/Korisnici/ChangePassword";
+    var url = "${_baseUrl}Korisnici/ChangePassword";
+
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+    print("url $url");
+    var jsonRequest = jsonEncode({
+      "id": userId,
+      "stariPassword": currentPassword,
+      "noviPassword": newPassword,
+      "potvrdaPassword": confirmPassword,
+    });
+    print("json $jsonRequest");
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    print("Response Status: ${response.statusCode}");
+    print("Response Body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      print("Password changed successfully!");
+    } else {
+      var responseBody = json.decode(response.body);
+      if (response.statusCode == 400 && responseBody['message'] != null) {
+        throw Exception(responseBody['message']);
+      } else {
+        throw Exception("Unknown error");
+      }
+    }
+  }
+
+
   Future<void> blokirajKorisnika(int korisnikId) async {
     var url =
         "${_baseUrl}Korisnici/Blokiraj/$korisnikId"; // ili 'blokiraj?id=$korisnikId' zavisno od backend rute

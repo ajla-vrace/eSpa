@@ -29,13 +29,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
   final List<String> statusOptions = ['Sve', 'Aktivan', 'Blokiran'];
 
   String? _selectedStatus = 'Sve'; // Podrazumevana vrednost
-  /*String _shortenText(String text, int maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-*/
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -50,13 +44,12 @@ class _KorisnikPageState extends State<KorisnikPage> {
   }
 
   Future<void> _loadKorisnici() async {
-     print("POZIV _loadKorisnici"); // prvi log
+    print("POZIV _loadKorisnici"); // prvi log
     try {
-       final korisnici =
-          await Provider.of<KorisnikProvider>(context, listen: false).get(filter: {'isZaposlenik':false,'isAdmin':false });
-      /*final korisnici =
-          await _korisnikProvider.get(filter: {'isZaposlenik': true,});
-      print("korisniic $korisnici");*/
+      final korisnici =
+          await Provider.of<KorisnikProvider>(context, listen: false)
+              .get(filter: {'isZaposlenik': false, 'isAdmin': false});
+
       setState(() {
         _korisnici = korisnici.result;
         _isKorisnikLoading = false;
@@ -93,16 +86,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
               child: DataTable(
                 columnSpacing:
                     constraints.maxWidth * 0.1, // Prostor između kolona
-                /*headingRowColor: MaterialStateProperty.all(
-                    Colors.lightBlue.shade100), // Boja zaglavlja
-                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Colors.lightBlue.shade200; // Selektovani red
-                    }
-                    return Colors.white; // Podrazumevana boja reda
-                  },
-                ),*/
+
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -112,12 +96,6 @@ class _KorisnikPageState extends State<KorisnikPage> {
                   },
                 ),
                 columns: const [
-                  /*DataColumn(
-                    label: Text(
-                      "ID",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                   DataColumn(
                     label: Text(
                       "Ime",
@@ -130,12 +108,6 @@ class _KorisnikPageState extends State<KorisnikPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  /*DataColumn(
-                    label: Text(
-                      "Email",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                   DataColumn(
                     label: Text(
                       "Korisnicko ime",
@@ -167,19 +139,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
                       DataCell(Text(korisnik.ime ?? "N/A")),
                       DataCell(Text(korisnik.prezime ?? "N/A")),
-                      // DataCell(Text(korisnik.email ?? "N/A")),
-                      /* DataCell(
-                        SizedBox(
-                          width: 100, // prilagodi po potrebi
-                          child: Text(
-                            korisnik.email ?? "N/A",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),*/
-                      //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
-                      // DataCell(Text(korisnik.korisnickoIme ?? "N/A")),
+
                       DataCell(
                         SizedBox(
                           width: 100, // prilagodi po potrebi
@@ -222,22 +182,11 @@ class _KorisnikPageState extends State<KorisnikPage> {
                               },
                               tooltip: 'Detalji',
                             ),
-                            /* IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                // Akcija za delete
-                                print('Delete clicked for: ${novost.naslov}');
-                              },
-                            ),*/
-
                             IconButton(
                               icon: const Icon(Icons.do_not_disturb),
                               color: korisnik.status == "Blokiran"
                                   ? Colors.grey
                                   : Colors.black,
-                              /*color: korisnik.isBlokiran!
-                                  ? Colors.grey
-                                  : Colors.black,*/ // Siva ako je blokiran
                               onPressed: korisnik.status == "Blokiran"
                                   ? null // Ako je korisnik blokiran, dugme je onemogućeno
                                   : () async {
@@ -264,6 +213,8 @@ class _KorisnikPageState extends State<KorisnikPage> {
                                               TextButton(
                                                 child: const Text("Blokiraj"),
                                                 onPressed: () {
+                                                  korisnik.status="Blokiran";
+                                                 // _loadKorisnici();
                                                   Navigator.of(context).pop(
                                                       true); // Korisnik je potvrdio
                                                 },
@@ -284,27 +235,9 @@ class _KorisnikPageState extends State<KorisnikPage> {
                                               await _korisnikProvider
                                                   .blokirajKorisnika(
                                                       korisnik.id!);
-                                          //_korisnik.status = "Blokiran";
-                                          //_korisnik.isBlokiran = true;
 
-                                          // await _korisnikProvider.update(
-                                          //  korisnik.id!, _korisnik);
-                                          setState(() {
-                                            /*  var index = _korisnici
-                                          .indexWhere((k) => k.id == korisnik.id);
-                                      if (index != -1) {
-                                        _korisnici[index] =
-                                            korisnik; // Ažuriraj korisnika u listi
-                                      }*/
-                                          });
-                                          await _loadKorisnici();
-                                          /*ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content:
-                                            Text("Korisnik uspješno blokiran."),
-                                        backgroundColor: Colors.green,
-                                      ),
-                                    );*/
+                                          setState(() {});
+
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             const SnackBar(
@@ -362,11 +295,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                /*const Text(
-                  "Tabela Kategorije",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),*/
-                //const SizedBox(height: 20), //const SizedBox(height: 20),
+
                 // Novi red za input i dugme
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -375,16 +304,6 @@ class _KorisnikPageState extends State<KorisnikPage> {
                         0.8, // Ograničavanje širine
                     child: Row(
                       children: [
-                        /* Expanded(
-                          child: TextField(
-                            controller: _ftsController,
-                            decoration: const InputDecoration(
-                              labelText: "Pretraži korisnike",
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.search),
-                            ),
-                          ),
-                        ),*/
                         Expanded(
                           child: TextField(
                             controller: _imeController,
@@ -440,7 +359,7 @@ class _KorisnikPageState extends State<KorisnikPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        IconButton(
+                        /*IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _imeController.clear();
@@ -451,16 +370,27 @@ class _KorisnikPageState extends State<KorisnikPage> {
                             }); // Briše unos iz polja
                           },
                           tooltip: 'Obriši unos',
-                        ),
+                        ),*/
+                        (_korisnickoImeController.text.isNotEmpty ||
+                                _imeController.text.isNotEmpty ||
+                                _prezimeController.text.isNotEmpty)
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _korisnickoImeController.clear();
+                                  _imeController.clear();
+                                  _prezimeController.clear();
+
+                                  setState(() {
+                                    _selectedStatus = "Sve";
+                                  });
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
+
                         const SizedBox(width: 10),
-                        /*ElevatedButton(
-                      onPressed: () {
-                        final searchTerm = _ftsController.text;
-                        print("Pretraženi termin: $searchTerm");
-                        // Možete pozvati funkciju za pretragu ovde
-                      },
-                      child: const Text("Pretraži"),
-                    ),*/
+
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -477,8 +407,8 @@ class _KorisnikPageState extends State<KorisnikPage> {
                                 'Ime': _imeController.text,
                                 'Prezime': _prezimeController.text,
                                 'KorisnickoIme': _korisnickoImeController.text,
-                                'isZaposlenik':false,
-                                'isAdmin':false,
+                                'isZaposlenik': false,
+                                'isAdmin': false,
                                 /*'Status':
                                     _selectedStatus, */ // Dodajemo status u filter
                               };
@@ -505,44 +435,6 @@ class _KorisnikPageState extends State<KorisnikPage> {
                           child: const Text("Pretraži"),
                         ),
                         // const SizedBox(width: 30),
-                        /*ElevatedButton(
-                          onPressed: () async {
-                            
-                            
-                          },
-                          child: const Text("Dodaj novu kategoriju"),
-                        ),*/
-
-                        /*R ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 16.0), // Isti padding za oba dugmeta
-                            minimumSize: const Size(
-                                120, 50), // Ista minimalna širina i visina
-                            textStyle: const TextStyle(
-                                fontSize: 16), // Ista veličina fonta
-                          ),
-                          onPressed: () async {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => KorisnikDetaljiPage(),
-                              ),
-                            );
-
-                            // Dodaj funkcionalnost za dugme
-                          },
-                          child: Row(
-                            /*mainAxisSize: MainAxisSize
-                                .min, // Osigurava da Row zauzima minimalnu širinu potrebnu za ikonu i tekst*/
-                            children: const [
-                              Icon(Icons.add), // Ikonica plusa
-                              SizedBox(
-                                  width: 8), // Razmak između ikone i teksta
-                              Text("Dodaj novog korisnika"), // Tekst dugmeta
-                            ],
-                          ),
-                        ),*/
                       ],
                     ),
                   ),

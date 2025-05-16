@@ -145,139 +145,8 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
                 ),
               ],
             ),
-            /* child: Column(
-                children: [
-                  isLoading
-                      ? const CircularProgressIndicator()
-                      : _buildForm(),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (!(_formKey.currentState?.saveAndValidate() ?? false)) {
-                          print("Validacija nije prošla!");
-                          return;
-                        }
-                        var request = Map.from(_formKey.currentState!.value);
+          
 
-                        var currentValues =
-                            Map.from(_formKey.currentState!.value);
-
-                        bool isChanged = false;
-                        print("Initial Values: $_initialValue");
-                      print("Current Values: $currentValues");
-                        _initialValue.forEach((key, value) {
-                          if (currentValues[key] != value) {
-                            isChanged = true;
-                          }
-                        });
-
-                        if (!isChanged) {
-                          Navigator.pop(context, false);
-                          return;
-                        }
-
-                        try {
-                          if (widget.novost == null) {
-                            await _novostProvider.insert(request);
-                          } else {
-                            await _novostProvider.update(
-                                widget.novost!.id!, request);
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NovostPage(),
-                            ),
-                          );
-                        } on Exception catch (e) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text(e.toString()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text("Sačuvaj"),
-                    ),
-                  ),
-                ],
-              ),*/
-/*
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min, // Sprečava prekomerno širenje
-                children: [
-                  isLoading ? const CircularProgressIndicator() : _buildForm(),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (!(_formKey.currentState?.saveAndValidate() ??
-                            false)) {
-                          print("Validacija nije prošla!");
-                          return;
-                        }
-                        var request = Map.from(_formKey.currentState!.value);
-                        var currentValues =
-                            Map.from(_formKey.currentState!.value);
-
-                        bool isChanged = false;
-                        print("Initial Values: $_initialValue");
-                        print("Current Values: $currentValues");
-                        _initialValue.forEach((key, value) {
-                          if (currentValues[key] != value) {
-                            isChanged = true;
-                          }
-                        });
-
-                        if (!isChanged) {
-                          Navigator.pop(context, false);
-                          return;
-                        }
-
-                        try {
-                          if (widget.novost == null) {
-                            await _novostProvider.insert(request);
-                          } else {
-                            await _novostProvider.update(
-                                widget.novost!.id!, request);
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NovostPage()),
-                          );
-                        } on Exception catch (e) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text(e.toString()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text("Sačuvaj"),
-                    ),
-                  ),
-                ],
-              ),
-            ),*/
 
             child: SingleChildScrollView(
               child: Column(
@@ -287,11 +156,7 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      /* Text(
-                        widget.novost?.naslov ?? "Novost details",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),*/
+                     
                       Spacer(), // Gura dugme skroz desno
                       IconButton(
                         icon: Icon(Icons.close, color: Colors.black54),
@@ -321,96 +186,7 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey),
                       ),
-                      /*  ElevatedButton(
-                        onPressed: () async {
-                          if (!(_formKey.currentState?.saveAndValidate() ??
-                              false)) {
-                            print("Validacija nije prošla!");
-                            return;
-                          }
-                          var request = Map.from(_formKey.currentState!.value);
-                          var currentValues =
-                              Map.from(_formKey.currentState!.value);
-
-                          // bool isChanged = false;
-                          print("Initial Values: $_initialValue");
-                          print("Current Values: $currentValues");
-                          /* _initialValue.forEach((key, value) {
-                            if (currentValues[key] != value) {
-                              isChanged = true;
-                            }
-                          });
-
-                          if (!isChanged) {
-                            Navigator.pop(context, false);
-                            return;
-                          }*/
-                          print("widget rezervacija ${widget.rezervacija}");
-                          try {
-                            print(" u try smo za insert");
-                            if (widget.rezervacija == null) {
-                              await _rezervacijaProvider.insert(request);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "Rezervacija uspješno dodana.",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  backgroundColor:
-                                      Colors.green, // Dodaj zelenu pozadinu
-                                  behavior: SnackBarBehavior
-                                      .floating, // Opcionalno za lepši prikaz
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
-                            } else {
-                              print(" u else smo za update");
-                              print("request $request");
-                              await _rezervacijaProvider.update(
-                                  widget.rezervacija!.id!, request);
-                              print("update poslije ");
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "Rezervacija uspješno modifikovana.",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  backgroundColor:
-                                      Colors.green, // Dodaj zelenu pozadinu
-                                  behavior: SnackBarBehavior
-                                      .floating, // Opcionalno za lepši prikaz
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
-                            }
-                            // _loadRezervacije();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RezervacijePage()),
-                            );
-                          } on Exception catch (e) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: Text(e.toString()),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text("Sačuvaj"),
-                      ),*/
+                     
                     ],
                   ),
                 ],
@@ -431,13 +207,7 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
-          // Polja sa ikonama
-          // _buildInputField("Naslov", Icons.title, "naslov"),
-          //SizedBox(height: 10),
-          // _buildInputField1("Sadrzaj", Icons.description, "sadrzaj"),
-          //SizedBox(height: 10),
-          /* _buildStatusDropdownField(
-              "Status", "status"),*/ // Ovdje koristiš novi dropdown
+        
           _buildStatusDropdownField(
               "Status rezervacije", "statusRezervacijeId"),
 
@@ -447,92 +217,7 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
     );
   }
 
-/*
-  Widget _buildInputField(String label, IconData icon, String name) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Polje je obavezno';
-        }
-        // Provera da li je prvo slovo veliko
-        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-          return 'Prvo slovo mora biti veliko';
-        }
-        if (value.length <= 3) {
-          return 'Unesite više od 3 karaktera';
-        }
-        return null;
-      },
-    );
-  }
-*/
-  /* Widget _buildStatusDropdownField(String label, String name) {
-    // Proveri da li je novost null, što znači da se kreira nova novost
-    if (widget.rezervacija == null) {
-      // Ako je nova novost, ne prikazuj status
-      return SizedBox.shrink(); // Vraća prazni widget (ne prikazuje ništa)
-    }
 
-    // Ako nije nova novost, prikaži status dropdown
-    return FormBuilderDropdown<String>(
-      name: name,
-      /* initialValue: _initialValue[name] ??
-          "Aktivna", // Podrazumevana vrednost za ažuriranje*/
-      initialValue:
-          _initialValue[name] ?? widget.rezervacija?.status ?? "Aktivna",
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon:
-            Icon(Icons.check_circle_outline), // Ikona pored dropdown menija
-        border: OutlineInputBorder(),
-      ),
-      items: _statusi.map<DropdownMenuItem<String>>((status) {
-        return DropdownMenuItem<String>(
-          value: status.naziv ?? '',
-          child: Text(status.naziv ?? ''),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _initialValue[name] =
-              value; // Ažuriraj status kada se odabere nova vrednost
-        });
-      },
-    );
-  }*/
-  /*Widget _buildStatusDropdownField(String label, String name) {
-    if (widget.rezervacija == null) {
-      return SizedBox.shrink();
-    }
-
-    return FormBuilderDropdown<int>(
-      name: name,
-      initialValue: _initialValue[name] ??
-          widget.rezervacija?.statusRezervacijeId, // koristi ID
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(Icons.check_circle_outline),
-        border: OutlineInputBorder(),
-      ),
-      items: _statusi.map<DropdownMenuItem<int>>((status) {
-        return DropdownMenuItem<int>(
-          value: status.id, // ID statusa se šalje kao vrijednost
-          child: Text(status.naziv ?? ''),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          _initialValue[name] = value; // Čuvaj ID, ne naziv
-        });
-      },
-    );
-  }*/
 
   Widget _buildStatusDropdownField(String label, String name) {
     if (widget.rezervacija == null) {
@@ -581,7 +266,7 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
             actions: [
               TextButton(
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.grey[400], // svetlosiva boja za tekst
+                  foregroundColor: Colors.grey[400], 
                 ),
                 onPressed: () {
                   // Ako korisnik odustane, navigiraj na ekran sa svim rezervacijama
@@ -645,119 +330,5 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
     );
   }
 
-/*Widget _buildStatusDropdownField(String label, String name) {
-  if (widget.rezervacija == null) {
-    return SizedBox.shrink();
-  }
 
-  // Prethodna vrednost statusa pre nego što se dijalog otvori
-  final previousValue = _initialValue[name] ?? widget.rezervacija?.statusRezervacijeId;
-
-  return FormBuilderDropdown<int>(
-    name: name,
-    initialValue: previousValue, // Početna vrednost
-    decoration: InputDecoration(
-      labelText: label,
-      prefixIcon: Icon(Icons.check_circle_outline),
-      border: OutlineInputBorder(),
-    ),
-    items: _statusi.map<DropdownMenuItem<int>>((status) {
-      return DropdownMenuItem<int>(
-        value: status.id,
-        child: Text(status.naziv ?? ''),
-      );
-    }).toList(),
-    onChanged: (value) async {
-      if (value == null || value == _initialValue[name]) return;
-
-      final selectedStatus = _statusi.firstWhere(
-        (s) => s.id == value,
-      );
-
-      if (selectedStatus == null) return;
-
-      // Pokaži dijalog za potvrdu
-      bool? potvrda = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Potvrda"),
-          content: Text("Jeste li sigurni da želite promijeniti status u '${selectedStatus.naziv}'?"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // Korisnik odustaje
-              child: Text("Ne"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),  // Korisnik potvrđuje
-              child: Text("Da"),
-            ),
-          ],
-        ),
-      );
-
-      if (potvrda == true) {
-        // Ako je korisnik potvrdio, promijeni status
-        setState(() {
-          _initialValue[name] = value; // Postavi novu vrednost
-        });
-      } else {
-        // Ako je korisnik odbio, resetuj status na 'Aktivna' (ID = 1)
-        setState(() {
-          _selectedStatus="Aktivna";
-          _initialValue[name] = 1; // Vraćamo status na 'Aktivna' (pretpostavljamo da je ID za 'Aktivna' = 1)
-        });
-      }
-    },
-  );
-}*/
-
-/*Future<bool> _pokaziPotvrdu(String poruka) async {
-  return await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Potvrda"),
-          content: Text(poruka),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text("Ne"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text("Da"),
-            ),
-          ],
-        ),
-      ) ??
-      false;
-}*/
-
-/*
-  Widget _buildInputField1(String label, IconData icon, String name) {
-    return FormBuilderTextField(
-      name: name,
-      minLines: 1, // Početna visina polja
-      maxLines: 3, // Omogućava beskonačno širenje prema dole
-      keyboardType: TextInputType.multiline, // Omogućava unos više linija
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Polje je obavezno';
-        }
-        // Provera da li je prvo slovo veliko
-        if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-          return 'Prvo slovo mora biti veliko';
-        }
-        // Provera minimalne dužine (više od 10 karaktera)
-        if (value.length <= 10) {
-          return 'Unesite više od 10 karaktera';
-        }
-        return null;
-      },
-    );
-  }*/
 }

@@ -3,14 +3,18 @@
 import 'dart:convert';
 
 import 'package:espa_admin/models/kategorija.dart';
+import 'package:espa_admin/models/ocjena.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/usluga.dart';
 import 'package:espa_admin/providers/kategorija_provider.dart';
+import 'package:espa_admin/providers/ocjena_provider.dart';
 //import 'package:espa_admin/providers/kategorija_provider.dart';
 //import 'package:espa_admin/providers/novost_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
 //import 'package:espa_admin/screens/novost_detalji.dart';
 import 'package:espa_admin/screens/usluga_detalji.dart';
+import 'package:espa_admin/screens/usluga_info.dart';
+import 'package:espa_admin/utils/util.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:intl/intl.dart';
@@ -39,11 +43,6 @@ class _UslugePageState extends State<UslugaPage> {
   List<Kategorija>? kategorije;
 
   List<String?>? _kategorije; // Varijabla za pohranu odabrane kategorije
-  //List<String> kategorije = [];
-
-  //List<Kategorija>? _kategorije;
-
-  //var kategorije;
 
   String _shortenText(String text, int maxLength) {
     if (text.length > maxLength) {
@@ -82,6 +81,31 @@ class _UslugePageState extends State<UslugaPage> {
     }
   }
 
+  /*Future<double> _loadProsjecnaOcjena(String nazivUsluge) async {
+  try {
+    final ocjene = await Provider.of<OcjenaProvider>(context, listen: false)
+        .get(filter: {
+          'Korisnik': LoggedUser.korisnickoIme,
+          'Usluga': nazivUsluge, // šalješ i naziv usluge kao filter
+        });
+    
+    final ocjeneList = ocjene.result;
+
+    if (ocjeneList.isEmpty) return 0.0;
+
+    // Izračunaj prosjek
+    final suma = ocjeneList
+    .map((o) => (o.ocjena1 ?? 0).toDouble())
+    .reduce((a, b) => a + b);
+
+ // pretpostavljam da je polje ocjena ovako
+    return suma / ocjeneList.length;
+  } catch (e) {
+    return 0.0;
+  }
+}
+*/
+
   Widget _buildUslugaTable() {
     if (_isUslugaLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -107,16 +131,7 @@ class _UslugePageState extends State<UslugaPage> {
               child: DataTable(
                 columnSpacing: 15,
                 //OVDJE JE  // constraints.maxWidth * 0.2, // Prostor između kolona
-                /*headingRowColor: MaterialStateProperty.all(
-                    Colors.lightBlue.shade100), // Boja zaglavlja
-                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Colors.lightBlue.shade200; // Selektovani red
-                    }
-                    return Colors.white; // Podrazumevana boja reda
-                  },
-                ),*/
+
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -126,12 +141,6 @@ class _UslugePageState extends State<UslugaPage> {
                   },
                 ),
                 columns: const [
-                  /*DataColumn(
-                    label: Text(
-                      "ID",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                   DataColumn(
                     label: Text(
                       "Naziv",
@@ -175,11 +184,11 @@ class _UslugePageState extends State<UslugaPage> {
                     ),
                   ),
                 ],
-                rows: _usluge.map((usluga) {
+                rows: _usluge.reversed.map((usluga) {
                   return DataRow(
                     cells: [
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
-                      // DataCell(Text(usluga.naziv ?? "N/A")),
+                      //DataCell(Text(usluga.naziv ?? "N/A")),
                       DataCell(
                         Text(_shortenText(
                             usluga.naziv ?? '', 30)), // Skraćeni sadržaj
@@ -189,6 +198,7 @@ class _UslugePageState extends State<UslugaPage> {
                         Text(_shortenText(
                             usluga.opis ?? '', 30)), // Skraćeni sadržaj
                       ),
+                      //DataCell(Text(usluga.cijena?.toStringAsFixed(2) ?? "N/A")),
                       //DataCell(Text(usluga.cijena?.toStringAsFixed(2) ?? "N/A")),
                       DataCell(Text(
                           '${usluga.cijena?.toStringAsFixed(0) ?? "N/A"} KM')),
@@ -214,6 +224,21 @@ class _UslugePageState extends State<UslugaPage> {
                               .end, // Poravnavanje ikonica desno
                           children: [
                             IconButton(
+                              icon: const Icon(Icons.info),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        UslugaInfoPage(usluga: usluga),
+                                  ),
+                                );
+
+                                // Akcija za update
+                                print('Update clicked for: ${usluga.naziv}');
+                              },
+                            ),
+                            IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () {
                                 Navigator.push(
@@ -223,31 +248,11 @@ class _UslugePageState extends State<UslugaPage> {
                                         UslugaDetaljiPage(usluga: usluga),
                                   ),
                                 );
-                                /* bool? isUpdated = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NovostDetaljiPage(novost: novost),
-                                  ),
-                                );
 
-                                // Provjera da li treba osvježiti podatke
-                                if (isUpdated == true) {
-                                  await _loadNovosti(); // Poziv metode za ponovno učitavanje podataka
-                                  setState(() {});
-                                }*/
                                 // Akcija za update
                                 print('Update clicked for: ${usluga.naziv}');
                               },
                             ),
-                            /* IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                // Akcija za delete
-                                print('Delete clicked for: ${novost.naslov}');
-                              },
-                            ),*/
-
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
@@ -335,19 +340,6 @@ class _UslugePageState extends State<UslugaPage> {
     );
   }
 
-  /* Future<void> _loadKategorije1() async {
-    final kategorijeSve =
-        await Provider.of<KategorijaProvider>(context, listen: false).get();
-    setState(() {
-      _kategorije = kategorijeSve.result;
-      selectedKategorija = _kategorije!.isNotEmpty
-          ? _kategorije![0].naziv
-          : null; // Postavi početni odabir
-
-      //_isUslugaLoading = false;
-    });
-  }*/
-
   Future<void> _loadKategorije() async {
     final kategorijeSve =
         await Provider.of<KategorijaProvider>(context, listen: false).get();
@@ -369,28 +361,6 @@ class _UslugePageState extends State<UslugaPage> {
     });
   }
 
-/*
-  DropdownButton<String?> buildKategorijaDropdown() {
-    return DropdownButton<String?>(
-      value: selectedKategorija, // Trenutno odabrana kategorija
-      onChanged: (String? newValue) {
-        setState(() {
-          selectedKategorija = newValue;
-          // Ako trebaš filtrirati usluge po kategoriji, ovde možeš pozvati funkciju za filtriranje
-          //_loadUsluge();  // Ovde možeš dodati funkciju koja filtrira usluge po kategoriji
-        });
-      },
-      items: ["Sve", ..._kategorije!.map((kategorija) => kategorija.naziv)]
-          .map<DropdownMenuItem<String?>>((String? value) {
-        return DropdownMenuItem<String?>(
-          value: value,
-          child: Text(value ??
-              "Nema kategorije"), // Ako je value null, prikaži tekst "Nema kategorije"
-        );
-      }).toList(),
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
@@ -402,10 +372,7 @@ class _UslugePageState extends State<UslugaPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                /*const Text(
-                  "Tabela Kategorije",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),*/
+
                 //const SizedBox(height: 20), //const SizedBox(height: 20),
                 // Novi red za input i dugme
                 Padding(
@@ -426,7 +393,7 @@ class _UslugePageState extends State<UslugaPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Expanded(
+                        /* Expanded(
                           child: TextField(
                             controller: _cijenaController,
                             decoration: const InputDecoration(
@@ -436,7 +403,7 @@ class _UslugePageState extends State<UslugaPage> {
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
-                        ),
+                        ),*/
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextField(
@@ -473,7 +440,7 @@ class _UslugePageState extends State<UslugaPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        IconButton(
+                        /* IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _nazivController.clear();
@@ -484,16 +451,24 @@ class _UslugePageState extends State<UslugaPage> {
                             }); // Briše unos iz polja
                           },
                           tooltip: 'Obriši unos',
-                        ),
+                        ),*/
+                        (_nazivController.text.isNotEmpty ||
+                                _trajanjeController.text.isNotEmpty)
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _nazivController.clear();
+                                  _trajanjeController.clear();
+                                  //_prezimeController.clear();
+
+                                  setState(() {
+                                    selectedKategorija = "Sve";
+                                  });
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
                         const SizedBox(width: 10),
-                        /*ElevatedButton(
-                      onPressed: () {
-                        final searchTerm = _ftsController.text;
-                        print("Pretraženi termin: $searchTerm");
-                        // Možete pozvati funkciju za pretragu ovde
-                      },
-                      child: const Text("Pretraži"),
-                    ),*/
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -507,8 +482,8 @@ class _UslugePageState extends State<UslugaPage> {
                           onPressed: () async {
                             try {
                               var filter = {
-                                'Naziv': _nazivController.text,
-                                'Cijena': _cijenaController.text,
+                                'Naziv1': _nazivController.text,
+                                //'Cijena': _cijenaController.text,
                                 'Trajanje': _trajanjeController.text,
                                 //'Uloga': selectedUloga == "Sve" ? null : selectedUloga,
                                 /*'Status':

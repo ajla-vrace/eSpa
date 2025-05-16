@@ -186,7 +186,7 @@ namespace eSpa.Service
 
             entity.DatumKreiranja = DateTime.Now;
             //entity.DatumKreiranja = DateTime.Now;
-            entity.Status = "Aktivna";
+           // entity.Status = "Aktivna";
             entity.AutorId = GetCurrentUserId();
             if (!string.IsNullOrEmpty(insert.SlikaBase64))
             {

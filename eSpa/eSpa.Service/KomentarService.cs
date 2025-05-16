@@ -71,7 +71,7 @@ namespace eSpa.Service
                 string uslugaSearch = search.Usluga.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
                     x.Korisnik.KorisnickoIme.ToLower()==(korisnikSearch) &&
-                    x.Usluga.Naziv.ToLower()==(uslugaSearch)
+                    x.Usluga.Naziv.ToLower().Contains(uslugaSearch)
                 );
             }
             // Ako je unesen samo username
@@ -87,7 +87,7 @@ namespace eSpa.Service
             {
                 string uslugaSearch = search.Usluga.ToLower();
                 filteredQuery = filteredQuery.Where(x =>
-                    x.Usluga.Naziv.ToLower()==(uslugaSearch)
+                    x.Usluga.Naziv.ToLower().Contains(uslugaSearch)
                 );
             }
 

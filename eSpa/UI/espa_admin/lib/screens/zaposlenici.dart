@@ -35,12 +35,6 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
   String selectedUloga = "Sve";
 
   List<String>? ulogeOption;
-  /*String _shortenText(String text, int maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }*/
 
   DropdownButton<String> buildUlogaDropdown(List<String> uloge) {
     return DropdownButton<String>(
@@ -147,16 +141,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
               child: DataTable(
                 columnSpacing:
                     constraints.maxWidth * 0.05, // Prostor između kolona
-                /*headingRowColor: MaterialStateProperty.all(
-                    Colors.lightBlue.shade100), // Boja zaglavlja
-                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Colors.lightBlue.shade200; // Selektovani red
-                    }
-                    return Colors.white; // Podrazumevana boja reda
-                  },
-                ),*/
+
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -166,12 +151,6 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                   },
                 ),
                 columns: const [
-                  /*DataColumn(
-                    label: Text(
-                      "ID",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                   DataColumn(
                     label: Text(
                       "Korisnicko ime",
@@ -190,12 +169,6 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  /*DataColumn(
-                    label: Text(
-                      "DatumZaposlenja",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
                   DataColumn(
                     label: Text(
                       "Kategorija",
@@ -230,9 +203,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                       //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
                       DataCell(Text(zaposlenik.korisnik?.ime ?? "N/A")),
                       DataCell(Text(zaposlenik.korisnik?.prezime ?? "N/A")),
-                      //DataCell(Text(DateFormat('dd.MM.yyyy.').format(
-                      //zaposlenik.datumZaposlenja ?? DateTime.now()))),
-                      //DataCell(Text(zaposlenik.struka ?? "N/A")),
+
                       DataCell(
                         SizedBox(
                           width: 100, // prilagodi po potrebi
@@ -244,44 +215,8 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                         ),
                       ),
 
-                      // DataCell(Text(zaposlenik.korisnik?.korisnikUlogas.first.uloga!.naziv ?? "N/A")),
-                       /*DataCell(
-                        Text(
-                          zaposlenik.korisnik?.korisnikUlogas.isNotEmpty == true
-                              ? zaposlenik.korisnik!.korisnikUlogas.first.uloga
-                                      ?.naziv ??
-                                  "N/A"
-                              : "Nema ulogu",
-                        ),
-                      ),*/
                       DataCell(Text(zaposlenik.status ?? "N/A")),
-                      //DataCell(Text(zaposlenik.status ?? "N/A")),
-                      /* DataCell(
-                        zaposlenik.slika?.slika != null /*&& zaposlenik.slika.slika.isNotEmpty*/
-                            ? Image.memory(
-                                // Ako slika dolazi kao byte[] iz baze podataka
-                                zaposlenik.slika.slika,
-                                width: 50, // Širina slike
-                                height: 50, // Visina slike
-                                fit: BoxFit.cover, // Prilagodba slike
-                              )
-                            : const Icon(Icons.account_circle,
-                                size:
-                                    50), // Ikona kao fallback ako slika nije dostupna
-                      ),*/
-                      /* DataCell(
-                        zaposlenik.slika?.slika != null
-                            ? Image.memory(
-                                base64Decode(zaposlenik.slika!
-                                    .slika!), // Pristupamo slici putem 'slika' unutar 'zaposlenik.slika'
-                                width: 50, // Širina slike
-                                height: 50, // Visina slike
-                                fit: BoxFit.cover, // Prilagodba slike
-                              )
-                            : const Icon(Icons.account_circle,
-                                size:
-                                    50), // Ikona kao fallback ako slika nije dostupna
-                      ),*/
+
                       DataCell(
                         zaposlenik.korisnik!.slika != null &&
                                 zaposlenik.korisnik!.slika!.slika != null
@@ -334,32 +269,12 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                         zaposlenik: zaposlenik),
                                   ),
                                 );
-                                /* bool? isUpdated = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NovostDetaljiPage(novost: novost),
-                                  ),
-                                );
 
-                                // Provjera da li treba osvježiti podatke
-                                if (isUpdated == true) {
-                                  await _loadNovosti(); // Poziv metode za ponovno učitavanje podataka
-                                  setState(() {});
-                                }*/
                                 // Akcija za update
                                 print(
                                     'Update clicked for: ${zaposlenik.korisnikId}');
                               },
                             ),
-                            /* IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                // Akcija za delete
-                                print('Delete clicked for: ${novost.naslov}');
-                              },
-                            ),*/
-
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
@@ -459,11 +374,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                /*const Text(
-                  "Tabela Kategorije",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),*/
-                //const SizedBox(height: 20), //const SizedBox(height: 20),
+
                 // Novi red za input i dugme
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -505,7 +416,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Expanded(
+                        /* Expanded(
                           child: DropdownButtonFormField<String>(
                             value: selectedUloga,
                             decoration: const InputDecoration(
@@ -526,29 +437,26 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                               });
                             },
                           ),
-                        ),
+                        ),*/
                         const SizedBox(width: 10),
-                        IconButton(
-                          icon: Icon(Icons.backspace, color: Colors.red),
-                          onPressed: () {
-                            _imeController.clear();
-                            _prezimeController.clear();
-                            _korisnickoImeController.clear();
-                            setState(() {
-                              selectedUloga = "Sve";
-                            }); // Briše unos iz polja
-                          },
-                          tooltip: 'Obriši unos',
-                        ),
+                        (_korisnickoImeController.text.isNotEmpty ||
+                                _imeController.text.isNotEmpty ||
+                                _prezimeController.text.isNotEmpty)
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _korisnickoImeController.clear();
+                                  _imeController.clear();
+                                  _prezimeController.clear();
+
+                                  setState(() {
+                                    // selectedUloga = "Sve";
+                                  });
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
                         const SizedBox(width: 10),
-                        /*ElevatedButton(
-                      onPressed: () {
-                        final searchTerm = _ftsController.text;
-                        print("Pretraženi termin: $searchTerm");
-                        // Možete pozvati funkciju za pretragu ovde
-                      },
-                      child: const Text("Pretraži"),
-                    ),*/
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -569,9 +477,9 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                 /*'Status':
                                     _selectedStatus, */ // Dodajemo status u filter
                               };
-                              if (selectedUloga != "Sve") {
+                              /*if (selectedUloga != "Sve") {
                                 filter['Uloga'] = selectedUloga;
-                              }
+                              }*/
                               var data =
                                   await _zaposlenikProvider.get(filter: filter);
                               setState(() {
@@ -590,14 +498,6 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                           child: const Text("Pretraži"),
                         ),
                         const SizedBox(width: 30),
-                        /*ElevatedButton(
-                          onPressed: () async {
-                            
-                            
-                          },
-                          child: const Text("Dodaj novu kategoriju"),
-                        ),*/
-
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(

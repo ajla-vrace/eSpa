@@ -29,14 +29,6 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
   SearchResult<Ocjena>? result1;
   int? _selectedView = 0;
   List<Ocjena> _ocjene = [];
-  //var _ocjene;
-
-  /*String _shortenText(String text, int maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }*/
 
   @override
   void didChangeDependencies() {
@@ -54,14 +46,14 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
   }
 
   Future<void> _loadKomentari() async {
-    print("u load komentari smo sada");
+    //print("u load komentari smo sada");
     try {
-      print("sada smo u try bloku");
+      //print("sada smo u try bloku");
       final komentari =
           await Provider.of<KomentarProvider>(context, listen: false).get();
-      print("komentari su ovdje $komentari");
+      //print("komentari su ovdje $komentari");
       setState(() {
-        print("u loadkomentari komentari su $komentari");
+        //print("u loadkomentari komentari su $komentari");
         _komentari = komentari.result;
         _isKomentarLoading = false;
       });
@@ -72,13 +64,6 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
     }
   }
 
-  /*Future<void> loadProsjek() async {
-    
-    var nesto=Provider.of<OcjenaProvider>(context, listen: false).getUslugeProsjecneOcjene();
-    //var nesto = await _ocjenaProvider.getUslugeProsjecneOcjene();
-    print("NESTO ----------------------------------------> : ${nesto}");
-    
-  }*/
   Future<void> loadProsjek() async {
     // Čekaj da se podaci učitaju
     var nesto = await Provider.of<OcjenaProvider>(context, listen: false)
@@ -94,24 +79,17 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
     } else {
       print("Podaci nisu u formatu liste");
     }
-   /* showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Podaci'),
-        content: Text(nesto.toString()), // Prikazuje sve podatke kao string
-      ),
-    );*/
   }
 
   Future<void> _loadOcjene() async {
-    print("u load ocjene smo sada");
+    //print("u load ocjene smo sada");
     try {
-      print("sada smo u try bloku");
+      //print("sada smo u try bloku");
       final ocjene =
           await Provider.of<OcjenaProvider>(context, listen: false).get();
-      print("komentari su ovdje $ocjene");
+      //print("komentari su ovdje $ocjene");
       setState(() {
-        print("u loadkomentari komentari su $ocjene");
+        //print("u loadkomentari komentari su $ocjene");
         _ocjene = ocjene.result;
         _isOcjenaLoading = false;
       });
@@ -149,8 +127,7 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
-                    return const Color.fromARGB(
-                        255, 181, 226, 182); // Svetlozelena boja za redove
+                    return const Color.fromARGB(255, 181, 226, 182);
                   },
                 ),
                 columns: const [
@@ -263,12 +240,20 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                                             onPressed: () {
                                               Navigator.of(context).pop(false);
                                             },
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors
+                                                  .grey, // Boja teksta na dugmetu (siva)
+                                            ),
                                           ),
                                           TextButton(
                                             child: const Text("Obriši"),
                                             onPressed: () {
                                               Navigator.of(context).pop(true);
                                             },
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors
+                                                  .red, // Boja teksta na dugmetu (siva)
+                                            ),
                                           ),
                                         ],
                                       );
@@ -355,8 +340,7 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
-                    return const Color.fromARGB(
-                        255, 181, 226, 182); // Svetlozelena boja za redove
+                    return const Color.fromARGB(255, 181, 226, 182);
                   },
                 ),
                 columns: const [
@@ -405,8 +389,8 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                         ),
                       ),
                       //DataCell(Text(komentar.korisnik?.korisnickoIme ?? "N/A")),
-                      //DataCell(Text(komentar.usluga?.naziv ?? "N/A")),
-                      DataCell(
+                      DataCell(Text(ocjena.usluga?.naziv ?? "N/A")),
+                      /*DataCell(
                         SizedBox(
                           width: 100, // ili neka druga širina u pikselima
                           child: Text(
@@ -415,7 +399,7 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                             maxLines: 1,
                           ),
                         ),
-                      ),
+                      ),*/
                       DataCell(
                         SizedBox(
                           width: 150, // ili neka druga širina u pikselima
@@ -434,24 +418,6 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            /*Flexible(
-                              child: IconButton(
-                                icon: const Icon(Icons.info_outline),
-                                onPressed: () {
-                                  // Akcija za update
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          RecenzijaDetaljiPage(
-                                              komentar: komentar),
-                                    ),
-                                  );
-                                  print(
-                                      'Update clicked for: ${komentar.tekst}');
-                                },
-                              ),
-                            ),*/
                             Flexible(
                               child: IconButton(
                                 icon: const Icon(Icons.delete),
@@ -469,12 +435,20 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                                             onPressed: () {
                                               Navigator.of(context).pop(false);
                                             },
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors
+                                                  .grey, // Boja teksta na dugmetu (siva)
+                                            ),
                                           ),
                                           TextButton(
                                             child: const Text("Obriši"),
                                             onPressed: () {
                                               Navigator.of(context).pop(true);
                                             },
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors
+                                                  .red, // Boja teksta na dugmetu (siva)
+                                            ),
                                           ),
                                         ],
                                       );
@@ -574,14 +548,26 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                         ),
                         const SizedBox(width: 10),
                         const SizedBox(width: 10),
-                        IconButton(
+                        /*IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _korisnikController.clear();
                             _uslugaController.clear();
                           },
                           tooltip: 'Obriši unos',
-                        ),
+                        ),*/
+                         (_korisnikController.text.isNotEmpty ||
+                                _uslugaController.text.isNotEmpty )
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _korisnikController.clear();
+                                  _uslugaController.clear();
+
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
                         const SizedBox(width: 10),
                         const SizedBox(width: 10),
                         ElevatedButton(
@@ -632,30 +618,6 @@ class _RecenzijaPageState extends State<RecenzijaPage> {
                           },
                           child: const Text("Pretraži"),
                         ),
-
-                        //const SizedBox(width: 30),
-                        /*ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 16.0),
-                            minimumSize: const Size(120, 50),
-                            textStyle: const TextStyle(fontSize: 16),
-                          ),
-                          onPressed: () async {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => KategorijaDetaljiPage(),
-                              ),
-                            );
-                          },
-                          child: Row(
-                            children: const [
-                              Icon(Icons.add),
-                              SizedBox(width: 8),
-                              Text("Dodaj novu kategoriju"),
-                            ],
-                          ),
-                        ),*/
                       ],
                     ),
                   ),

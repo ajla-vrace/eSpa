@@ -73,16 +73,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
               child: DataTable(
                 columnSpacing:
                     constraints.maxWidth * 0.1, // Prostor između kolona
-                /*headingRowColor: MaterialStateProperty.all(
-                    Colors.lightBlue.shade100), // Boja zaglavlja
-                dataRowColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Colors.lightBlue.shade200; // Selektovani red
-                    }
-                    return Colors.white; // Podrazumevana boja reda
-                  },
-                ),*/
+                
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -92,12 +83,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                   },
                 ),
                 columns: const [
-                  /*DataColumn(
-                    label: Text(
-                      "ID",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),*/
+                 
                   DataColumn(
                     label: Text(
                       "Naslov",
@@ -135,30 +121,12 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                         KategorijaDetaljiPage(kategorija: kategorija),
                                   ),
                                 );
-                                /* bool? isUpdated = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NovostDetaljiPage(novost: novost),
-                                  ),
-                                );
-
-                                // Provjera da li treba osvježiti podatke
-                                if (isUpdated == true) {
-                                  await _loadNovosti(); // Poziv metode za ponovno učitavanje podataka
-                                  setState(() {});
-                                }*/
+                               
                                 // Akcija za update
                                 print('Detalji clicked for: ${kategorija.naziv}');
                               },
                             ),
-                            /* IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                // Akcija za delete
-                                print('Delete clicked for: ${novost.naslov}');
-                              },
-                            ),*/
+                           
 
                             IconButton(
                               icon: const Icon(Icons.delete),
@@ -205,11 +173,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                       _kategorije.remove(
                                           kategorija); // Uklonite obrisanu novost iz liste
                                     });
-                                    /*ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content:
-                                              Text("Novost uspešno obrisana.")),
-                                    );*/
+                                   
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
@@ -260,10 +224,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                /*const Text(
-                  "Tabela Kategorije",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),*/
+               
                 //const SizedBox(height: 20), //const SizedBox(height: 20),
                 // Novi red za input i dugme
                 Padding(
@@ -284,25 +245,27 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           ),
                         ),
                        const SizedBox(width: 10),
-                        IconButton(
+                       /* IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _ftsController.clear();
                           },
                           tooltip: 'Obriši unos',
-                        ),
+                        ),*/
+                         (_ftsController.text.isNotEmpty )
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _ftsController.clear();
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
                          const SizedBox(width: 10),
                   
 
                        
-                        /*ElevatedButton(
-                      onPressed: () {
-                        final searchTerm = _ftsController.text;
-                        print("Pretraženi termin: $searchTerm");
-                        // Možete pozvati funkciju za pretragu ovde
-                      },
-                      child: const Text("Pretraži"),
-                    ),*/
+                       
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -338,13 +301,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           child: const Text("Pretraži"),
                         ),
                         const SizedBox(width: 30),
-                        /*ElevatedButton(
-                          onPressed: () async {
-                            
-                            
-                          },
-                          child: const Text("Dodaj novu kategoriju"),
-                        ),*/
+                       
 
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(

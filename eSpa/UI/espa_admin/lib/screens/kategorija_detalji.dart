@@ -46,109 +46,6 @@ class _KategorijaDetaljiPageState extends State<KategorijaDetaljiPage> {
       isLoading = false;
     });
   }
-/*
-  @override
-  Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      // ignore: sort_child_properties_last
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(210.0), // Odmicanje od ivica ekrana
-          child: Container(
-            width: 500,
-            padding: EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                isLoading ? CircularProgressIndicator() : _buildForm(),
-                SizedBox(
-                    height: 20), // Dodavanje prostora između forme i dugmeta
-                Center(
-                  // Koristimo Center za centriranje dugmeta
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      _formKey.currentState?.saveAndValidate();
-                      if (!(_formKey.currentState?.saveAndValidate() ??
-                          false)) {
-                        // Možeš prikazati poruku korisniku ako je potrebno
-                        print("Validacija nije prošla!");
-                        return;
-                      }
-                      var request = new Map.from(_formKey.currentState!.value);
-
-                      var currentValues =
-                          Map.from(_formKey.currentState!.value);
-
-                      // Provera da li su vrednosti promenjene
-                      bool isChanged = false;
-                      _initialValue.forEach((key, value) {
-                        if (currentValues[key] != value) {
-                          isChanged = true;
-                        }
-                      });
-
-                      if (!isChanged) {
-                        // Ako nema promena, vrati se na prethodnu stranicu bez ažuriranja
-                        Navigator.pop(context, false);
-                        return;
-                      }
-
-                      try {
-                        if (widget.kategorija == null) {
-                          await _kategorijaProvider.insert(request);
-                        } else {
-                          await _kategorijaProvider.update(
-                              widget.kategorija!.id!, request);
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => KategorijaPage(),
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("OK"),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                    child: Text("Sačuvaj"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      
-
-
-
-      
-      title: this.widget.kategorija?.naziv ?? "Kategorija detalji",
-    );
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -312,61 +209,13 @@ class _KategorijaDetaljiPageState extends State<KategorijaDetaljiPage> {
           // Polja sa ikonama
           _buildInputField("Naziv", Icons.title, "naziv"),
           SizedBox(height: 10),
-          //_buildInputField("Sadrzaj", Icons.description, "sadrzaj"),
-
-          // SizedBox(height: 10),
-          //_buildInputField("Datum", Icons.attach_money, "datum"),
-          //SizedBox(height: 10),
-          //_buildInputField("Trajanje (min)", Icons.access_time, "trajanje"), // Dodano trajanje
-          // SizedBox(height: 10),
-          /*_buildDropdownField(
-            "Kategorija",
-            Icons.list,
-            "kategorijaId",
-            kategorijaResult?.result ?? [],
-          ),
-         */
+         
         ],
       ),
     );
   }
 
-  // Funkcija za kreiranje input polja sa ikonom
-  /*Widget _buildInputField(String label, IconData icon, String name) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-    );
-  }*/
-  /*Widget _buildInputField(String label, IconData icon, String name) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-      validator: (value) {
-       if (value == null || value.isEmpty) {
-        return 'Polje je obavezno';
-      }
-      // Proveri da li sadrži samo slova i razmake
-      final regexOnlyLetters = RegExp(r'^[a-zA-Z\s]+$');
-      if (!regexOnlyLetters.hasMatch(value)) {
-        return 'Dozvoljena su samo slova';
-      }
-      // Proveri da li je prvo slovo veliko
-      if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-        return 'Prvo slovo mora biti veliko';
-      }
-      return null;
-    },
-    );
-  }*/
+  
   Widget _buildInputField(String label, IconData icon, String name) {
     return FormBuilderTextField(
       name: name,
@@ -397,26 +246,5 @@ class _KategorijaDetaljiPageState extends State<KategorijaDetaljiPage> {
     );
   }
 
-  // Funkcija za dropdown meni sa kategorijama
-  /* Widget _buildDropdownField(
-    String label,
-    IconData icon,
-    String name,
-    List<Kategorija> items,
-  ) {
-    return FormBuilderDropdown<String>(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-      items: items
-          .map((item) => DropdownMenuItem<String>(
-                value: item.id.toString(),
-                child: Text(item.naziv ?? ""),
-              ))
-          .toList(),
-    );
-  }*/
+ 
 }

@@ -184,7 +184,7 @@ class _NovostKomentarPageState extends State<NovostKomentarPage> {
                       const Icon(Icons.person, color: Colors.blueGrey),
                       const SizedBox(width: 8),
                       Text(
-                        recenzija.korisnik?.ime ?? 'Nepoznato ime',
+                        recenzija.korisnik?.korisnickoIme ?? 'Nepoznato ime',
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),

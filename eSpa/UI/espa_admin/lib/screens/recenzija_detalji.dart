@@ -43,36 +43,8 @@ class _RecenzijaDetaljiPageState extends State<RecenzijaDetaljiPage> {
     });
   }
 
-/*
-  @override
-  Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      // Ostatak sadržaja dolazi iz MasterScreenWidget-a
-      // ignore: sort_child_properties_last
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(200.0), // Odmicanje od ivica ekrana
-          child: Container(
-            width: 500,
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color.fromARGB(66, 137, 137, 137),
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: isLoading ? const CircularProgressIndicator() : _buildForm(),
-          ),
-        ),
-      ),
-       title: this.widget.komentar?.korisnik?.korisnickoIme ?? "Recenzija detalji",
-    );
-  }*/
+
+  
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
@@ -119,19 +91,7 @@ class _RecenzijaDetaljiPageState extends State<RecenzijaDetaljiPage> {
                         ],
                       ),
               ),
-              /*Positioned(
-                right: 10,
-                top: 10,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors
-                      .click, // Promena kursora na "ruku" (pointer)
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context), // Zatvori formu
-                    child: const Icon(Icons.close,
-                        size: 24, color: Colors.black54),
-                  ),
-                ),
-              ),*/
+             
             ],
           ),
         ),
@@ -203,48 +163,8 @@ class _RecenzijaDetaljiPageState extends State<RecenzijaDetaljiPage> {
       ),
     );
   }
-  /* Widget _buildDisabledField1(String label, String name, String? value) {
-  return FormBuilderTextField(
-    name: name,
-    initialValue: value,
-    enabled: false,
-    style: const TextStyle(
-      color: Color.fromARGB(221, 87, 87, 87),
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-    ),
-    maxLines: null, // Omogućava neograničeni broj linija
-    decoration: InputDecoration(
-      labelText: label,
-      border: const OutlineInputBorder(),
-      filled: true,
-      fillColor: Colors.grey[200],
-    ),
-  );
-}*/
-/*
-Widget _buildDisabledField2(String label, String name, String? value) {
-  return Container(
-    height: 150, // Fiksna visina polja
-    child: FormBuilderTextField(
-      name: name,
-      initialValue: value,
-      enabled: false, // Onemogućava uređivanje
-      style: const TextStyle(
-        color: Color.fromARGB(221, 87, 87, 87),
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-      ),
-      maxLines: 2, // Omogućava neograničen broj linija, što rezultira skrolovanjem ako je potrebno
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-        filled: true,
-        fillColor: Colors.grey[200],
-      ),
-    ),
-  );
-}*/
+  
+
 
   Widget _buildDisabledField3(String label, String name, String? value) {
     return Container(
@@ -257,7 +177,7 @@ Widget _buildDisabledField2(String label, String name, String? value) {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical, // Omogućava vertikalni skrol
         physics:
-            const AlwaysScrollableScrollPhysics(), // Osigurava da skrol uvek bude dostupan
+            const AlwaysScrollableScrollPhysics(), // Osigurava da skrol uvijek bude dostupan
         child: FormBuilderTextField(
           name: name,
           initialValue: value,

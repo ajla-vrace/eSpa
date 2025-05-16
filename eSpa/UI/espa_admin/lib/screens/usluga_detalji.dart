@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:espa_admin/models/kategorija.dart';
+import 'package:espa_admin/models/ocjena.dart';
 import 'package:espa_admin/models/search_result.dart';
 import 'package:espa_admin/models/usluga.dart';
 import 'package:espa_admin/providers/kategorija_provider.dart';
+import 'package:espa_admin/providers/ocjena_provider.dart';
 import 'package:espa_admin/providers/usluga_provider.dart';
 import 'package:espa_admin/screens/usluge.dart';
+import 'package:espa_admin/utils/util.dart';
 import 'package:espa_admin/widgets/master_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +50,7 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
     _uslugaProvider = context.read<UslugaProvider>();
 
     initForm();
+    //_loadOcjene(widget.usluga!.naziv);
   }
 
   Future initForm() async {
@@ -55,6 +59,8 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
       isLoading = false;
     });
   }
+
+  
 
   Future<void> _pickImage() async {
     try {
@@ -70,157 +76,11 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
           //_fileType = result.files.single.extension ??
           'Unknown'; // Spremamo odabranu sliku u memoriju
         });
-        print("✅ Slika odabrana!");
-      } else {
-        print("❌ Nema izabrane slike");
-      }
+      } else {}
     } catch (e) {
-      print("❌ Greška pri odabiru slike: $e");
+      //print(" Greška pri odabiru slike: $e");
     }
   }
-/*
-  @override
-  Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      // ignore: sort_child_properties_last
-      child: Center(
-        child: Container(
-          width: 500,  // Pravougaonik u sredini ekrana
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              isLoading ? CircularProgressIndicator() : _buildForm(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        _formKey.currentState?.saveAndValidate();
-                        var request = new Map.from(_formKey.currentState!.value);
-
-                        try {
-                          if (widget.usluga == null) {
-                            await _uslugaProvider.insert(request);
-                          } else {
-                            await _uslugaProvider.update(widget.usluga!.id!, request);
-                          }
-                        } on Exception catch (e) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: Text("Error"),
-                              content: Text(e.toString()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text("OK"),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: Text("Sačuvaj"),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      title: this.widget.usluga?.naziv ?? "Usluga details",
-    );
-  }
-*/
-
-/*
-@override
-  Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      // ignore: sort_child_properties_last
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(100.0), // Odmicanje od ivica ekrana
-          child: Container(
-            width: 500, 
-           // height: 500, // Pravougaonik u sredini ekrana
-            padding: EdgeInsets.all(20),
-            //margin: EdgeInsets.all(40),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                isLoading ? CircularProgressIndicator() : _buildForm(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          _formKey.currentState?.saveAndValidate();
-                          var request = new Map.from(_formKey.currentState!.value);
-
-                          try {
-                            if (widget.usluga == null) {
-                              await _uslugaProvider.insert(request);
-                            } else {
-                              await _uslugaProvider.update(widget.usluga!.id!, request);
-                            }
-                          } on Exception catch (e) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: Text("Error"),
-                                content: Text(e.toString()),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text("OK"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
-                        child: Text("Sačuvaj"),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      title: this.widget.usluga?.naziv ?? "Usluga details",
-    );
-  }
-
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -348,13 +208,14 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
                                 builder: (context) => UslugaPage(),
                               ),
                             );
-                          // ignore: unused_catch_clause
+                            // ignore: unused_catch_clause
                           } on Exception catch (e) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
                                 title: Text("Error"),
-                                content: /*Text(e.toString())*/Text("Usluga s ovim nazivom vec postoji."),
+                                content: /*Text(e.toString())*/
+                                    Text("Usluga s ovim nazivom vec postoji."),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
@@ -403,7 +264,14 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
             "kategorijaId",
             kategorijaResult?.result ?? [],
           ),
-            SizedBox(height: 5),
+          SizedBox(height: 5),
+          /*Text(
+            'Prosječna ocjena: ${izracunajProsjekOcjena(_ocjene).toStringAsFixed(2)}',
+            style: TextStyle(fontSize: 14,),
+          ),*/
+          
+
+          ///SizedBox(height: 5),
           _buildImagePicker(),
           SizedBox(height: 10),
         ],
@@ -411,18 +279,7 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
     );
   }
 
-  // Funkcija za kreiranje input polja sa ikonom
-  /*Widget _buildInputField(String label, IconData icon, String name) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-    );
-  }*/
- Widget _buildImagePicker() {
+  Widget _buildImagePicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -497,28 +354,6 @@ class _UslugaDetaljiPageState extends State<UslugaDetaljiPage> {
     );
   }
 
-  // Funkcija za dropdown meni sa kategorijama
-  /*Widget _buildDropdownField(
-    String label,
-    IconData icon,
-    String name,
-    List<Kategorija> items,
-  ) {
-    return FormBuilderDropdown<String>(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-      items: items
-          .map((item) => DropdownMenuItem<String>(
-                value: item.id.toString(),
-                child: Text(item.naziv ?? ""),
-              ))
-          .toList(),
-    );
-  }*/
   Widget _buildDropdownField(
     String label,
     IconData icon,

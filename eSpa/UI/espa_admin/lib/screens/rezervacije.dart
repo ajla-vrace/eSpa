@@ -31,12 +31,12 @@ class _RezervacijePageState extends State<RezervacijePage> {
   List<StatusRezervacije> _statusi = [];
 //String? _selectedStatus = "Sve";
 
-  /*String _shortenText(String text, int maxLength) {
+  String _shortenText(String text, int maxLength) {
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + '...';
     }
     return text;
-  }*/
+  }
 
   @override
   void didChangeDependencies() {
@@ -100,7 +100,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
               width: constraints.maxWidth, // Tabela zauzima maksimalnu širinu
               child: DataTable(
                 columnSpacing:
-                    constraints.maxWidth * 0.1, // Prostor između kolona
+                    constraints.maxWidth * 0.08, // Prostor između kolona
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -152,7 +152,22 @@ class _RezervacijePageState extends State<RezervacijePage> {
                     cells: [
                       DataCell(
                           Text(rezervacija.korisnik?.korisnickoIme ?? "N/A")),
-                      DataCell(Text(rezervacija.usluga?.naziv ?? "N/A")),
+                      //DataCell(Text(rezervacija.usluga?.naziv ?? "N/A")),
+                      /* DataCell(
+                        Text(_shortenText(rezervacija.usluga!.naziv ?? '',
+                            30)), // Skraćeni sadržaj
+                      ),*/
+                      DataCell(
+                        SizedBox(
+                          width: 150, // prilagodi širinu prema tabeli
+                          child: Text(
+                            rezervacija.usluga?.naziv ?? "N/A",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ),
+                      ),
 
                       DataCell(Text(DateFormat('dd.MM.yyyy.')
                           .format(rezervacija.datum ?? DateTime.now()))),
@@ -393,7 +408,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
                         ),
 
                         const SizedBox(width: 10),
-                        IconButton(
+                        /*IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _korisnickoImeController.clear();
@@ -404,7 +419,23 @@ class _RezervacijePageState extends State<RezervacijePage> {
                             }); // Briše unos iz polja
                           },
                           tooltip: 'Obriši unos',
-                        ),
+                        ),*/
+                        (_korisnickoImeController.text.isNotEmpty ||
+                                _uslugaController.text.isNotEmpty)
+                            ? IconButton(
+                                icon: Icon(Icons.backspace, color: Colors.red),
+                                onPressed: () {
+                                  _korisnickoImeController.clear();
+                                  _uslugaController.clear();
+
+                                  setState(() {
+                                    _selectedStatus = "Sve";
+                                  });
+                                },
+                                tooltip: 'Obriši unos',
+                              )
+                            : SizedBox.shrink(),
+
                         const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(

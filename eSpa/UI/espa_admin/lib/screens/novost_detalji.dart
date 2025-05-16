@@ -37,7 +37,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
       'sadrzaj': widget.novost?.sadrzaj,
       'datumKreiranja': widget.novost?.datumKreiranja,
       'korisnickoIme': widget.novost?.autor?.korisnickoIme,
-      'status': widget.novost?.status,
+      'status': widget.novost?.status ?? 'Aktivna',
       'slika': widget.novost?.slika,
     };
     _isAktivna = _initialValue['status'] == 'Aktivna';
@@ -80,21 +80,20 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
           _image = result.files.single.bytes;
           //_fileName = result.files.single.name;
           //_fileType = result.files.single.extension ??
-          'Unknown'; // Spremamo odabranu sliku u memoriju
+          'Unknown'; // Sprema odabranu sliku u memoriju
         });
-        print("✅ Slika odabrana!");
+        //print("✅ Slika odabrana!");
       } else {
-        print("❌ Nema izabrane slike");
+        // print("❌ Nema izabrane slike");
       }
     } catch (e) {
-      print("❌ Greška pri odabiru slike: $e");
+      //print("❌ Greška pri odabiru slike: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      // Ostatak sadržaja dolazi iz MasterScreenWidget-a
       // ignore: sort_child_properties_last
       child: Center(
         child: Padding(
@@ -115,7 +114,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
             ),
             child: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.min, // Sprečava prekomerno širenje
+                mainAxisSize: MainAxisSize.min, // Sprečava prekomjerno širenje
                 children: [
                   // Red sa naslovom i X dugmetom
                   Row(
@@ -193,10 +192,8 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  backgroundColor:
-                                      Colors.green, // Dodaj zelenu pozadinu
-                                  behavior: SnackBarBehavior
-                                      .floating, // Opcionalno za lepši prikaz
+                                  backgroundColor: Colors.green,
+                                  behavior: SnackBarBehavior.floating,
                                   duration: Duration(seconds: 3),
                                 ),
                               );
@@ -211,10 +208,8 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  backgroundColor:
-                                      Colors.green, // Dodaj zelenu pozadinu
-                                  behavior: SnackBarBehavior
-                                      .floating, // Opcionalno za lepši prikaz
+                                  backgroundColor: Colors.green,
+                                  behavior: SnackBarBehavior.floating,
                                   duration: Duration(seconds: 3),
                                 ),
                               );
@@ -279,37 +274,6 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
     );
   }
 
-/*
-  Widget _buildImagePicker() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () async {
-            await _pickImage(); // Funkcija za odabir slike
-          },
-          child: _image != null
-              ? Image.memory(
-                  _image!, // Prikazivanje odabrane slike
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                )
-              : const Icon(Icons.camera_alt,
-                  size: 100,
-                  color: Colors
-                      .grey), // Prikaz ikone kamere ako slika nije odabrana
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: () async {
-            await _pickImage(); // Ponovno odabir slike
-          },
-          child: const Text("Dodaj sliku"),
-        ),
-      ],
-    );
-  }*/
   Widget _buildImagePicker() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,7 +334,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
   }
 
   Widget _buildStatusDropdownField(String label, String name) {
-    // Proveri da li je novost null, što znači da se kreira nova novost
+    // Provjeri da li je novost null, što znači da se kreira nova novost
     if (widget.novost == null) {
       // Ako je nova novost, ne prikazuj status
       return SizedBox.shrink(); // Vraća prazni widget (ne prikazuje ništa)
@@ -380,7 +344,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
     return FormBuilderDropdown<String>(
       name: name,
       initialValue: _initialValue[name] ??
-          "Aktivna", // Podrazumevana vrednost za ažuriranje
+          "Aktivna", // Podrazumevana vrijednost za ažuriranje
       decoration: InputDecoration(
         labelText: label,
         prefixIcon:

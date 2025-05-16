@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _chartKey1 = GlobalKey();
 
   List<Korisnik> korisnik = [];
- 
+
   @override
   void initState() {
     super.initState();
@@ -203,10 +203,35 @@ class _HomePageState extends State<HomePage> {
         pw.Page(
           build: (pw.Context context) => pw.Column(
             children: [
-              pw.Text('Chart usluga s prosjecnim ocjenama',
-                  style: pw.TextStyle(
-                    fontSize: 18,
-                  )),
+              pw.Text(
+                'Analiza prosjecnih ocjena',
+                style:
+                    pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                'Ovaj grafikon prikazuje prosjecnu ocjenu svake usluge na temelju korisnickih povratnih informacija.',
+                style: pw.TextStyle(fontSize: 12),
+              ),
+              pw.Text(
+                'Usluge bez nijedne ocjena nisu uzete u razmatranje, stoga nisu ni prikazane na ovom grafikonu.',
+                style: pw.TextStyle(fontSize: 12),
+              ),
+              pw.Text(
+                'Cilj grafikona je pomoci menadzmentu u donosenju odluka za unapredjenje kvalitete usluga.',
+                style: pw.TextStyle(fontSize: 12),
+              ),
+              pw.Text(
+                'Napomena: Ocjene su prikazane u rasponu od 1 do 5, gdje 5 oznacava najvisi nivo zadovoljstva korisnika.',
+                style:
+                    pw.TextStyle(fontSize: 12, fontStyle: pw.FontStyle.italic),
+              ),
+              pw.SizedBox(height: 20),
+              pw.Text(
+                'Grafikon usluga s prosjecnim ocjenama',
+                style:
+                    pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+              ),
               pw.SizedBox(height: 10),
               pw.Image(pw.MemoryImage(pngBytes1)),
               pw.SizedBox(height: 20),
@@ -242,9 +267,26 @@ class _HomePageState extends State<HomePage> {
         pw.Page(
           build: (pw.Context context) => pw.Column(
             children: [
+              pw.Text('Analiza broja rezervacija za svaku uslugu',
+                  style: pw.TextStyle(
+                      fontSize: 18, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                'Grafikon na slici ispod  prikazuje broj rezervacija za svaku uslugu u posljednjem periodu.',
+                style: pw.TextStyle(fontSize: 12),
+              ),
+              pw.Text(
+                'Usluge koje nisu imale rezervacije nisu uzete u razmatranje, stoga nisu ni  prikazane na  ovom grafikonu.',
+                style: pw.TextStyle(fontSize: 12),
+              ),
+              pw.Text(
+                'Cilj grafikona je pomoci u analizi popularnosti i zadovoljstva uslugom na osnovu broja rezervacija.',
+                style: pw.TextStyle(fontSize: 12),
+              ),
+                pw.SizedBox(height: 10),
               pw.Text('Chart broj rezervacija po usluzi',
                   style: pw.TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                   )),
               pw.SizedBox(height: 10),
               pw.Image(pw.MemoryImage(pngBytes1)),
@@ -616,8 +658,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  if (!LoggedUser.isZaposlenik!)
-                    Center(
+
+                  /* Center(
                       child: TextButton.icon(
                         onPressed: () {
                           _exportChart1(); // Funkcija za eksport
@@ -626,18 +668,26 @@ class _HomePageState extends State<HomePage> {
                             size: 30), // Povećaj ikonu
                         label: Text("Export u PDF"),
                       ),
-                    ),
+                    ),*/
+                  Center(
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        await _exportChart1(); // I dalje eksportuje PDF
 
-                  /*IconButton(
-                    onPressed: () {
-                      _exportChart1(); // 👉 funkcija koju ti implementiraš
-                    },
-                    icon: Icon(
-                      Icons.picture_as_pdf,
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Izvještaj je generisan: C:\\Users\\User\\Downloads\\graf1.pdf',
+                            ),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 5),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.picture_as_pdf, size: 30),
+                      label: Text("Export u PDF"),
                     ),
-                    tooltip: "Export u pdf",
-                    // label: Text('Eksportuj grafikon'),
-                  ),*/
+                  ),
                 ],
               ),
             ),
@@ -649,7 +699,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildReservationsChartWithDescription() {
     return SizedBox(
-      height: 400, // 🔁 Postavi visinu da bude ista kao visina grafikona
+      height: 400, //  Postavi visinu da bude ista kao visina grafikona
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -658,21 +708,20 @@ class _HomePageState extends State<HomePage> {
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal:
-                      16.0), // 🔁 Dodaj padding da bi tekst bio u sredini
+                  horizontal: 16.0), //  Dodaj padding da bi tekst bio u sredini
               child: Align(
                 alignment:
-                    Alignment.center, // 🔁 Centriraj vertikalno i horizontalno
+                    Alignment.center, //  Centriraj vertikalno i horizontalno
                 child: Column(
                   mainAxisSize:
-                      MainAxisSize.min, // 🔁 Samo zauzmi prostor koji trebaš
+                      MainAxisSize.min, // Samo zauzmi prostor koji trebaš
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Wrap(
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment
-                              .start, // 🔁 Poravnanje ikone i teksta
+                              .start, //  Poravnanje ikone i teksta
                           children: [
                             Icon(Icons.list, size: 20),
                             SizedBox(width: 8.0),
@@ -685,9 +734,9 @@ class _HomePageState extends State<HomePage> {
                                   decoration: TextDecoration.underline,
                                 ),
                                 softWrap:
-                                    true, // 🔁 Omogućava prelazak u novi red
-                                overflow: TextOverflow
-                                    .visible, // 🔁 Sprečava overflow
+                                    true, //  Omogućava prelazak u novi red
+                                overflow:
+                                    TextOverflow.visible, //  Sprečava overflow
                               ),
                             ),
                           ],
@@ -760,35 +809,25 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    /* if (!LoggedUser.isZaposlenik!)
-                      IconButton(
-                        onPressed: () {
-                          _exportChart2(); // 👉 funkcija koju ti implementiraš
-                        },
-                        iconSize: 30, // Povećaj veličinu ikone
-                        icon: Icon(Icons.picture_as_pdf),
-                        tooltip: "Export u pdf",
-                      ),*/
-                    if (!LoggedUser.isZaposlenik!)
-                      Center(
-                        child: TextButton.icon(
-                          onPressed: () {
-                            _exportChart2(); // Funkcija za eksport
-                          },
-                          icon: Icon(Icons.picture_as_pdf,
-                              size: 30), // Povećaj ikonu
-                          label: Text("Export u PDF"),
-                        ),
-                      ),
+                    Center(
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          await _exportChart2(); // I dalje eksportuje PDF
 
-                    /*IconButton(
-                      onPressed: () {
-                        _exportChart2(); // 👉 funkcija koju ti implementiraš
-                      },
-                      icon: Icon(Icons.picture_as_pdf),
-                      tooltip: "Export u pdf",
-                      //label: Text('Eksportuj grafikon'),
-                    ),*/
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Izvještaj je generisan: C:\\Users\\User\\Downloads\\graf2.pdf',
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 5),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.picture_as_pdf, size: 30),
+                        label: Text("Export u PDF"),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -799,7 +838,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 3,
             child:
-                _buildBarChart1(), // 🛠️ Ovdje pozivaš funkciju za grafikon rezervacija
+                _buildBarChart1(), //  Ovdje  funkciju za grafikon rezervacija
           ),
         ],
       ),
@@ -813,7 +852,7 @@ class _HomePageState extends State<HomePage> {
       height: 100, // Visina pravougaonika
       decoration: BoxDecoration(
         color: ui.Color.fromARGB(
-            255, 243, 244, 235), // Suptilna svetlo bež boja pozadine
+            255, 243, 244, 235), // Suptilna svjetlo bež boja pozadine
         borderRadius:
             BorderRadius.all(Radius.circular(20)), // Blago zaobljene ivice
         boxShadow: [
@@ -916,6 +955,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
+
+                  const SizedBox(height: 20),
                   // Pozdravna poruka bez paddinga
                   Container(
                     margin: EdgeInsets.zero,
@@ -952,8 +993,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-
-          // 🔘 Dugme u donjem desnom uglu
           /*Positioned(
             bottom: 16,
             right: 16,
@@ -963,16 +1002,26 @@ class _HomePageState extends State<HomePage> {
               child: Icon(Icons.picture_as_pdf),
             ),
           ),*/
-          if (!LoggedUser.isZaposlenik!)
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: FloatingActionButton(
-                onPressed: () => exportChartsToPdf(),
-                tooltip: "Export u PDF",
-                child: Icon(Icons.picture_as_pdf),
-              ),
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () async {
+                await exportChartsToPdf();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Izvještaj je generisan: C:\\Users\\User\\Downloads\\grafovi.pdf',
+                    ),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 4),
+                  ),
+                );
+              },
+              tooltip: "Export u PDF",
+              child: Icon(Icons.picture_as_pdf),
             ),
+          ),
         ],
       ),
     );

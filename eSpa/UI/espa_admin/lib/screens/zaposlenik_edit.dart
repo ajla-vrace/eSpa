@@ -187,21 +187,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
     }
   }
 
-// Funkcija koja uzima ID uloge na temelju id-a korisnika
-  /* int? _findUlogaId(int korisnikUlogaId) {
-    // Proverite da li lista uloga nije null i nije prazna
-    if (uloge != null && uloge.isNotEmpty) {
-      var uloga = uloge.firstWhere(
-        (role) => role.id == korisnikUlogaId,
-        orElse: () => null, // Kada nema odgovarajuće uloge, vrati null
-      );
 
-      return uloga != null ? uloga.id : null; // Ako je uloga null, vrati null
-    } else {
-      // Ako je lista uloga null ili prazna, vrati null
-      return null;
-    }
-  }*/
 
   Future initForm() async {
     zaposlenikResult = await _zaposlenikProvider.get();
@@ -476,21 +462,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
-          /* _buildInputField1("Ime", Icons.person, "ime"),
-          SizedBox(height: 10),
-          _buildInputField1("Prezime", Icons.person_2_outlined, "prezime"),*/
-          /*  Row(
-            children: [
-              Expanded(
-                child: _buildInputField1("Ime", Icons.person, "ime"),
-              ),
-              SizedBox(width: 10), // Razmak između dva polja
-              Expanded(
-                child: _buildInputField1(
-                    "Prezime", Icons.person_2_outlined, "prezime"),
-              ),
-            ],
-          ),*/
+        
           Row(
             crossAxisAlignment: CrossAxisAlignment
                 .start, // važno za poravnanje kad se prikaže greška
@@ -514,20 +486,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
             ],
           ),
 
-          /* Row(
-            mainAxisAlignment:
-                MainAxisAlignment.spaceBetween, // Pruža razmak između polja
-            children: [
-              Expanded(
-                child: _buildInputField1("Ime", Icons.person, "ime"),
-              ),
-              SizedBox(width: 10), // Razmak između dva input polja
-              Expanded(
-                child: _buildInputField1(
-                    "Prezime", Icons.person_2_outlined, "prezime"),
-              ),
-            ],
-          ),*/
+          
 
           SizedBox(height: 10),
           Row(
@@ -576,120 +535,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
     );
   }
 
-  /*Widget _buildRoleDropdown() {
-    // Filtriraj uloge koje nisu 'admin'
-    List<Uloga> filteredRoles = uloge
-        .where((role) => role.naziv.toLowerCase() != 'administrator')
-        .toList();
-    // Provera da li postoji dodeljena uloga za zaposlenika
 
-    //print("selectedUlogaId: $selectedUlogaId");
-
-    print("selectedUlogaId: $selectedUlogaId");
-
-    // print("filtered roles $filteredRoles");
-    print("default selectedUlogaId $selectedUlogaId");
-    return FormBuilderDropdown<int>(
-      name: "ulogaId",
-      initialValue: selectedUlogaId, // Postavljamo defaultnu vrijednost
-      decoration: InputDecoration(
-        labelText: "Uloga",
-        prefixIcon: Icon(Icons.group),
-        border: OutlineInputBorder(),
-      ),
-      validator: (value) {
-        if (value == null) {
-          return 'Odaberite ulogu';
-        }
-        return null;
-      },
-      items: filteredRoles.map((role) {
-        return DropdownMenuItem<int>(
-          value: role.id,
-          child: Text(role.naziv.toString()),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          print("selected u setstate $selectedUlogaId");
-          print("value $value");
-          // Ovdje pohranjuješ selektovanu ulogu
-          selectedUlogaId = value;
-          print("selected u setstate poslije $selectedUlogaId");
-          print("value $value");
-        });
-      },
-    );
-  }*/
-  /*
-Widget _buildRoleDropdown2() {
-  // Filtriraj uloge koje nisu 'administrator'
-  List<Uloga> filteredRoles =
-      uloge.where((role) => role.naziv.toLowerCase() != 'administrator').toList();
-  print("filteredroles $filteredRoles");
-
-  return FormBuilderDropdown<int>(  // Koristimo int tip umesto String
-    name: "ulogaId",
-    decoration: InputDecoration(
-      labelText: "Uloga",
-      prefixIcon: Icon(Icons.person),
-      border: OutlineInputBorder(),
-    ),
-    validator: (value) {
-      if (value == null) {
-        return 'Odaberite ulogu';
-      }
-      return null;
-    },
-    items: filteredRoles.map((role) {
-      return DropdownMenuItem<int>(  // Koristimo int kao tip
-        value: role.id,  // Ne pretvaramo u string, koristimo int
-        child: Text(role.naziv!),
-      );
-    }).toList(),
-    onChanged: (value) {
-      setState(() {
-        // Pohranjujemo selektovanu ulogu kao int
-        selectedUlogaId = value;
-      });
-    },
-  );
-}
-*/
-/*
-Widget _buildRoleDropdown1() {
-  // Filtriraj uloge koje nisu 'admin'
-  List<Uloga> filteredRoles =
-      uloge.where((role) => role.naziv.toLowerCase() != 'administrator').toList();
-
-  return FormBuilderDropdown<int>(
-    name: "ulogaId",
-    decoration: InputDecoration(
-      labelText: "Uloga",
-      prefixIcon: Icon(Icons.person),
-      border: OutlineInputBorder(),
-    ),
-    validator: (value) {
-      if (value == null) {
-        return 'Odaberite ulogu';
-      }
-      return null;
-    },
-    items: filteredRoles.map((role) {
-      return DropdownMenuItem<int>(  // Koristi int kao tip
-        value: role.id,  // ID je int
-        child: Text(role.naziv!),
-      );
-    }).toList(),
-    onChanged: (value) {
-      setState(() {
-        // Ovdje pohranjuješ selektovanu ulogu kao int
-        selectedUlogaId = value as String?;
-      });
-    },
-  );
-}
-*/
 
   Widget _buildInputField1(String label, IconData icon, String name,
       {bool required = true}) {
@@ -766,104 +612,7 @@ Widget _buildRoleDropdown1() {
     );
   }
 
-  /*Widget _buildInputField1(String label, IconData icon, String name,
-      {bool required = true}) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(),
-      ),
-      textCapitalization: TextCapitalization.sentences,
-      validator: (value) {
-        if (required && (value == null || value.isEmpty)) {
-          return 'Polje je obavezno';
-        }
-
-        if (name == "struka") {
-          // Ako nije prazno, provjeri validaciju
-          if (value != null && value.isNotEmpty) {
-            // Provera da li počinje velikim slovom
-            if (!RegExp(r'^[A-ZČĆĐŠŽ]').hasMatch(value)) {
-              return 'Struka mora početi velikim slovom';
-            }
-            // Provera minimalne dužine
-            if (value.length < 3) {
-              return 'Struka mora imati najmanje 3 slova';
-            }
-            // Provera da li sadrži samo slova
-            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-              return 'Struka može sadržavati samo slova';
-            }
-          }
-        } else if (name == "biografija") {
-          // Ako nije prazno, provjeri validaciju
-          if (value != null && value.isNotEmpty) {
-            // Provera da li počinje velikim slovom
-            if (!RegExp(r'^[A-ZČĆĐŠŽ]').hasMatch(value)) {
-              return 'Biografija mora početi velikim slovom';
-            }
-            // Provera minimalne dužine
-            if (value.length < 3) {
-              return 'Biografija mora imati najmanje 3 karaktera';
-            }
-          }
-        } else if (name == "Ime") {
-          // Ako nije prazno, provjeri validaciju
-          if (value != null && value.isNotEmpty) {
-            // Provera da li počinje velikim slovom
-            if (!RegExp(r'^[A-ZČĆĐŠŽ]').hasMatch(value)) {
-              return 'Ime mora početi velikim slovom';
-            }
-            // Provera minimalne dužine
-            if (value.length < 3) {
-              return 'Ime mora imati najmanje 3 karaktera';
-            }
-            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-              return 'Ime može sadržavati samo slova';
-            }
-          }
-        } else if (name == "prezime") {
-          // Ako nije prazno, provjeri validaciju
-          if (value != null && value.isNotEmpty) {
-            // Provera da li počinje velikim slovom
-            if (!RegExp(r'^[A-ZČĆĐŠŽ]').hasMatch(value)) {
-              return 'Prezime mora početi velikim slovom';
-            }
-            // Provera minimalne dužine
-            if (value.length < 3) {
-              return 'Prezime mora imati najmanje 3 karaktera';
-            }
-            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-              return 'Ime može sadržavati samo slova';
-            }
-          }
-        }
-
-if (name == "Ime") {
-          // Ako nije prazno, provjeri validaciju
-          if (value != null && value.isNotEmpty) {
-            // Provera da li počinje velikim slovom
-            if (!RegExp(r'^[A-ZČĆĐŠŽ]').hasMatch(value)) {
-              return 'Ime mora početi velikim slovom';
-            }
-            // Provera minimalne dužine
-            if (value.length < 3) {
-              return 'Ime mora imati najmanje 3 karaktera';
-            }
-            if (!RegExp(r'^[A-ZČĆĐŠŽa-zčćđšž]+$').hasMatch(value)) {
-              return 'Ime može sadržavati samo slova';
-            }
-          }
-        }
-
-
-
-        return null;
-      },
-    );
-  }*/
+  
 
   Widget _buildImagePicker() {
     return Column(

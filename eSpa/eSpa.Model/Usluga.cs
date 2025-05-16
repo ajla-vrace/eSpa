@@ -17,6 +17,7 @@ namespace eSpa.Model
         public Kategorija Kategorija { get; set; }
         public byte[]? Slika { get; set; }
         public virtual ICollection<Favorit> Favorits { get; set; } = new List<Favorit>();
+        //public virtual ICollection<Ocjena> Ocjenas { get; set; } = new List<Ocjena>();
 
     }
 }

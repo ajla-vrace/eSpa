@@ -87,14 +87,23 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             Expanded(
               child: ListView(
                 children: [
-                  ListTile(
+                  /*ListTile(
                     title: Text('HomePage'),
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => HomePage(),
                       ));
                     },
-                  ),
+                  ),*/
+                   if (!LoggedUser.isZaposlenik!)
+                    ListTile(
+                      title: Text('HomePage'),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ));
+                      },
+                    ),
                   if (!LoggedUser.isZaposlenik!)
                     ListTile(
                       title: Text('Korisnici'),
