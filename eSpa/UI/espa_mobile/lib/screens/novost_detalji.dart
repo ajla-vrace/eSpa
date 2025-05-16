@@ -266,7 +266,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
                   return 'Komentar ne može biti prazan';
                 }
                 if (value.trim().isEmpty) {
-                  return 'Komentar ne može imati samo razmake';
+                  return 'Treba imati karaktere';
                 }
 
                 final trimmed = value.trim();

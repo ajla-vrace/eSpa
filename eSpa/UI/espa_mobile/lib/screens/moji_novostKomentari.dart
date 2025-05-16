@@ -161,11 +161,11 @@ class _MojiKomentariScreenState extends State<MojiKomentariScreen> {
                                                   }
 
                                                   if (value.trim().isEmpty) {
-                                                    return 'Komentar ne može imati samo razmake';
+                                                    return 'Treba imati karaktere';
                                                   }
 
                                                   if (value.trim().length < 3) {
-                                                    return 'Komentar mora imati najmanje 3 karaktera';
+                                                    return 'Min. 3 karaktera';
                                                   }
 
                                                   return null;
