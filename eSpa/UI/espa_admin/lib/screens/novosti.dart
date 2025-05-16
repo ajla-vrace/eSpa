@@ -91,8 +91,7 @@ class _NovostiPageState extends State<NovostPage> {
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
-                    return const Color.fromARGB(
-                        255, 181, 226, 182); 
+                    return const Color.fromARGB(255, 181, 226, 182);
                   },
                 ),
                 columns: const [
@@ -158,8 +157,7 @@ class _NovostiPageState extends State<NovostPage> {
                       DataCell(
                         novost.slika != null && novost.slika!.isNotEmpty
                             ? Image.memory(
-                                base64Decode(novost
-                                    .slika!), 
+                                base64Decode(novost.slika!),
                                 width: 50, // Širina slike
                                 height: 50, // Visina slike
                                 fit: BoxFit.cover, // Prilagodba slike
@@ -209,7 +207,7 @@ class _NovostiPageState extends State<NovostPage> {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovu novost?"),
+                                          "Da li ste sigurni da želite obrisati ovu novost? \n Trajno će se izbrisati svi podaci povezani s njom."),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),
@@ -218,8 +216,7 @@ class _NovostiPageState extends State<NovostPage> {
                                                 false); // Korisnik je odustao
                                           },
                                           style: TextButton.styleFrom(
-                                            foregroundColor: Colors
-                                                .grey, 
+                                            foregroundColor: Colors.grey,
                                           ),
                                         ),
                                         TextButton(
@@ -229,8 +226,7 @@ class _NovostiPageState extends State<NovostPage> {
                                                 true); // Korisnik je potvrdio
                                           },
                                           style: TextButton.styleFrom(
-                                            foregroundColor: Colors
-                                                .red, 
+                                            foregroundColor: Colors.red,
                                           ),
                                         ),
                                       ],
@@ -364,9 +360,8 @@ class _NovostiPageState extends State<NovostPage> {
                           },
                           tooltip: 'Obriši unos',
                         ),*/
-                         (_naslovController.text.isNotEmpty ||
-                                _autorController.text.isNotEmpty
-                               )
+                        (_naslovController.text.isNotEmpty ||
+                                _autorController.text.isNotEmpty)
                             ? IconButton(
                                 icon: Icon(Icons.backspace, color: Colors.red),
                                 onPressed: () {
@@ -382,7 +377,7 @@ class _NovostiPageState extends State<NovostPage> {
                               )
                             : SizedBox.shrink(),
                         const SizedBox(width: 10),
-                       
+
                         const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(

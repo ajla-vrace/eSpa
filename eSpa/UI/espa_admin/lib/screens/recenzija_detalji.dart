@@ -78,7 +78,7 @@ class _RecenzijaDetaljiPageState extends State<RecenzijaDetaljiPage> {
                             children: [
                               Spacer(), // Gura dugme skroz desno
                               IconButton(
-                                icon: Icon(Icons.close, color: Colors.black54),
+                                icon: Icon(Icons.close, color: Color.fromARGB(137, 104, 102, 102)),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },

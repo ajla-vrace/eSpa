@@ -200,7 +200,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
                       ),*/
                 Spacer(), // Gura dugme skroz desno
                 IconButton(
-                  icon: Icon(Icons.close, color: Colors.black54),
+                  icon: Icon(Icons.close, color: Color.fromARGB(137, 88, 86, 86)),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -213,7 +213,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
             SizedBox(height: 10),
             _buildInputField("Email", Icons.email, "email"),
             SizedBox(height: 10),
-            _buildInputField("Broj telefona", Icons.phone, "telefon"),
+            _buildInputFieldTelefon("Broj telefona", Icons.phone, "telefon"),
             SizedBox(height: 10),
             _buildInputField(
                 "Korisničko ime", Icons.account_circle, "korisnickoIme"),
@@ -286,6 +286,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
                             await _korisnikProvider.insert(request);
                         setState(() {
                           korisnikId = kreiraniKorisnik.id;
+                          print("kreirani korisnik $kreiraniKorisnik");
                           korisnikKreiran = true;
                         });
                       } catch (e) {
@@ -324,7 +325,7 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
                       ),*/
                 Spacer(), // Gura dugme skroz desno
                 IconButton(
-                  icon: Icon(Icons.close, color: Colors.black54),
+                  icon: Icon(Icons.close, color: Color.fromARGB(137, 85, 82, 82)),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -620,6 +621,44 @@ class _ZaposlenikDetaljiPageState extends State<ZaposlenikDetaljiPage> {
       //maxLines: multiline ? null : 1,
     );
   }
+
+
+Widget _buildInputFieldTelefon(
+    String label,
+    IconData icon,
+    String name, {
+    bool obscureText = false,
+    /*bool multiline = false*/
+  }) {
+    return FormBuilderTextField(
+      name: name,
+      obscureText: obscureText,
+      validator: (value) {
+        if (value == null || (value.isEmpty && name != "napomena")) {
+          return 'Polje je obavezno';
+        }
+        
+        
+        if (name == "telefon") {
+          if (!RegExp(r'^06\d{7}$').hasMatch(value)) {
+            return 'Broj telefona mora počinjati s "06" i imati 9 cifara"';
+          }
+        }
+
+        return null; // Ako je validacija prošla, vraća null
+      },
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: 'Format 06xxxxxxx',
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(),
+      ),
+      //maxLines: multiline ? null : 1,
+    );
+  }
+
+
+
 
   Widget _buildInputField1(String label, IconData icon, String name,
       {bool required = true}) {

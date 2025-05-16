@@ -166,7 +166,7 @@ class _UslugaInfoPageState extends State<UslugaInfoPage> {
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context), // Zatvori formu
                     child: const Icon(Icons.close,
-                        size: 24, color: Colors.black54),
+                        size: 24, color: Color.fromARGB(137, 84, 82, 82)),
                   ),
                 ),
               ),

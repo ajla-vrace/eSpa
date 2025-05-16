@@ -140,6 +140,7 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                   TextFormField(
                     controller: _komentarController,
                     maxLines: 2,
+                    minLines: 1,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       hintText: 'Unesite vaš komentar (opcionalno)',
@@ -153,7 +154,7 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
                         return 'Komentar ne može imati samo razmake';
                       } else if (value.trim().length < 3) {
                         // Ako je komentar prekratak (manje od 3 karaktera)
-                        return 'Komentar mora imati najmanje 3 karaktera';
+                        return 'Treba vise od 3 karaktera';
                       }
                       return null; // Ako nema problema sa komentarom, vraća null (validno je)
                     },
@@ -300,9 +301,9 @@ class _ZaposlenikDetaljiScreenState extends State<ZaposlenikDetaljiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final slikaBytes = widget.zaposlenik.slika?.slika != null &&
-            widget.zaposlenik.slika!.slika!.isNotEmpty
-        ? base64Decode(widget.zaposlenik.slika!.slika!)
+    final slikaBytes = widget.zaposlenik.korisnik?.slika != null &&
+            widget.zaposlenik.korisnik!.slika!.slika!.isNotEmpty
+        ? base64Decode(widget.zaposlenik.korisnik!.slika!.slika!)
         : null;
 
     return MasterScreenWidget(

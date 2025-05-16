@@ -76,7 +76,7 @@ class _KategorijaDetaljiPageState extends State<KategorijaDetaljiPage> {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    icon: Icon(Icons.close, color: Colors.black54),
+                    icon: Icon(Icons.close, color: Color.fromARGB(137, 132, 131, 131)),
                     onPressed: () {
                       Navigator.pop(context);
                     },

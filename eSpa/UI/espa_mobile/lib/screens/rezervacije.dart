@@ -111,6 +111,10 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                               "Vrijeme: ${formatTime(rezervacija.termin?.pocetak)}"),
                           const SizedBox(height: 4),
                           Text(
+                            "Placeno: ${rezervacija.isPlaceno! ? 'Da' : 'Ne'}",
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
                             "Status: ${rezervacija.status ?? 'Nepoznat'}",
                             style: TextStyle(
                               color: getStatusColor(rezervacija.status),
@@ -189,7 +193,8 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
   Future<void> _cancelReservation(Rezervacija rezervacija) async {
     try {
       final rezervacijaProvider = context.read<RezervacijaProvider>();
-      await rezervacijaProvider.update(rezervacija.id!, {'statusRezervacijeId': 2});
+      await rezervacijaProvider
+          .update(rezervacija.id!, {'statusRezervacijeId': 2});
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

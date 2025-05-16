@@ -39,7 +39,7 @@ class _KorisnikDetaljiPageState extends State<KorisnikDetaljiPage> {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    icon: Icon(Icons.close),
+                    icon: Icon(Icons.close,color: Color.fromARGB(136, 97, 96, 96)),
                     onPressed: () {
                       Navigator.pop(
                           context); // Zatvara stranicu kada se klikne X

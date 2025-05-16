@@ -160,7 +160,7 @@ class _TerminPageState extends State<TerminPage> {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovaj termin?"),
+                                          "Da li ste sigurni da želite obrisati ovaj termin?\n Trajno će se izbrisati svi podaci povezani s njim."),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),

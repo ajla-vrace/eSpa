@@ -63,15 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Color.fromARGB(255, 21, 109, 51), // Boja ikone
                       //color: Color.fromARGB(255, 36, 62, 37), // Boja ikone
                     ),
-                    //Text("eSpa"),
-                    /*Text(
-                      "eSpa",
-                      style: TextStyle(
-                        fontFamily: 'cursive',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),*/
+                    
                     Text(
                       "eSpa",
                       style: TextStyle(
@@ -140,44 +132,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-/*
-  Future<void> _login() async {
-    var username = _usernameController.text;
-    var password = _passwordController.text;
 
-    if (username.isEmpty || password.isEmpty) {
-      _showErrorDialog("Username and password are required!");
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      Authorization.username = username;
-      Authorization.password = password;
-      await setUserName(username);
-      print("Pozivam novostProvider.get()");
-      await _novostProvider.get();
-      print("Uspješno dobio novosti");
-      // await _novostProvider.get();
-
-      if (!mounted) return;
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } catch (e) {
-      _showErrorDialog(e.toString());
-    } finally {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    }
-  }*/
   Future<void> _login() async {
     var username = _usernameController.text;
     var password = _passwordController.text;
@@ -208,7 +163,10 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       var korisnik = korisnici.result[0];
-
+      if (korisnik.isBlokiran == true) {
+        _showErrorDialog("Nedozvoljen pristup.");
+        return;
+      }
       // Provjera uloge za mobilnu verziju - ako korisnik IMA ulogu, odbij login
       if (korisnik.korisnikUlogas.isNotEmpty) {
         /* _showErrorDialog(
@@ -252,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Error"),
+        title: const Text("Greška"),
         content: Text(message),
         actions: [
           TextButton(

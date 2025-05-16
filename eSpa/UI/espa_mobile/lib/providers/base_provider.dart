@@ -21,7 +21,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "http://10.0.2.2:5031/");
         print("baseurl $_baseUrl");
-   /* _baseUrl = const String.fromEnvironment("baseUrl",
+    /*_baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "http://192.168.1.6:5031/");*/
     // _baseUrl = const String.fromEnvironment("baseUrl",
     //defaultValue: "https://localhost:7031/");

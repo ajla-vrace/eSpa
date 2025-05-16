@@ -44,28 +44,13 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
 
   double? iznos;
 
+  var _napomenaController;
+
   @override
   void initState() {
     super.initState();
     _ucitajZaposlenikeIKategoriju();
   }
-
-  //DateTime? _odabraniDatum;
-
-// kod za otvaranje datepickera
-  /*Future<void> _odaberiDatum(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2030),
-    );
-    if (picked != null && picked != _odabraniDatum) {
-      setState(() {
-        _odabraniDatum = picked;
-      });
-    }
-  }*/
 
   Future<void> _ucitajZaposlenikeIKategoriju() async {
     try {
@@ -259,7 +244,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
       // Ako su svi zaposleni zauzeti za ovaj termin, ne može se napraviti rezervacija
       /*if (brojZauzetihZaposlenika >= brojZaposlenikaUKategoriji) {
         throw Exception('Nema više dostupnih zaposlenika za odabrani termin');
-      }*/////////////ovdjeeeeeeeeeeee
+      }*/ ////////////ovdjeeeeeeeeeeee
 
       // Izvuci već zauzete zaposlenike
       List<int> zauzetiZaposlenici =
@@ -313,63 +298,6 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
     }
   }
 
-/*
-  Future<void> _kreirajRezervaciju() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    try {
-      int? zaposleniId;
-
-      // Dohvati rezervacije za odabrani termin
-      final rezervacijeZaTermin =
-          await context.read<RezervacijaProvider>().get(filter: {
-        'terminId': _odabraniTermin!.id,
-      });
-
-      final brojZauzetihZaposlenika = rezervacijeZaTermin.result.length;
-      final brojZaposlenikaUKategoriji = _zaposleniciUKategoriji.length;
-
-      // Ako su svi zaposleni zauzeti za ovaj termin, ne može se napraviti rezervacija
-      if (brojZauzetihZaposlenika >= brojZaposlenikaUKategoriji) {
-        throw Exception('Nema više dostupnih zaposlenika za odabrani termin');
-      }
-
-      if (_zaposleniciUKategoriji.isNotEmpty) {
-        // Dodeli zaposlenika koji je dostupan
-        zaposleniId = _zaposleniciUKategoriji.first.id;
-      } else {
-        throw Exception('Nema zaposlenika za dodeljivanje');
-      }
-
-      // Kreiraj novu rezervaciju
-      await context.read<RezervacijaProvider>().insert({
-        'korisnikId': widget.korisnikId,
-        'uslugaId': widget.usluga.id,
-        'datum': _odabraniDatum!.toIso8601String(),
-        //'datum': DateTime.now().toIso8601String(),
-        'terminId': _odabraniTermin!.id,
-        'zaposlenikId': zaposleniId,
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Rezervacija uspješno kreirana!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.of(context).pop();
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Greška pri kreiranju: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -413,38 +341,7 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
               const SizedBox(height: 20),
               if (_termini
                   .isNotEmpty) // Prikazivanje Dropdown-a samo kad imamo slobodne termine
-                /* DropdownButtonFormField<Termin>(
-                  value: _odabraniTermin,
-                  items: _termini.map((t) {
-                    // Ako je t.pocetak string koji treba parsirati kao broj
-                    double? pocetakDouble = double.tryParse(t.pocetak ?? '');
-                    String prikaz = pocetakDouble != null
-                        ? pocetakDouble.toStringAsFixed(2)
-                        : (t.pocetak ?? 'Nepoznato vrijeme');
 
-                    return DropdownMenuItem<Termin>(
-                      value: t,
-                      child: Text(
-                        prikaz,
-                        style: const TextStyle(
-                          color: Colors.green, // ZELENI TEKST
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _odabraniTermin = value;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Odaberi termin',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) =>
-                      value == null ? 'Molimo odaberite termin' : null,
-                ),*/
                 DropdownButtonFormField<Termin>(
                   value: _odabraniTermin,
                   items: _termini.map((termin) {
@@ -477,63 +374,8 @@ class _KreirajRezervacijuScreenState extends State<KreirajRezervacijuScreen> {
                 ),
 //dodano danas
 
-              /* DropdownButtonFormField<Termin>(
-                  value: _odabraniTermin,
-                  items: _termini.map((t) {
-                    return DropdownMenuItem<Termin>(
-                      value: t,
-                      child: Text(t.pocetak ?? 'Nepoznato vrijeme'),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _odabraniTermin = value;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Odaberi termin',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) =>
-                      value == null ? 'Molimo odaberite termin' : null,
-                ),*/
               const SizedBox(height: 30),
-              /*ElevatedButton(
-                onPressed: (_odabraniDatum != null && _odabraniTermin != null)
-                    ? _kreirajRezervaciju
-                    : null,
-                child: const Text('Rezerviši'),
-              ),
-
-              ElevatedButton(
-                onPressed: () async {
-                  if (KreiranaRezervacija != null) {
-                    print("kreirana rezervacija  je ovdje ${KreiranaRezervacija}");
-                   
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PayPalScreen(
-                                lastRezervacija: KreiranaRezervacija,
-                                totalAmount:
-                                    iznos!
-                              )),
-                    );
-                    if (result == true) {
-                      // Ako je plaćanje uspješno, pozovi update
-                      //await azurirajRezervaciju(rezervacijaId);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Plaćanje uspješno!')),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Plaćanje otkazano.')),
-                      );
-                    }
-                  }
-                },
-                child: const Text('Izvrši plaćanje'),
-              ),*/
+             
 
               const SizedBox(height: 30),
               ElevatedButton(

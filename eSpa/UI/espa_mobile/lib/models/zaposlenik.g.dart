@@ -21,9 +21,6 @@ Zaposlenik _$ZaposlenikFromJson(Map<String, dynamic> json) => Zaposlenik(
           : Korisnik.fromJson(json['korisnik'] as Map<String, dynamic>),
       json['kategorijaId'] as int?,
       json['slikaId'] as int?,
-      json['slika'] == null
-          ? null
-          : ZaposlenikSlike.fromJson(json['slika'] as Map<String, dynamic>),
       Kategorija.fromJson(json['kategorija'] as Map<String, dynamic>),
     );
 
@@ -39,6 +36,5 @@ Map<String, dynamic> _$ZaposlenikToJson(Zaposlenik instance) =>
       'korisnik': instance.korisnik,
       'kategorijaId': instance.kategorijaId,
       'slikaId': instance.slikaId,
-      'slika': instance.slika,
       'kategorija': instance.kategorija,
     };

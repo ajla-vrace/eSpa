@@ -104,25 +104,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
     }
   }
 
-  /*Future<void> _provjeriJeLajkovano() async {
-    //NovostInterakcija? interakcija;
-    print("korisnik id $korisnikId");
-    try {
-      print("u try smo");
-      interakcija = widget.novost.novostInterakcijas?.firstWhere(
-        (x) => x.korisnikId == korisnikId,
-      );
-      print("interakcija $interakcija");
-    } catch (e) {
-      print("interakcija je null");
-      interakcija = null;
-    }
-
-    setState(() {
-      jeLajkovano = interakcija?.isLiked;
-      print("JE LI LAJKOVANO $jeLajkovano");
-    });
-  }*/
+  
 
   Future<void> _loadKomentari() async {
     try {
@@ -294,7 +276,7 @@ class _NovostDetailScreenState extends State<NovostDetailScreen> {
                 }
 
                 if (trimmed.length < 3) {
-                  return 'Komentar mora imati najmanje 3 znaka';
+                  return 'Treba vise od 3 karaktera';
                 }
 
                 return null;

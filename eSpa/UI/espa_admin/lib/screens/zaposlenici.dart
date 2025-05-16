@@ -284,7 +284,7 @@ class _ZaposlenikPageState extends State<ZaposlenikPage> {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovog zaposlenika?"),
+                                          "Da li ste sigurni da želite obrisati ovog zaposlenika? \n Trajno će se izbrisati svi podaci povezani s njom."),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),

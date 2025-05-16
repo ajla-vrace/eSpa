@@ -151,7 +151,7 @@ class _PayPalScreenState extends State<PayPalScreen> {
             if (url.startsWith('https://your-cancel-url.com')) {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => const CancelPage(),
+                  builder: (context) =>  CancelPage(lastRezervacija:_lastRezervacija),
                 ),
               );
             }

@@ -14,5 +14,6 @@ namespace eSpa.Model.Requests
         // public int TerminId { get; set; }
         [Required]
         public int StatusRezervacijeId { get; set; }
+        public bool isPlaceno { get; set; }
     }
 }

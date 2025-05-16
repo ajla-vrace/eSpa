@@ -357,7 +357,7 @@ class _KorisnickiProfilScreenState extends State<KorisnickiProfilScreen> {
                         );
                       }),
                       const SizedBox(height: 12),
-                      _buildButton(context, "Moje recenzije", Icons.rate_review,
+                      _buildButton(context, "Moji komentari usluga", Icons.rate_review,
                           () {
                         Navigator.push(
                           context,

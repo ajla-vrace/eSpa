@@ -284,7 +284,7 @@ class _ZaposlenikEditPageState extends State<ZaposlenikEditPage> {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
-                        icon: Icon(Icons.close, color: Colors.black54),
+                        icon: Icon(Icons.close, color: Color.fromARGB(137, 97, 94, 94)),
                         onPressed: () {
                           Navigator.pop(context);
                         },

@@ -97,7 +97,7 @@ class _ZaposlenikInfoPageState extends State<ZaposlenikInfoPage> {
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context), // Zatvori formu
                     child: const Icon(Icons.close,
-                        size: 24, color: Colors.black54),
+                        size: 24, color: Color.fromARGB(137, 88, 85, 85)),
                   ),
                 ),
               ),

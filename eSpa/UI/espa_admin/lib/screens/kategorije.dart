@@ -73,7 +73,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
               child: DataTable(
                 columnSpacing:
                     constraints.maxWidth * 0.1, // Prostor između kolona
-                
+
                 headingRowColor: MaterialStateProperty.all(
                     Colors.green.shade800), // Tamnozelena boja za zaglavlje
                 dataRowColor: MaterialStateProperty.resolveWith<Color?>(
@@ -83,15 +83,12 @@ class _KategorijaPageState extends State<KategorijaPage> {
                   },
                 ),
                 columns: const [
-                 
                   DataColumn(
                     label: Text(
                       "Naslov",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                 
-                 
                   DataColumn(
                     label: Text(
                       "",
@@ -105,7 +102,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                       // DataCell(Text(novost.id?.toString() ?? "N/A")),
                       DataCell(Text(kategorija.naziv ?? "N/A")),
                       //DataCell(Text(novost.sadrzaj?.toString() ?? "N/A")),
-                      
+
                       DataCell(
                         Row(
                           mainAxisAlignment: MainAxisAlignment
@@ -117,17 +114,16 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        KategorijaDetaljiPage(kategorija: kategorija),
+                                    builder: (context) => KategorijaDetaljiPage(
+                                        kategorija: kategorija),
                                   ),
                                 );
-                               
+
                                 // Akcija za update
-                                print('Detalji clicked for: ${kategorija.naziv}');
+                                print(
+                                    'Detalji clicked for: ${kategorija.naziv}');
                               },
                             ),
-                           
-
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
@@ -137,7 +133,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovu novost?"),
+                                          "Da li ste sigurni da želite obrisati ovu kategoriju?\n Trajno će se izbrisati svi podaci povezani s njom."),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),
@@ -168,12 +164,13 @@ class _KategorijaPageState extends State<KategorijaPage> {
 
                                 if (confirm == true) {
                                   try {
-                                    await _kategorijaProvider.delete(kategorija.id!);
+                                    await _kategorijaProvider
+                                        .delete(kategorija.id!);
                                     setState(() {
                                       _kategorije.remove(
                                           kategorija); // Uklonite obrisanu novost iz liste
                                     });
-                                   
+
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
@@ -224,7 +221,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-               
+
                 //const SizedBox(height: 20), //const SizedBox(height: 20),
                 // Novi red za input i dugme
                 Padding(
@@ -244,15 +241,15 @@ class _KategorijaPageState extends State<KategorijaPage> {
                             ),
                           ),
                         ),
-                       const SizedBox(width: 10),
-                       /* IconButton(
+                        const SizedBox(width: 10),
+                        /* IconButton(
                           icon: Icon(Icons.backspace, color: Colors.red),
                           onPressed: () {
                             _ftsController.clear();
                           },
                           tooltip: 'Obriši unos',
                         ),*/
-                         (_ftsController.text.isNotEmpty )
+                        (_ftsController.text.isNotEmpty)
                             ? IconButton(
                                 icon: Icon(Icons.backspace, color: Colors.red),
                                 onPressed: () {
@@ -261,11 +258,7 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                 tooltip: 'Obriši unos',
                               )
                             : SizedBox.shrink(),
-                         const SizedBox(width: 10),
-                  
-
-                       
-                       
+                        const SizedBox(width: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -289,7 +282,6 @@ class _KategorijaPageState extends State<KategorijaPage> {
                                     data.result; // Ažurirajte listu komentara
                               });
                               print(data.result);
-                             
                             } catch (e) {
                               print("Došlo je do greške prilikom pretrage: $e");
                               setState(() {
@@ -301,8 +293,6 @@ class _KategorijaPageState extends State<KategorijaPage> {
                           child: const Text("Pretraži"),
                         ),
                         const SizedBox(width: 30),
-                       
-
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(

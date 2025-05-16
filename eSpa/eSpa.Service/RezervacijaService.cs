@@ -146,7 +146,7 @@ namespace eSpa.Service
 
             // Ažuriraj samo status
             entity.StatusRezervacijeId = update.StatusRezervacijeId;
-
+            entity.IsPlaceno = update.isPlaceno;
             _context.Rezervacijas.Update(entity);
             await _context.SaveChangesAsync();
 

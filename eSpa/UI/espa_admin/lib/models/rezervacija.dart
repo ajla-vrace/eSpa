@@ -2,6 +2,7 @@ import 'package:espa_admin/models/korisnik.dart';
 import 'package:espa_admin/models/statusRezervacije.dart';
 import 'package:espa_admin/models/termin.dart';
 import 'package:espa_admin/models/usluga.dart';
+import 'package:espa_admin/models/zaposlenik.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
@@ -24,6 +25,7 @@ class Rezervacija {
   Korisnik? korisnik;
   Usluga? usluga;
   Termin? termin;
+  Zaposlenik? zaposlenik;
   Rezervacija(
       this.id,
       this.korisnikId,
@@ -37,7 +39,8 @@ class Rezervacija {
       this.statusRezervacije,
       this.korisnik,
       this.usluga,
-      this.termin);
+      this.termin,
+      this.zaposlenik);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

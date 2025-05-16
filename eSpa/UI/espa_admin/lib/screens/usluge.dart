@@ -262,7 +262,7 @@ class _UslugePageState extends State<UslugaPage> {
                                     return AlertDialog(
                                       title: const Text("Potvrda brisanja"),
                                       content: const Text(
-                                          "Da li ste sigurni da želite obrisati ovu uslugu?"),
+                                          "Da li ste sigurni da želite obrisati ovu uslugu?\n Trajno će se izbrisati svi podaci povezani s njom."),
                                       actions: [
                                         TextButton(
                                           child: const Text("Odustani"),

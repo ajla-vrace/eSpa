@@ -104,7 +104,7 @@ class _TerminDetaljiPageState extends State<TerminDetaljiPage> {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                        icon: Icon(Icons.close, color: Colors.black54),
+                        icon: Icon(Icons.close, color: Color.fromARGB(137, 95, 93, 93)),
                         onPressed: () {
                           Navigator.pop(context);
                         },

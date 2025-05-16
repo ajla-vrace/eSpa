@@ -122,7 +122,7 @@ class _NovostDetaljiPageState extends State<NovostDetaljiPage> {
                     children: [
                       Spacer(), // Gura dugme skroz desno
                       IconButton(
-                        icon: Icon(Icons.close, color: Colors.black54),
+                        icon: Icon(Icons.close, color: Color.fromARGB(137, 108, 107, 107)),
                         onPressed: () {
                           Navigator.pop(context);
                         },

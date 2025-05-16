@@ -30,22 +30,18 @@ class _SuccessPageState extends State<SuccessPage> {
     setState(() {
       _isLoading = true;
     });
-    //var request;
-    /*var request = RezervacijaUpdate(
-        LoggedUser.id,
-        _lastRezervacija!.uslugaId,
-        _lastRezervacija!.terminId,
-        _lastRezervacija!.statusId,
-        _lastRezervacija!.isArhiva,
-        _lastRezervacija!.datumRezervacije,
-        _lastRezervacija!.isArhivaKorisnik,
-        false,
-        true);*/
+    // var request;
+
+    final request = {
+      "statusRezervacijeId": _lastRezervacija!.statusRezervacijeId,
+      "isPlaceno": true
+    };
 
     try {
       // ignore: unused_local_variable
-      /* var update =
-          await _rezervacijeProvider.update(_lastRezervacija!.id!, request);*/
+      var update =
+          await _rezervacijeProvider.update(_lastRezervacija!.id!, request);
+          print("uodate $update");
       /*Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => RezervacijeScreen(),

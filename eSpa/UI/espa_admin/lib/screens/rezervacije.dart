@@ -142,6 +142,12 @@ class _RezervacijePageState extends State<RezervacijePage> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Placeno",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -182,6 +188,10 @@ class _RezervacijePageState extends State<RezervacijePage> {
                         ),
                       ),
                       DataCell(Text(rezervacija.status ?? "N/A")),
+                      DataCell(
+                        Text(rezervacija.isPlaceno! ? "Da" : "Ne"),
+                      ),
+
                       // DataCell(Text(rezervacija.statusRezervacije!.naziv ?? "N/A")),
                       DataCell(
                         Row(
@@ -320,7 +330,7 @@ class _RezervacijePageState extends State<RezervacijePage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: ("Reezrvacije"),
+      title: ("Rezervacije"),
       child: SingleChildScrollView(
         child: Center(
           child: Padding(

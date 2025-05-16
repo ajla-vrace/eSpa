@@ -165,21 +165,24 @@ class _MojeRecenzijeZaposlenikaScreenState
                                                             .center,
                                                     children: List.generate(5,
                                                         (index) {
-                                                      return IconButton(
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            currentRating =
-                                                                (index + 1)
-                                                                    .toDouble();
-                                                          });
-                                                        },
-                                                        icon: Icon(
-                                                          index < currentRating
-                                                              ? Icons.star
-                                                              : Icons
-                                                                  .star_border,
-                                                          color: Colors.yellow,
-                                                          size: 32,
+                                                      return Expanded(
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              currentRating =
+                                                                  (index + 1)
+                                                                      .toDouble();
+                                                            });
+                                                          },
+                                                          icon: Icon(
+                                                            index < currentRating
+                                                                ? Icons.star
+                                                                : Icons
+                                                                    .star_border,
+                                                            color:
+                                                                Colors.yellow,
+                                                            size: 32,
+                                                          ),
                                                         ),
                                                       );
                                                     }),
@@ -197,7 +200,9 @@ class _MojeRecenzijeZaposlenikaScreenState
                                                             OutlineInputBorder(),
                                                       ),
                                                       maxLines: 3,
-                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                      autovalidateMode:
+                                                          AutovalidateMode
+                                                              .onUserInteraction,
                                                       validator: (value) {
                                                         // Ako je komentar prazan, dozvoljava se
                                                         if (value == null ||
@@ -216,8 +221,7 @@ class _MojeRecenzijeZaposlenikaScreenState
                                                           return 'Komentar mora imati najmanje 3 karaktera';
                                                         }
                                                         return null; // Ako nema problema sa komentarom, vraća null (validno je)
-                                                      }
-                                                      ),
+                                                      }),
                                                 ],
                                               ),
                                             ),

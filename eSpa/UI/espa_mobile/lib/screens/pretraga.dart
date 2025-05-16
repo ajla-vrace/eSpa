@@ -294,11 +294,13 @@ class _PretragaScreenState extends State<PretragaScreen> {
                                                       ),
                                                       const SizedBox(height: 4),
                                                       /*Text(
-                                                      usluga.opis ?? 'Bez opisa',
-                                                      style: const TextStyle(fontSize: 14),
-                                                      maxLines: 2,
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),*/
+                                                        '${usluga.cijena ?? 'Bez opisa'} KM',
+                                                        style: const TextStyle(
+                                                            fontSize: 14),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),*/
                                                     ],
                                                   ),
                                                 ),
@@ -376,13 +378,14 @@ class _PretragaScreenState extends State<PretragaScreen> {
                                             MainAxisAlignment.center,
                                         children: [
                                           ClipOval(
-                                            child: (zaposlenik.slika?.slika !=
-                                                        null &&
-                                                    zaposlenik.slika!.slika!
+                                            child: (zaposlenik.korisnik?.slika != null &&
+                                                    zaposlenik.korisnik!.slika!.slika!
                                                         .isNotEmpty)
                                                 ? Image.memory(
                                                     base64Decode(zaposlenik
-                                                        .korisnik!.slika!.slika!),
+                                                        .korisnik!
+                                                        .slika!
+                                                        .slika!),
                                                     height: 80.0,
                                                     width: 80.0,
                                                     fit: BoxFit.cover,

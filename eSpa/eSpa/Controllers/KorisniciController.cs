@@ -38,7 +38,7 @@ namespace eSpa.Controllers
             return base.Delete(id);
         }
 
-        [Authorize]
+       /* [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest model)
         {
@@ -56,7 +56,7 @@ namespace eSpa.Controllers
                 }
             }
             return BadRequest("Invalid request");
-        }
+        }*/
         [HttpPut("Blokiraj/{id}")]
         public async Task<IActionResult> BlokirajKorisnika(int id)
         {

@@ -22,7 +22,7 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
 
   List<StatusRezervacije> _statusi = [];
   List<String>? naziviStatusa = [];
-  String? selectedNazivStatusa="Sve";
+  String? selectedNazivStatusa = "Sve";
   @override
   void initState() {
     super.initState();
@@ -201,6 +201,10 @@ class _MojeRezervacijeScreenState extends State<MojeRezervacijeScreen> {
                           Text("Datum: ${formatDate(rezervacija.datum)}"),
                           Text(
                               "Vrijeme: ${formatTime(rezervacija.termin?.pocetak)}"),
+                          const SizedBox(height: 4),
+                          Text(
+                            "Placeno: ${rezervacija.isPlaceno! ? 'Da' : 'Ne'}",
+                          ),
                           const SizedBox(height: 4),
                           Text(
                             "Status: ${rezervacija.status ?? 'Nepoznat'}",

@@ -39,7 +39,7 @@ namespace eSpa.Service
             }
             if (!string.IsNullOrWhiteSpace(search?.Status))
             {
-                filteredQuery = filteredQuery.Where(x => x.Status.Contains(search.Status));
+                filteredQuery = filteredQuery.Where(x => x.Status==(search.Status));
             }
             if (!string.IsNullOrWhiteSpace(search?.Uloga))
             {
@@ -93,10 +93,20 @@ namespace eSpa.Service
             {
                 throw new KeyNotFoundException("Uloga 'Terapeut' nije pronađena.");
             }
-
+            //entity.Korisnik.IsZaposlenik = true;
             // Dodaj zaposlenika
             _context.Zaposleniks.Add(entity);
             await _context.SaveChangesAsync();
+
+            var korisnik = await _context.Korisniks.FindAsync(entity.KorisnikId);
+            if (korisnik == null)
+            {
+                throw new KeyNotFoundException("Korisnik nije pronađen.");
+            }
+            korisnik.IsZaposlenik = true;
+            _context.Korisniks.Update(korisnik);
+            await _context.SaveChangesAsync();
+
 
             // Dodaj ulogu terapeut zaposleniku
             var zaposlenikUloga = new Database.KorisnikUloga

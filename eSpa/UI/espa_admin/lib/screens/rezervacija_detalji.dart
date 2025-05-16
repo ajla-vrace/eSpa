@@ -159,7 +159,7 @@ class _RezervacijaDetaljiPageState extends State<RezervacijaDetaljiPage> {
                      
                       Spacer(), // Gura dugme skroz desno
                       IconButton(
-                        icon: Icon(Icons.close, color: Colors.black54),
+                        icon: Icon(Icons.close, color: Color.fromARGB(137, 101, 100, 100)),
                         onPressed: () {
                           Navigator.pop(context);
                         },

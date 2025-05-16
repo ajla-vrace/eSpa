@@ -225,15 +225,7 @@ class _RegistracijaScreenState extends State<RegistracijaScreen> {
                 false, // Ovdje se koristi `false`, što znači da uklanja sve prethodne ekrane
           );
 
-          // Navigator.pushReplacementNamed(context, '/login');
-          /* Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => LoginPage()),
-            (route) => false,
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );*/
+          
         }
       } catch (e) {
         print("GRESKA ${e.toString()}");

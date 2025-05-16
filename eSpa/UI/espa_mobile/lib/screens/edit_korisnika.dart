@@ -1,4 +1,4 @@
-import 'package:espa_mobile/screens/change_password.dart';
+
 import 'package:espa_mobile/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -135,39 +135,9 @@ class _EditKorisnikScreenState extends State<EditKorisnikScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    // OVDJE UBACUJEŠ NOVO DUGME
-                    /* ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChangePasswordScreen(userId: korisnik!.id!,)),
-                        );
-                      },
-                      child: const Text("Promijeni lozinku"),
-                    ),*/
+                   
 
-                    OutlinedButton(
-                      onPressed: () async {
-                        var result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ChangePasswordScreen(userId: korisnik!.id!),
-                          ),
-                        );
-                        if (result == true) {
-                          // Ako je lozinka promijenjena, možeš prikazati kratku poruku
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text("Lozinka je uspješno promijenjena"),
-                                    backgroundColor: Colors.green,),
-                          );
-                        }
-                      },
-                      child: const Text("Promijeni lozinku"),
-                    ),
+                  
 
                     const SizedBox(height: 20),
                     ElevatedButton(

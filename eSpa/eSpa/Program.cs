@@ -809,7 +809,7 @@ using (var scope = app.Services.CreateScope())
         Status = "Aktivna", // Status rezervacije
         Napomena = "",
         ZaposlenikId = 2,  // Zaposlenik sa ID 2 (terapeut)
-        IsPlaceno = false, // Nije plaćeno
+        IsPlaceno = true, // Nije plaćeno
         StatusRezervacijeId = 1  // Status "Na čekanju" (ID 1 iz StatusRezervacije)
     },
     new Rezervacija
@@ -821,7 +821,7 @@ using (var scope = app.Services.CreateScope())
         Status = "Aktivna", // Status rezervacije
         Napomena = "",
         ZaposlenikId = 3,  // Zaposlenik sa ID 3 (terapeut)
-        IsPlaceno = false, // Nije plaćeno
+        IsPlaceno = true, // Nije plaćeno
         StatusRezervacijeId = 1  // Status "Na čekanju" (ID 1 iz StatusRezervacije)
     },
     new Rezervacija
@@ -833,7 +833,7 @@ using (var scope = app.Services.CreateScope())
         Status = "Aktivna", // Status rezervacije
         Napomena = "Molim vas za opuštanje sa laganom muzikom.",
         ZaposlenikId = 1,  // Zaposlenik sa ID 6 (terapeut)
-        IsPlaceno = false, // Nije plaćeno
+        IsPlaceno = true, // Nije plaćeno
         StatusRezervacijeId = 1  // Status "Na čekanju" (ID 1 iz StatusRezervacije)
     },
     new Rezervacija
@@ -845,7 +845,7 @@ using (var scope = app.Services.CreateScope())
         Status = "Aktivna", // Status rezervacije
         Napomena = "",
         ZaposlenikId = 2,  // Zaposlenik sa ID 2 (terapeut)
-        IsPlaceno = false, // Nije plaćeno
+        IsPlaceno = true, // Nije plaćeno
         StatusRezervacijeId = 1  // Status "Na čekanju" (ID 1 iz StatusRezervacije)
     }
 );

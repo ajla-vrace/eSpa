@@ -149,14 +149,16 @@ class _MojeOcjeneScreenState extends State<MojeOcjeneScreen> {
                                               children: [
                                                 /* buildStars(
                                                     currentRating),*/ // Prikaz trenutnih zvjezdica
-                                                Expanded(
+                                                SizedBox(
+                                                  height: 100,
                                                   child: Row(
+                                                  
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
                                                     children: List.generate(5,
                                                         (index) {
-                                                      return IconButton(
+                                                      return Expanded(child:IconButton(
                                                         onPressed: () {
                                                           setState(() {
                                                             currentRating =
@@ -172,7 +174,7 @@ class _MojeOcjeneScreenState extends State<MojeOcjeneScreen> {
                                                           color: Colors.yellow,
                                                           size: 32,
                                                         ),
-                                                      );
+                                                      ),);
                                                     }),
                                                   ),
                                                 ),
